@@ -1276,5 +1276,282 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 });
 </script>
+<h2 id="quiz-section">Тест</h2>
+
+<style>
+.quiz-question { margin-bottom: 20px; }
+.quiz-option { margin: 5px 0; display: block; padding: 4px; border: 1px solid #ccc; border-radius: 4px; cursor: pointer; }
+.quiz-option:hover { background: #f0f0f0; }
+.correct { background-color: #d4edda; border-color: #c3e6cb; }
+.incorrect { background-color: #f8d7da; border-color: #f5c6cb; }
+</style>
+<div class="quiz">
+<div class="quiz-question" data-answer="it">
+<strong>1. 它 (ta)</strong><br/>
+<label class="quiz-option"><input name="q0" type="radio" value="it"/> оно</label>
+<label class="quiz-option"><input name="q0" type="radio" value="the first"/> первый</label>
+<label class="quiz-option"><input name="q0" type="radio" value="summer holiday"/> летние каникулы</label>
+</div>
+<div class="quiz-question" data-answer="colour">
+<strong>2. 颜色 (yánsè)</strong><br/>
+<label class="quiz-option"><input name="q1" type="radio" value="then"/> затем</label>
+<label class="quiz-option"><input name="q1" type="radio" value="colour"/> цвет</label>
+<label class="quiz-option"><input name="q1" type="radio" value="need"/> нуждаться</label>
+</div>
+<div class="quiz-question" data-answer="need">
+<strong>3. 需要 (xūyào)</strong><br/>
+<label class="quiz-option"><input name="q2" type="radio" value="need"/> нуждаться</label>
+<label class="quiz-option"><input name="q2" type="radio" value="it"/> оно</label>
+<label class="quiz-option"><input name="q2" type="radio" value="restaurant"/> ресторан</label>
+</div>
+<div class="quiz-question" data-answer="some">
+<strong>4. 一些 (yīxiē)</strong><br/>
+<label class="quiz-option"><input name="q3" type="radio" value="holiday"/> праздник</label>
+<label class="quiz-option"><input name="q3" type="radio" value="some"/> некоторые</label>
+<label class="quiz-option"><input name="q3" type="radio" value="then"/> затем</label>
+</div>
+<div class="quiz-question" data-answer="Sanlitun, a place in Beijing">
+<strong>5. 三里屯 (sānlǐtún)</strong><br/>
+<label class="quiz-option"><input name="q4" type="radio" value="go sightseeing"/> осматривать достопримечательности</label>
+<label class="quiz-option"><input name="q4" type="radio" value="Sanlitun, a place in Beijing"/> Санлитунь (район в Пекине)</label>
+<label class="quiz-option"><input name="q4" type="radio" value="car park"/> парковка</label>
+</div>
+<div class="quiz-question" data-answer="take (a vehicle)">
+<strong>6. 坐 (zuò)</strong><br/>
+<label class="quiz-option"><input name="q5" type="radio" value="ride (bicycle, etc)"/> ездить верхом</label>
+<label class="quiz-option"><input name="q5" type="radio" value="take (a vehicle)"/> ехать (на транспорте)</label>
+<label class="quiz-option"><input name="q5" type="radio" value="or (in a question)"/> или (в вопросе)</label>
+</div>
+<div class="quiz-question" data-answer="bus">
+<strong>7. 公共汽车 (gōnggòng qichē)</strong><br/>
+<label class="quiz-option"><input name="q6" type="radio" value="train"/> поезд</label>
+<label class="quiz-option"><input name="q6" type="radio" value="bus"/> автобус</label>
+<label class="quiz-option"><input name="q6" type="radio" value="take photos"/> фотографировать</label>
+</div>
+<div class="quiz-question" data-answer="or (in a question)">
+<strong>8. 还是 (háishi)</strong><br/>
+<label class="quiz-option"><input name="q7" type="radio" value="visit (a place)"/> посещать</label>
+<label class="quiz-option"><input name="q7" type="radio" value="take (a vehicle)"/> ехать (на транспорте)</label>
+<label class="quiz-option"><input name="q7" type="radio" value="or (in a question)"/> или (в вопросе)</label>
+</div>
+<div class="quiz-question" data-answer="taxi">
+<strong>9. 出租车 (chūzūchē)</strong><br/>
+<label class="quiz-option"><input name="q8" type="radio" value="taxi"/> такси</label>
+<label class="quiz-option"><input name="q8" type="radio" value="aeroplane"/> самолёт</label>
+<label class="quiz-option"><input name="q8" type="radio" value="bus"/> автобус</label>
+</div>
+<div class="quiz-question" data-answer="then">
+<strong>10. 然后 (ránhòu)</strong><br/>
+<label class="quiz-option"><input name="q9" type="radio" value="bicycle"/> велосипед</label>
+<label class="quiz-option"><input name="q9" type="radio" value="boat"/> лодка</label>
+<label class="quiz-option"><input name="q9" type="radio" value="then"/> затем</label>
+</div>
+<div class="quiz-question" data-answer="of course">
+<strong>11. 当然 (dāngrán)</strong><br/>
+<label class="quiz-option"><input name="q10" type="radio" value="scenic site"/> достопримечательность</label>
+<label class="quiz-option"><input name="q10" type="radio" value="of course"/> конечно</label>
+<label class="quiz-option"><input name="q10" type="radio" value="take photos"/> фотографировать</label>
+</div>
+<div class="quiz-question" data-answer="Italy">
+<strong>12. 意大利 (Yìdàlì)</strong><br/>
+<label class="quiz-option"><input name="q11" type="radio" value="visit (a place)"/> посещать</label>
+<label class="quiz-option"><input name="q11" type="radio" value="take photos"/> фотографировать</label>
+<label class="quiz-option"><input name="q11" type="radio" value="Italy"/> Италия</label>
+</div>
+<div class="quiz-question" data-answer="restaurant">
+<strong>13. 餐厅 (cāntīng)</strong><br/>
+<label class="quiz-option"><input name="q12" type="radio" value="need"/> нуждаться</label>
+<label class="quiz-option"><input name="q12" type="radio" value="take photos"/> фотографировать</label>
+<label class="quiz-option"><input name="q12" type="radio" value="restaurant"/> ресторан</label>
+</div>
+<div class="quiz-question" data-answer="travel">
+<strong>14. 旅行 (lǚxíng)</strong><br/>
+<label class="quiz-option"><input name="q13" type="radio" value="scenic site"/> достопримечательность</label>
+<label class="quiz-option"><input name="q13" type="radio" value="train"/> поезд</label>
+<label class="quiz-option"><input name="q13" type="radio" value="travel"/> путешествовать</label>
+</div>
+<div class="quiz-question" data-answer="summer holiday">
+<strong>15. 暑假 (shǔjià)</strong><br/>
+<label class="quiz-option"><input name="q14" type="radio" value="summer holiday"/> летние каникулы</label>
+<label class="quiz-option"><input name="q14" type="radio" value="then"/> затем</label>
+<label class="quiz-option"><input name="q14" type="radio" value="ride (bicycle, etc)"/> ездить верхом</label>
+</div>
+<div class="quiz-question" data-answer="holiday">
+<strong>16. 假期 (jiàqī)</strong><br/>
+<label class="quiz-option"><input name="q15" type="radio" value="of course"/> конечно</label>
+<label class="quiz-option"><input name="q15" type="radio" value="holiday"/> праздник</label>
+<label class="quiz-option"><input name="q15" type="radio" value="Sanlitun, a place in Beijing"/> Санлитунь (район в Пекине)</label>
+</div>
+<div class="quiz-question" data-answer="the first">
+<strong>17. 第一个 (dì-yī gè)</strong><br/>
+<label class="quiz-option"><input name="q16" type="radio" value="the first"/> первый</label>
+<label class="quiz-option"><input name="q16" type="radio" value="ride (bicycle, etc)"/> ездить верхом</label>
+<label class="quiz-option"><input name="q16" type="radio" value="climb a mountain"/> подниматься в гору</label>
+</div>
+<div class="quiz-question" data-answer="Guilin">
+<strong>18. 桂林 (Guìlín)</strong><br/>
+<label class="quiz-option"><input name="q17" type="radio" value="Guilin"/> Гуйлинь</label>
+<label class="quiz-option"><input name="q17" type="radio" value="petrol station"/> заправка</label>
+<label class="quiz-option"><input name="q17" type="radio" value="holiday"/> праздник</label>
+</div>
+<div class="quiz-question" data-answer="train">
+<strong>19. 火车 (huǒchē)</strong><br/>
+<label class="quiz-option"><input name="q18" type="radio" value="train"/> поезд</label>
+<label class="quiz-option"><input name="q18" type="radio" value="Italy"/> Италия</label>
+<label class="quiz-option"><input name="q18" type="radio" value="need"/> нуждаться</label>
+</div>
+<div class="quiz-question" data-answer="boat">
+<strong>20. 船 (chuán)</strong><br/>
+<label class="quiz-option"><input name="q19" type="radio" value="colour"/> цвет</label>
+<label class="quiz-option"><input name="q19" type="radio" value="boat"/> лодка</label>
+<label class="quiz-option"><input name="q19" type="radio" value="the first"/> первый</label>
+</div>
+<div class="quiz-question" data-answer="go sightseeing">
+<strong>21. 游览 (yóulǎn)</strong><br/>
+<label class="quiz-option"><input name="q20" type="radio" value="ride (bicycle, etc)"/> ездить верхом</label>
+<label class="quiz-option"><input name="q20" type="radio" value="go sightseeing"/> осматривать достопримечательности</label>
+<label class="quiz-option"><input name="q20" type="radio" value="petrol station"/> заправка</label>
+</div>
+<div class="quiz-question" data-answer="climb a mountain">
+<strong>22. 爬山 (páshān)</strong><br/>
+<label class="quiz-option"><input name="q21" type="radio" value="railway station"/> вокзал</label>
+<label class="quiz-option"><input name="q21" type="radio" value="restaurant"/> ресторан</label>
+<label class="quiz-option"><input name="q21" type="radio" value="climb a mountain"/> подниматься в гору</label>
+</div>
+<div class="quiz-question" data-answer="take photos">
+<strong>23. 拍照 (pāizhào)</strong><br/>
+<label class="quiz-option"><input name="q22" type="radio" value="travel"/> путешествовать</label>
+<label class="quiz-option"><input name="q22" type="radio" value="need"/> нуждаться</label>
+<label class="quiz-option"><input name="q22" type="radio" value="take photos"/> фотографировать</label>
+</div>
+<div class="quiz-question" data-answer="visit (a place)">
+<strong>24. 参观 (cānguān)</strong><br/>
+<label class="quiz-option"><input name="q23" type="radio" value="visit (a place)"/> посещать</label>
+<label class="quiz-option"><input name="q23" type="radio" value="colour"/> цвет</label>
+<label class="quiz-option"><input name="q23" type="radio" value="restaurant"/> ресторан</label>
+</div>
+<div class="quiz-question" data-answer="scenic site">
+<strong>25. 景点 (jǐngdiǎn)</strong><br/>
+<label class="quiz-option"><input name="q24" type="radio" value="scenic site"/> достопримечательность</label>
+<label class="quiz-option"><input name="q24" type="radio" value="visit (a place)"/> посещать</label>
+<label class="quiz-option"><input name="q24" type="radio" value="Italy"/> Италия</label>
+</div>
+<div class="quiz-question" data-answer="ride (bicycle, etc)">
+<strong>26. 骑 (qí)</strong><br/>
+<label class="quiz-option"><input name="q25" type="radio" value="ride (bicycle, etc)"/> ездить верхом</label>
+<label class="quiz-option"><input name="q25" type="radio" value="taxi"/> такси</label>
+<label class="quiz-option"><input name="q25" type="radio" value="train"/> поезд</label>
+</div>
+<div class="quiz-question" data-answer="bicycle">
+<strong>27. 自行车 (zìxíngchē)</strong><br/>
+<label class="quiz-option"><input name="q26" type="radio" value="scenic site"/> достопримечательность</label>
+<label class="quiz-option"><input name="q26" type="radio" value="bicycle"/> велосипед</label>
+<label class="quiz-option"><input name="q26" type="radio" value="petrol station"/> заправка</label>
+</div>
+<div class="quiz-question" data-answer="aeroplane">
+<strong>28. 飞机 (fēijī)</strong><br/>
+<label class="quiz-option"><input name="q27" type="radio" value="car park"/> парковка</label>
+<label class="quiz-option"><input name="q27" type="radio" value="aeroplane"/> самолёт</label>
+<label class="quiz-option"><input name="q27" type="radio" value="summer holiday"/> летние каникулы</label>
+</div>
+<div class="quiz-question" data-answer="petrol station">
+<strong>29. 加油站 (jiāyóuzhàn)</strong><br/>
+<label class="quiz-option"><input name="q28" type="radio" value="petrol station"/> заправка</label>
+<label class="quiz-option"><input name="q28" type="radio" value="ride (bicycle, etc)"/> ездить верхом</label>
+<label class="quiz-option"><input name="q28" type="radio" value="or (in a question)"/> или (в вопросе)</label>
+</div>
+<div class="quiz-question" data-answer="railway station">
+<strong>30. 火车站 (huǒchēzhàn)</strong><br/>
+<label class="quiz-option"><input name="q29" type="radio" value="go sightseeing"/> осматривать достопримечательности</label>
+<label class="quiz-option"><input name="q29" type="radio" value="railway station"/> вокзал</label>
+<label class="quiz-option"><input name="q29" type="radio" value="travel"/> путешествовать</label>
+</div>
+<div class="quiz-question" data-answer="car park">
+<strong>31. 停车场 (tíngchēchǎng)</strong><br/>
+<label class="quiz-option"><input name="q30" type="radio" value="car park"/> парковка</label>
+<label class="quiz-option"><input name="q30" type="radio" value="need"/> нуждаться</label>
+<label class="quiz-option"><input name="q30" type="radio" value="take photos"/> фотографировать</label>
+</div>
+<div class="quiz-question" data-answer="airport">
+<strong>32. 飞机场 (fēijīchǎng)</strong><br/>
+<label class="quiz-option"><input name="q31" type="radio" value="taxi"/> такси</label>
+<label class="quiz-option"><input name="q31" type="radio" value="scenic site"/> достопримечательность</label>
+<label class="quiz-option"><input name="q31" type="radio" value="airport"/> аэропорт</label>
+</div>
+<button onclick="calculateScore()">Показать результат</button>
+<div id="result"></div>
+<script>
+function calculateScore() {
+  const questions = document.querySelectorAll('.quiz-question');
+  let correct = 0;
+  questions.forEach((q, idx) => {
+    const answer = q.getAttribute('data-answer');
+    const options = q.querySelectorAll('input[type=radio]');
+    let selectedOption = null;
+
+    options.forEach(opt => {
+      const label = opt.parentElement;
+      label.classList.remove("correct", "incorrect");
+      if (opt.checked) {
+        selectedOption = opt;
+      }
+    });
+
+    options.forEach(opt => {
+      const label = opt.parentElement;
+      if (opt.value === answer) {
+        label.classList.add("correct");
+      }
+      if (opt.checked && opt.value !== answer) {
+        label.classList.add("incorrect");
+      }
+    });
+
+    if (selectedOption && selectedOption.value === answer) {
+      correct++;
+    }
+  });
+
+  const total = questions.length;
+  const percent = Math.round((correct / total) * 100);
+  document.getElementById('result').textContent = `Правильно: ${correct} из ${total} (${percent}%)`;
+}
+</script>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  const questions = document.querySelectorAll(".quiz-question");
+  questions.forEach(q => {
+    const options = Array.from(q.querySelectorAll(".quiz-option"));
+    for (let i = options.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [options[i], options[j]] = [options[j], options[i]];
+    }
+    const parent = options[0].parentNode;
+    options.forEach(opt => parent.appendChild(opt));
+  });
+});
+</script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  // Сброс всех выбранных radio-кнопок
+  const inputs = document.querySelectorAll("input[type=radio]");
+  inputs.forEach(input => input.checked = false);
+
+  // Перемешивание вариантов ответа
+  const questions = document.querySelectorAll(".quiz-question");
+  questions.forEach(q => {
+    const options = Array.from(q.querySelectorAll(".quiz-option"));
+    for (let i = options.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [options[i], options[j]] = [options[j], options[i]];
+    }
+    const parent = options[0].parentNode;
+    options.forEach(opt => parent.appendChild(opt));
+  });
+});
+</script>
 </body>
 </html>
