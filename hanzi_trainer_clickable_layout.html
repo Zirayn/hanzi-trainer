@@ -1,0 +1,939 @@
+
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>Тренажёр по картинке — Клик для анимации</title>
+    <script src="https://unpkg.com/hanzi-writer@2.0.2/dist/hanzi-writer.min.js"></script>
+    <style>
+        body {
+            font-family: sans-serif;
+            padding: 20px;
+            line-height: 1.4;
+        }
+        .container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+        }
+        .word-block {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .char-box {
+            display: flex;
+            gap: 10px;
+            margin-right: 15px;
+        }
+        .char {
+            width: 60px;
+            height: 60px;
+            cursor: pointer;
+        }
+        .text-info {
+            flex: 1;
+        }
+        .text-info strong {
+            display: block;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Кликни на иероглиф для анимации (как на картинке)</h1>
+    <div class="container">
+<div>
+        <div class="word-block">
+            <div class="char-box"><div id="c1_0_0" class="char" onclick="writers['c1_0_0'].animateCharacter()"></div></div>
+            <div class="text-info">
+                <strong>它</strong>
+                <div>tā</div>
+                <div>it</div>
+                <div>оно</div>
+            </div>
+        </div>
+        
+        <div class="word-block">
+            <div class="char-box"><div id="c1_1_0" class="char" onclick="writers['c1_1_0'].animateCharacter()"></div><div id="c1_1_1" class="char" onclick="writers['c1_1_1'].animateCharacter()"></div></div>
+            <div class="text-info">
+                <strong>颜色</strong>
+                <div>yánsè</div>
+                <div>color</div>
+                <div>цвет</div>
+            </div>
+        </div>
+        
+        <div class="word-block">
+            <div class="char-box"><div id="c1_2_0" class="char" onclick="writers['c1_2_0'].animateCharacter()"></div><div id="c1_2_1" class="char" onclick="writers['c1_2_1'].animateCharacter()"></div></div>
+            <div class="text-info">
+                <strong>需要</strong>
+                <div>xūyào</div>
+                <div>to need</div>
+                <div>нуждаться</div>
+            </div>
+        </div>
+        
+        <div class="word-block">
+            <div class="char-box"><div id="c1_3_0" class="char" onclick="writers['c1_3_0'].animateCharacter()"></div><div id="c1_3_1" class="char" onclick="writers['c1_3_1'].animateCharacter()"></div></div>
+            <div class="text-info">
+                <strong>一些</strong>
+                <div>yìxiē</div>
+                <div>some</div>
+                <div>немного</div>
+            </div>
+        </div>
+        
+        <div class="word-block">
+            <div class="char-box"><div id="c1_4_0" class="char" onclick="writers['c1_4_0'].animateCharacter()"></div><div id="c1_4_1" class="char" onclick="writers['c1_4_1'].animateCharacter()"></div><div id="c1_4_2" class="char" onclick="writers['c1_4_2'].animateCharacter()"></div></div>
+            <div class="text-info">
+                <strong>三里屯</strong>
+                <div>Sānlǐtún</div>
+                <div>Sanlitun</div>
+                <div>Санлитунь (район в Пекине)</div>
+            </div>
+        </div>
+        
+        <div class="word-block">
+            <div class="char-box"><div id="c1_5_0" class="char" onclick="writers['c1_5_0'].animateCharacter()"></div></div>
+            <div class="text-info">
+                <strong>坐</strong>
+                <div>zuò</div>
+                <div>to sit / ride</div>
+                <div>сидеть / ехать на транспорте</div>
+            </div>
+        </div>
+        
+        <div class="word-block">
+            <div class="char-box"><div id="c1_6_0" class="char" onclick="writers['c1_6_0'].animateCharacter()"></div><div id="c1_6_1" class="char" onclick="writers['c1_6_1'].animateCharacter()"></div><div id="c1_6_2" class="char" onclick="writers['c1_6_2'].animateCharacter()"></div><div id="c1_6_3" class="char" onclick="writers['c1_6_3'].animateCharacter()"></div></div>
+            <div class="text-info">
+                <strong>公共汽车</strong>
+                <div>gōnggòng qìchē</div>
+                <div>bus</div>
+                <div>автобус</div>
+            </div>
+        </div>
+        
+        <div class="word-block">
+            <div class="char-box"><div id="c1_7_0" class="char" onclick="writers['c1_7_0'].animateCharacter()"></div><div id="c1_7_1" class="char" onclick="writers['c1_7_1'].animateCharacter()"></div></div>
+            <div class="text-info">
+                <strong>还是</strong>
+                <div>háishì</div>
+                <div>or</div>
+                <div>или</div>
+            </div>
+        </div>
+        
+        <div class="word-block">
+            <div class="char-box"><div id="c1_8_0" class="char" onclick="writers['c1_8_0'].animateCharacter()"></div><div id="c1_8_1" class="char" onclick="writers['c1_8_1'].animateCharacter()"></div><div id="c1_8_2" class="char" onclick="writers['c1_8_2'].animateCharacter()"></div></div>
+            <div class="text-info">
+                <strong>出租车</strong>
+                <div>chūzūchē</div>
+                <div>taxi</div>
+                <div>такси</div>
+            </div>
+        </div>
+        
+        <div class="word-block">
+            <div class="char-box"><div id="c1_9_0" class="char" onclick="writers['c1_9_0'].animateCharacter()"></div><div id="c1_9_1" class="char" onclick="writers['c1_9_1'].animateCharacter()"></div></div>
+            <div class="text-info">
+                <strong>然后</strong>
+                <div>ránhòu</div>
+                <div>then</div>
+                <div>затем</div>
+            </div>
+        </div>
+        
+        <div class="word-block">
+            <div class="char-box"><div id="c1_10_0" class="char" onclick="writers['c1_10_0'].animateCharacter()"></div><div id="c1_10_1" class="char" onclick="writers['c1_10_1'].animateCharacter()"></div></div>
+            <div class="text-info">
+                <strong>当然</strong>
+                <div>dāngrán</div>
+                <div>of course</div>
+                <div>конечно</div>
+            </div>
+        </div>
+        
+        <div class="word-block">
+            <div class="char-box"><div id="c1_11_0" class="char" onclick="writers['c1_11_0'].animateCharacter()"></div><div id="c1_11_1" class="char" onclick="writers['c1_11_1'].animateCharacter()"></div><div id="c1_11_2" class="char" onclick="writers['c1_11_2'].animateCharacter()"></div></div>
+            <div class="text-info">
+                <strong>意大利</strong>
+                <div>Yìdàlì</div>
+                <div>Italy</div>
+                <div>Италия</div>
+            </div>
+        </div>
+        
+        <div class="word-block">
+            <div class="char-box"><div id="c1_12_0" class="char" onclick="writers['c1_12_0'].animateCharacter()"></div><div id="c1_12_1" class="char" onclick="writers['c1_12_1'].animateCharacter()"></div></div>
+            <div class="text-info">
+                <strong>餐厅</strong>
+                <div>cāntīng</div>
+                <div>restaurant</div>
+                <div>ресторан</div>
+            </div>
+        </div>
+        
+        <div class="word-block">
+            <div class="char-box"><div id="c1_13_0" class="char" onclick="writers['c1_13_0'].animateCharacter()"></div><div id="c1_13_1" class="char" onclick="writers['c1_13_1'].animateCharacter()"></div></div>
+            <div class="text-info">
+                <strong>旅行</strong>
+                <div>lǚxíng</div>
+                <div>to travel</div>
+                <div>путешествовать</div>
+            </div>
+        </div>
+        
+        <div class="word-block">
+            <div class="char-box"><div id="c1_14_0" class="char" onclick="writers['c1_14_0'].animateCharacter()"></div><div id="c1_14_1" class="char" onclick="writers['c1_14_1'].animateCharacter()"></div></div>
+            <div class="text-info">
+                <strong>暑假</strong>
+                <div>shǔjià</div>
+                <div>summer vacation</div>
+                <div>летние каникулы</div>
+            </div>
+        </div>
+        
+        <div class="word-block">
+            <div class="char-box"><div id="c1_15_0" class="char" onclick="writers['c1_15_0'].animateCharacter()"></div><div id="c1_15_1" class="char" onclick="writers['c1_15_1'].animateCharacter()"></div></div>
+            <div class="text-info">
+                <strong>假期</strong>
+                <div>jiàqī</div>
+                <div>holiday</div>
+                <div>праздники / отпуск</div>
+            </div>
+        </div>
+        </div><div>
+        <div class="word-block">
+            <div class="char-box"><div id="c2_0_0" class="char" onclick="writers['c2_0_0'].animateCharacter()"></div><div id="c2_0_1" class="char" onclick="writers['c2_0_1'].animateCharacter()"></div><div id="c2_0_2" class="char" onclick="writers['c2_0_2'].animateCharacter()"></div></div>
+            <div class="text-info">
+                <strong>第一个</strong>
+                <div>dì yī gè</div>
+                <div>first</div>
+                <div>первый</div>
+            </div>
+        </div>
+        
+        <div class="word-block">
+            <div class="char-box"><div id="c2_1_0" class="char" onclick="writers['c2_1_0'].animateCharacter()"></div><div id="c2_1_1" class="char" onclick="writers['c2_1_1'].animateCharacter()"></div></div>
+            <div class="text-info">
+                <strong>桂林</strong>
+                <div>Guìlín</div>
+                <div>Guilin</div>
+                <div>Гуйлинь (город)</div>
+            </div>
+        </div>
+        
+        <div class="word-block">
+            <div class="char-box"><div id="c2_2_0" class="char" onclick="writers['c2_2_0'].animateCharacter()"></div><div id="c2_2_1" class="char" onclick="writers['c2_2_1'].animateCharacter()"></div></div>
+            <div class="text-info">
+                <strong>火车</strong>
+                <div>huǒchē</div>
+                <div>train</div>
+                <div>поезд</div>
+            </div>
+        </div>
+        
+        <div class="word-block">
+            <div class="char-box"><div id="c2_3_0" class="char" onclick="writers['c2_3_0'].animateCharacter()"></div></div>
+            <div class="text-info">
+                <strong>船</strong>
+                <div>chuán</div>
+                <div>boat</div>
+                <div>лодка</div>
+            </div>
+        </div>
+        
+        <div class="word-block">
+            <div class="char-box"><div id="c2_4_0" class="char" onclick="writers['c2_4_0'].animateCharacter()"></div><div id="c2_4_1" class="char" onclick="writers['c2_4_1'].animateCharacter()"></div></div>
+            <div class="text-info">
+                <strong>游览</strong>
+                <div>yóulǎn</div>
+                <div>to go sightseeing</div>
+                <div>осматривать</div>
+            </div>
+        </div>
+        
+        <div class="word-block">
+            <div class="char-box"><div id="c2_5_0" class="char" onclick="writers['c2_5_0'].animateCharacter()"></div><div id="c2_5_1" class="char" onclick="writers['c2_5_1'].animateCharacter()"></div></div>
+            <div class="text-info">
+                <strong>爬山</strong>
+                <div>páshān</div>
+                <div>to climb mountains</div>
+                <div>восходить на гору</div>
+            </div>
+        </div>
+        
+        <div class="word-block">
+            <div class="char-box"><div id="c2_6_0" class="char" onclick="writers['c2_6_0'].animateCharacter()"></div><div id="c2_6_1" class="char" onclick="writers['c2_6_1'].animateCharacter()"></div></div>
+            <div class="text-info">
+                <strong>拍照</strong>
+                <div>pāizhào</div>
+                <div>to take pictures</div>
+                <div>фотографировать</div>
+            </div>
+        </div>
+        
+        <div class="word-block">
+            <div class="char-box"><div id="c2_7_0" class="char" onclick="writers['c2_7_0'].animateCharacter()"></div><div id="c2_7_1" class="char" onclick="writers['c2_7_1'].animateCharacter()"></div></div>
+            <div class="text-info">
+                <strong>参观</strong>
+                <div>cānguān</div>
+                <div>to visit</div>
+                <div>посещать (осмотр)</div>
+            </div>
+        </div>
+        
+        <div class="word-block">
+            <div class="char-box"><div id="c2_8_0" class="char" onclick="writers['c2_8_0'].animateCharacter()"></div><div id="c2_8_1" class="char" onclick="writers['c2_8_1'].animateCharacter()"></div></div>
+            <div class="text-info">
+                <strong>景点</strong>
+                <div>jǐngdiǎn</div>
+                <div>scenic spot</div>
+                <div>достопримечательность</div>
+            </div>
+        </div>
+        
+        <div class="word-block">
+            <div class="char-box"><div id="c2_9_0" class="char" onclick="writers['c2_9_0'].animateCharacter()"></div></div>
+            <div class="text-info">
+                <strong>骑</strong>
+                <div>qí</div>
+                <div>to ride</div>
+                <div>ехать верхом</div>
+            </div>
+        </div>
+        
+        <div class="word-block">
+            <div class="char-box"><div id="c2_10_0" class="char" onclick="writers['c2_10_0'].animateCharacter()"></div><div id="c2_10_1" class="char" onclick="writers['c2_10_1'].animateCharacter()"></div><div id="c2_10_2" class="char" onclick="writers['c2_10_2'].animateCharacter()"></div></div>
+            <div class="text-info">
+                <strong>自行车</strong>
+                <div>zìxíngchē</div>
+                <div>bicycle</div>
+                <div>велосипед</div>
+            </div>
+        </div>
+        
+        <div class="word-block">
+            <div class="char-box"><div id="c2_11_0" class="char" onclick="writers['c2_11_0'].animateCharacter()"></div><div id="c2_11_1" class="char" onclick="writers['c2_11_1'].animateCharacter()"></div></div>
+            <div class="text-info">
+                <strong>飞机</strong>
+                <div>fēijī</div>
+                <div>plane</div>
+                <div>самолёт</div>
+            </div>
+        </div>
+        
+        <div class="word-block">
+            <div class="char-box"><div id="c2_12_0" class="char" onclick="writers['c2_12_0'].animateCharacter()"></div><div id="c2_12_1" class="char" onclick="writers['c2_12_1'].animateCharacter()"></div><div id="c2_12_2" class="char" onclick="writers['c2_12_2'].animateCharacter()"></div></div>
+            <div class="text-info">
+                <strong>加油站</strong>
+                <div>jiāyóuzhàn</div>
+                <div>gas station</div>
+                <div>заправка</div>
+            </div>
+        </div>
+        
+        <div class="word-block">
+            <div class="char-box"><div id="c2_13_0" class="char" onclick="writers['c2_13_0'].animateCharacter()"></div><div id="c2_13_1" class="char" onclick="writers['c2_13_1'].animateCharacter()"></div><div id="c2_13_2" class="char" onclick="writers['c2_13_2'].animateCharacter()"></div></div>
+            <div class="text-info">
+                <strong>火车站</strong>
+                <div>huǒchēzhàn</div>
+                <div>train station</div>
+                <div>вокзал</div>
+            </div>
+        </div>
+        
+        <div class="word-block">
+            <div class="char-box"><div id="c2_14_0" class="char" onclick="writers['c2_14_0'].animateCharacter()"></div><div id="c2_14_1" class="char" onclick="writers['c2_14_1'].animateCharacter()"></div><div id="c2_14_2" class="char" onclick="writers['c2_14_2'].animateCharacter()"></div></div>
+            <div class="text-info">
+                <strong>停车场</strong>
+                <div>tíngchēchǎng</div>
+                <div>parking lot</div>
+                <div>парковка</div>
+            </div>
+        </div>
+        
+        <div class="word-block">
+            <div class="char-box"><div id="c2_15_0" class="char" onclick="writers['c2_15_0'].animateCharacter()"></div><div id="c2_15_1" class="char" onclick="writers['c2_15_1'].animateCharacter()"></div><div id="c2_15_2" class="char" onclick="writers['c2_15_2'].animateCharacter()"></div></div>
+            <div class="text-info">
+                <strong>飞机场</strong>
+                <div>fēijīchǎng</div>
+                <div>airport</div>
+                <div>аэропорт</div>
+            </div>
+        </div>
+        </div></div>
+<script>
+const writers = {};
+
+            writers['c1_0_0'] = HanziWriter.create('c1_0_0', '它', {
+                width: 60,
+                height: 60,
+                padding: 2,
+                showOutline: true,
+                showCharacter: false
+            });
+            
+            writers['c1_1_0'] = HanziWriter.create('c1_1_0', '颜', {
+                width: 60,
+                height: 60,
+                padding: 2,
+                showOutline: true,
+                showCharacter: false
+            });
+            
+            writers['c1_1_1'] = HanziWriter.create('c1_1_1', '色', {
+                width: 60,
+                height: 60,
+                padding: 2,
+                showOutline: true,
+                showCharacter: false
+            });
+            
+            writers['c1_2_0'] = HanziWriter.create('c1_2_0', '需', {
+                width: 60,
+                height: 60,
+                padding: 2,
+                showOutline: true,
+                showCharacter: false
+            });
+            
+            writers['c1_2_1'] = HanziWriter.create('c1_2_1', '要', {
+                width: 60,
+                height: 60,
+                padding: 2,
+                showOutline: true,
+                showCharacter: false
+            });
+            
+            writers['c1_3_0'] = HanziWriter.create('c1_3_0', '一', {
+                width: 60,
+                height: 60,
+                padding: 2,
+                showOutline: true,
+                showCharacter: false
+            });
+            
+            writers['c1_3_1'] = HanziWriter.create('c1_3_1', '些', {
+                width: 60,
+                height: 60,
+                padding: 2,
+                showOutline: true,
+                showCharacter: false
+            });
+            
+            writers['c1_4_0'] = HanziWriter.create('c1_4_0', '三', {
+                width: 60,
+                height: 60,
+                padding: 2,
+                showOutline: true,
+                showCharacter: false
+            });
+            
+            writers['c1_4_1'] = HanziWriter.create('c1_4_1', '里', {
+                width: 60,
+                height: 60,
+                padding: 2,
+                showOutline: true,
+                showCharacter: false
+            });
+            
+            writers['c1_4_2'] = HanziWriter.create('c1_4_2', '屯', {
+                width: 60,
+                height: 60,
+                padding: 2,
+                showOutline: true,
+                showCharacter: false
+            });
+            
+            writers['c1_5_0'] = HanziWriter.create('c1_5_0', '坐', {
+                width: 60,
+                height: 60,
+                padding: 2,
+                showOutline: true,
+                showCharacter: false
+            });
+            
+            writers['c1_6_0'] = HanziWriter.create('c1_6_0', '公', {
+                width: 60,
+                height: 60,
+                padding: 2,
+                showOutline: true,
+                showCharacter: false
+            });
+            
+            writers['c1_6_1'] = HanziWriter.create('c1_6_1', '共', {
+                width: 60,
+                height: 60,
+                padding: 2,
+                showOutline: true,
+                showCharacter: false
+            });
+            
+            writers['c1_6_2'] = HanziWriter.create('c1_6_2', '汽', {
+                width: 60,
+                height: 60,
+                padding: 2,
+                showOutline: true,
+                showCharacter: false
+            });
+            
+            writers['c1_6_3'] = HanziWriter.create('c1_6_3', '车', {
+                width: 60,
+                height: 60,
+                padding: 2,
+                showOutline: true,
+                showCharacter: false
+            });
+            
+            writers['c1_7_0'] = HanziWriter.create('c1_7_0', '还', {
+                width: 60,
+                height: 60,
+                padding: 2,
+                showOutline: true,
+                showCharacter: false
+            });
+            
+            writers['c1_7_1'] = HanziWriter.create('c1_7_1', '是', {
+                width: 60,
+                height: 60,
+                padding: 2,
+                showOutline: true,
+                showCharacter: false
+            });
+            
+            writers['c1_8_0'] = HanziWriter.create('c1_8_0', '出', {
+                width: 60,
+                height: 60,
+                padding: 2,
+                showOutline: true,
+                showCharacter: false
+            });
+            
+            writers['c1_8_1'] = HanziWriter.create('c1_8_1', '租', {
+                width: 60,
+                height: 60,
+                padding: 2,
+                showOutline: true,
+                showCharacter: false
+            });
+            
+            writers['c1_8_2'] = HanziWriter.create('c1_8_2', '车', {
+                width: 60,
+                height: 60,
+                padding: 2,
+                showOutline: true,
+                showCharacter: false
+            });
+            
+            writers['c1_9_0'] = HanziWriter.create('c1_9_0', '然', {
+                width: 60,
+                height: 60,
+                padding: 2,
+                showOutline: true,
+                showCharacter: false
+            });
+            
+            writers['c1_9_1'] = HanziWriter.create('c1_9_1', '后', {
+                width: 60,
+                height: 60,
+                padding: 2,
+                showOutline: true,
+                showCharacter: false
+            });
+            
+            writers['c1_10_0'] = HanziWriter.create('c1_10_0', '当', {
+                width: 60,
+                height: 60,
+                padding: 2,
+                showOutline: true,
+                showCharacter: false
+            });
+            
+            writers['c1_10_1'] = HanziWriter.create('c1_10_1', '然', {
+                width: 60,
+                height: 60,
+                padding: 2,
+                showOutline: true,
+                showCharacter: false
+            });
+            
+            writers['c1_11_0'] = HanziWriter.create('c1_11_0', '意', {
+                width: 60,
+                height: 60,
+                padding: 2,
+                showOutline: true,
+                showCharacter: false
+            });
+            
+            writers['c1_11_1'] = HanziWriter.create('c1_11_1', '大', {
+                width: 60,
+                height: 60,
+                padding: 2,
+                showOutline: true,
+                showCharacter: false
+            });
+            
+            writers['c1_11_2'] = HanziWriter.create('c1_11_2', '利', {
+                width: 60,
+                height: 60,
+                padding: 2,
+                showOutline: true,
+                showCharacter: false
+            });
+            
+            writers['c1_12_0'] = HanziWriter.create('c1_12_0', '餐', {
+                width: 60,
+                height: 60,
+                padding: 2,
+                showOutline: true,
+                showCharacter: false
+            });
+            
+            writers['c1_12_1'] = HanziWriter.create('c1_12_1', '厅', {
+                width: 60,
+                height: 60,
+                padding: 2,
+                showOutline: true,
+                showCharacter: false
+            });
+            
+            writers['c1_13_0'] = HanziWriter.create('c1_13_0', '旅', {
+                width: 60,
+                height: 60,
+                padding: 2,
+                showOutline: true,
+                showCharacter: false
+            });
+            
+            writers['c1_13_1'] = HanziWriter.create('c1_13_1', '行', {
+                width: 60,
+                height: 60,
+                padding: 2,
+                showOutline: true,
+                showCharacter: false
+            });
+            
+            writers['c1_14_0'] = HanziWriter.create('c1_14_0', '暑', {
+                width: 60,
+                height: 60,
+                padding: 2,
+                showOutline: true,
+                showCharacter: false
+            });
+            
+            writers['c1_14_1'] = HanziWriter.create('c1_14_1', '假', {
+                width: 60,
+                height: 60,
+                padding: 2,
+                showOutline: true,
+                showCharacter: false
+            });
+            
+            writers['c1_15_0'] = HanziWriter.create('c1_15_0', '假', {
+                width: 60,
+                height: 60,
+                padding: 2,
+                showOutline: true,
+                showCharacter: false
+            });
+            
+            writers['c1_15_1'] = HanziWriter.create('c1_15_1', '期', {
+                width: 60,
+                height: 60,
+                padding: 2,
+                showOutline: true,
+                showCharacter: false
+            });
+            
+            writers['c2_0_0'] = HanziWriter.create('c2_0_0', '第', {
+                width: 60,
+                height: 60,
+                padding: 2,
+                showOutline: true,
+                showCharacter: false
+            });
+            
+            writers['c2_0_1'] = HanziWriter.create('c2_0_1', '一', {
+                width: 60,
+                height: 60,
+                padding: 2,
+                showOutline: true,
+                showCharacter: false
+            });
+            
+            writers['c2_0_2'] = HanziWriter.create('c2_0_2', '个', {
+                width: 60,
+                height: 60,
+                padding: 2,
+                showOutline: true,
+                showCharacter: false
+            });
+            
+            writers['c2_1_0'] = HanziWriter.create('c2_1_0', '桂', {
+                width: 60,
+                height: 60,
+                padding: 2,
+                showOutline: true,
+                showCharacter: false
+            });
+            
+            writers['c2_1_1'] = HanziWriter.create('c2_1_1', '林', {
+                width: 60,
+                height: 60,
+                padding: 2,
+                showOutline: true,
+                showCharacter: false
+            });
+            
+            writers['c2_2_0'] = HanziWriter.create('c2_2_0', '火', {
+                width: 60,
+                height: 60,
+                padding: 2,
+                showOutline: true,
+                showCharacter: false
+            });
+            
+            writers['c2_2_1'] = HanziWriter.create('c2_2_1', '车', {
+                width: 60,
+                height: 60,
+                padding: 2,
+                showOutline: true,
+                showCharacter: false
+            });
+            
+            writers['c2_3_0'] = HanziWriter.create('c2_3_0', '船', {
+                width: 60,
+                height: 60,
+                padding: 2,
+                showOutline: true,
+                showCharacter: false
+            });
+            
+            writers['c2_4_0'] = HanziWriter.create('c2_4_0', '游', {
+                width: 60,
+                height: 60,
+                padding: 2,
+                showOutline: true,
+                showCharacter: false
+            });
+            
+            writers['c2_4_1'] = HanziWriter.create('c2_4_1', '览', {
+                width: 60,
+                height: 60,
+                padding: 2,
+                showOutline: true,
+                showCharacter: false
+            });
+            
+            writers['c2_5_0'] = HanziWriter.create('c2_5_0', '爬', {
+                width: 60,
+                height: 60,
+                padding: 2,
+                showOutline: true,
+                showCharacter: false
+            });
+            
+            writers['c2_5_1'] = HanziWriter.create('c2_5_1', '山', {
+                width: 60,
+                height: 60,
+                padding: 2,
+                showOutline: true,
+                showCharacter: false
+            });
+            
+            writers['c2_6_0'] = HanziWriter.create('c2_6_0', '拍', {
+                width: 60,
+                height: 60,
+                padding: 2,
+                showOutline: true,
+                showCharacter: false
+            });
+            
+            writers['c2_6_1'] = HanziWriter.create('c2_6_1', '照', {
+                width: 60,
+                height: 60,
+                padding: 2,
+                showOutline: true,
+                showCharacter: false
+            });
+            
+            writers['c2_7_0'] = HanziWriter.create('c2_7_0', '参', {
+                width: 60,
+                height: 60,
+                padding: 2,
+                showOutline: true,
+                showCharacter: false
+            });
+            
+            writers['c2_7_1'] = HanziWriter.create('c2_7_1', '观', {
+                width: 60,
+                height: 60,
+                padding: 2,
+                showOutline: true,
+                showCharacter: false
+            });
+            
+            writers['c2_8_0'] = HanziWriter.create('c2_8_0', '景', {
+                width: 60,
+                height: 60,
+                padding: 2,
+                showOutline: true,
+                showCharacter: false
+            });
+            
+            writers['c2_8_1'] = HanziWriter.create('c2_8_1', '点', {
+                width: 60,
+                height: 60,
+                padding: 2,
+                showOutline: true,
+                showCharacter: false
+            });
+            
+            writers['c2_9_0'] = HanziWriter.create('c2_9_0', '骑', {
+                width: 60,
+                height: 60,
+                padding: 2,
+                showOutline: true,
+                showCharacter: false
+            });
+            
+            writers['c2_10_0'] = HanziWriter.create('c2_10_0', '自', {
+                width: 60,
+                height: 60,
+                padding: 2,
+                showOutline: true,
+                showCharacter: false
+            });
+            
+            writers['c2_10_1'] = HanziWriter.create('c2_10_1', '行', {
+                width: 60,
+                height: 60,
+                padding: 2,
+                showOutline: true,
+                showCharacter: false
+            });
+            
+            writers['c2_10_2'] = HanziWriter.create('c2_10_2', '车', {
+                width: 60,
+                height: 60,
+                padding: 2,
+                showOutline: true,
+                showCharacter: false
+            });
+            
+            writers['c2_11_0'] = HanziWriter.create('c2_11_0', '飞', {
+                width: 60,
+                height: 60,
+                padding: 2,
+                showOutline: true,
+                showCharacter: false
+            });
+            
+            writers['c2_11_1'] = HanziWriter.create('c2_11_1', '机', {
+                width: 60,
+                height: 60,
+                padding: 2,
+                showOutline: true,
+                showCharacter: false
+            });
+            
+            writers['c2_12_0'] = HanziWriter.create('c2_12_0', '加', {
+                width: 60,
+                height: 60,
+                padding: 2,
+                showOutline: true,
+                showCharacter: false
+            });
+            
+            writers['c2_12_1'] = HanziWriter.create('c2_12_1', '油', {
+                width: 60,
+                height: 60,
+                padding: 2,
+                showOutline: true,
+                showCharacter: false
+            });
+            
+            writers['c2_12_2'] = HanziWriter.create('c2_12_2', '站', {
+                width: 60,
+                height: 60,
+                padding: 2,
+                showOutline: true,
+                showCharacter: false
+            });
+            
+            writers['c2_13_0'] = HanziWriter.create('c2_13_0', '火', {
+                width: 60,
+                height: 60,
+                padding: 2,
+                showOutline: true,
+                showCharacter: false
+            });
+            
+            writers['c2_13_1'] = HanziWriter.create('c2_13_1', '车', {
+                width: 60,
+                height: 60,
+                padding: 2,
+                showOutline: true,
+                showCharacter: false
+            });
+            
+            writers['c2_13_2'] = HanziWriter.create('c2_13_2', '站', {
+                width: 60,
+                height: 60,
+                padding: 2,
+                showOutline: true,
+                showCharacter: false
+            });
+            
+            writers['c2_14_0'] = HanziWriter.create('c2_14_0', '停', {
+                width: 60,
+                height: 60,
+                padding: 2,
+                showOutline: true,
+                showCharacter: false
+            });
+            
+            writers['c2_14_1'] = HanziWriter.create('c2_14_1', '车', {
+                width: 60,
+                height: 60,
+                padding: 2,
+                showOutline: true,
+                showCharacter: false
+            });
+            
+            writers['c2_14_2'] = HanziWriter.create('c2_14_2', '场', {
+                width: 60,
+                height: 60,
+                padding: 2,
+                showOutline: true,
+                showCharacter: false
+            });
+            
+            writers['c2_15_0'] = HanziWriter.create('c2_15_0', '飞', {
+                width: 60,
+                height: 60,
+                padding: 2,
+                showOutline: true,
+                showCharacter: false
+            });
+            
+            writers['c2_15_1'] = HanziWriter.create('c2_15_1', '机', {
+                width: 60,
+                height: 60,
+                padding: 2,
+                showOutline: true,
+                showCharacter: false
+            });
+            
+            writers['c2_15_2'] = HanziWriter.create('c2_15_2', '场', {
+                width: 60,
+                height: 60,
+                padding: 2,
+                showOutline: true,
+                showCharacter: false
+            });
+            
+</script>
+</body></html>
