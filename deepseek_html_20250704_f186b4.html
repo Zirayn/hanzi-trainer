@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Китайские иероглифы с анимацией</title>
+    <script src="https://cdn.jsdelivr.net/npm/hanzi-writer@2.0.2/dist/hanzi-writer.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f9f9f9;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-bottom: 20px;
+            background-color: white;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        th, td {
+            border: 1px solid #e0e0e0;
+            padding: 12px;
+            text-align: left;
+            vertical-align: top;
+        }
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+            color: #333;
+        }
+        .character-container {
+            display: inline-block;
+            margin: 0 8px;
+            text-align: center;
+            vertical-align: middle;
+        }
+        .character {
+            font-size: 28px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+        }
+        .character:hover {
+            color: #e74c3c;
+            transform: scale(1.15);
+        }
+        .hanzi-writer-target {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto;
+        }
+        .writer-container {
+            margin-top: 10px;
+        }
+        tr:nth-child(even) {
+            background-color: #fafafa;
+        }
+        tr:hover {
+            background-color: #f0f0f0;
+        }
+    </style>
+</head>
+<body>
+    <table>
+        <thead>
+            <tr>
+                <th>Иероглиф</th>
+                <th>Пиньинь</th>
+                <th>Перевод</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Строка 1 -->
+            <tr>
+                <td>
+                    <div class="character-container">
+                        <span class="character" data-char="它">它</span>
+                        <div class="writer-container" id="writer-它-0"></div>
+                    </div>
+                </td>
+                <td>ta</td>
+                <td>it</td>
+            </tr>
+            
+            <!-- Строка 2 -->
+            <tr>
+                <td>
+                    <div class="character-container">
+                        <span class="character" data-char="颜">颜</span>
+                        <div class="writer-container" id="writer-颜-0"></div>
+                    </div>
+                    <div class="character-container">
+                        <span class="character" data-char="色">色</span>
+                        <div class="writer-container" id="writer-色-0"></div>
+                    </div>
+                </td>
+                <td>yánsè</td>
+                <td>colour</td>
+            </tr>
+            
+            <!-- Строка 3 -->
+            <tr>
+                <td>
+                    <div class="character-container">
+                        <span class="character" data-char="需">需</span>
+                        <div class="writer-container" id="writer-需-0"></div>
+                    </div>
+                    <div class="character-container">
+                        <span class="character" data-char="要">要</span>
+                        <div class="writer-container" id="writer-要-0"></div>
+                    </div>
+                </td>
+                <td>xūyào</td>
+                <td>need</td>
+            </tr>
+            
+            <!-- Строка 4 -->
+            <tr>
+                <td>
+                    <div class="character-container">
+                        <span class="character" data-char="一">一</span>
+                        <div class="writer-container" id="writer-一-0"></div>
+                    </div>
+                    <div class="character-container">
+                        <span class="character" data-char="些">些</span>
+                        <div class="writer-container" id="writer-些-0"></div>
+                    </div>
+                </td>
+                <td>yīxiē</td>
+                <td>some</td>
+            </tr>
+            
+            <!-- Строка 5 -->
+            <tr>
+                <td>
+                    <div class="character-container">
+                        <span class="character" data-char="三">三</span>
+                        <div class="writer-container" id="writer-三-0"></div>
+                    </div>
+                    <div class="character-container">
+                        <span class="character" data-char="里">里</span>
+                        <div class="writer-container" id="writer-里-0"></div>
+                    </div>
+                    <div class="character-container">
+                        <span class="character" data-char="屯">屯</span>
+                        <div class="writer-container" id="writer-屯-0"></div>
+                    </div>
+                </td>
+                <td>sānlǐtún</td>
+                <td>Sanlitun, a place in Beijing</td>
+            </tr>
+            
+            <!-- Строка 6 -->
+            <tr>
+                <td>
+                    <div class="character-container">
+                        <span class="character" data-char="坐">坐</span>
+                        <div class="writer-container" id="writer-坐-0"></div>
+                    </div>
+                </td>
+                <td>zuò</td>
+                <td>take (a vehicle)</td>
+            </tr>
+            
+            <!-- Строка 7 -->
+            <tr>
+                <td>
+                    <div class="character-container">
+                        <span class="character" data-char="公">公</span>
+                        <div class="writer-container" id="writer-公-0"></div>
+                    </div>
+                    <div class="character-container">
+                        <span class="character" data-char="共">共</span>
+                        <div class="writer-container" id="writer-共-0"></div>
+                    </div>
+                    <div class="character-container">
+                        <span class="character" data-char="汽">汽</span>
+                        <div class="writer-container" id="writer-汽-0"></div>
+                    </div>
+                    <div class="character-container">
+                        <span class="character" data-char="车">车</span>
+                        <div class="writer-container" id="writer-车-0"></div>
+                    </div>
+                </td>
+                <td>gōnggòng qichē</td>
+                <td>bus</td>
+            </tr>
+            
+            <!-- Строка 8 -->
+            <tr>
+                <td>
+                    <div class="character-container">
+                        <span class="character" data-char="还">还</span>
+                        <div class="writer-container" id="writer-还-0"></div>
+                    </div>
+                    <div class="character-container">
+                        <span class="character" data-char="是">是</span>
+                        <div class="writer-container" id="writer-是-0"></div>
+                    </div>
+                </td>
+                <td>háishi</td>
+                <td>or (in a question)</td>
+            </tr>
+            
+            <!-- Строка 9 -->
+            <tr>
+                <td>
+                    <div class="character-container">
+                        <span class="character" data-char="出">出</span>
+                        <div class="writer-container" id="writer-出-0"></div>
+                    </div>
+                    <div class="character-container">
+                        <span class="character" data-char="租">租</span>
+                        <div class="writer-container" id="writer-租-0"></div>
+                    </div>
+                    <div class="character-container">
+                        <span class="character" data-char="车">车</span>
+                        <div class="writer-container" id="writer-车-1"></div>
+                    </div>
+                </td>
+                <td>chūzūchē</td>
+                <td>taxi</td>
+            </tr>
+            
+            <!-- Строка 10 -->
+            <tr>
+                <td>
+                    <div class="character-container">
+                        <span class="character" data-char="然">然</span>
+                        <div class="writer-container" id="writer-然-0"></div>
+                    </div>
+                    <div class="character-container">
+                        <span class="character" data-char="后">后</span>
+                        <div class="writer-container" id="writer-后-0"></div>
+                    </div>
+                </td>
+                <td>ránhòu</td>
+                <td>then</td>
+            </tr>
+            
+            <!-- Строка 11 -->
+            <tr>
+                <td>
+                    <div class="character-container">
+                        <span class="character" data-char="当">当</span>
+                        <div class="writer-container" id="writer-当-0"></div>
+                    </div>
+                    <div class="character-container">
+                        <span class="character" data-char="然">然</span>
+                        <div class="writer-container" id="writer-然-1"></div>
+                    </div>
+                </td>
+                <td>dāngrán</td>
+                <td>of course</td>
+            </tr>
+            
+            <!-- Строка 12 -->
+            <tr>
+                <td>
+                    <div class="character-container">
+                        <span class="character" data-char="意">意</span>
+                        <div class="writer-container" id="writer-意-0"></div>
+                    </div>
+                    <div class="character-container">
+                        <span class="character" data-char="大">大</span>
+                        <div class="writer-container" id="writer-大-0"></div>
+                    </div>
+                    <div class="character-container">
+                        <span class="character" data-char="利">利</span>
+                        <div class="writer-container" id="writer-利-0"></div>
+                    </div>
+                </td>
+                <td>Yìdàlì</td>
+                <td>Italy</td>
+            </tr>
+            
+            <!-- Строка 13 -->
+            <tr>
+                <td>
+                    <div class="character-container">
+                        <span class="character" data-char="餐">餐</span>
+                        <div class="writer-container" id="writer-餐-0"></div>
+                    </div>
+                    <div class="character-container">
+                        <span class="character" data-char="厅">厅</span>
+                        <div class="writer-container" id="writer-厅-0"></div>
+                    </div>
+                </td>
+                <td>cāntīng</td>
+                <td>restaurant</td>
+            </tr>
+            
+            <!-- Строка 14 -->
+            <tr>
+                <td>
+                    <div class="character-container">
+                        <span class="character" data-char="旅">旅</span>
+                        <div class="writer-container" id="writer-旅-0"></div>
+                    </div>
+                    <div class="character-container">
+                        <span class="character" data-char="行">行</span>
+                        <div class="writer-container" id="writer-行-0"></div>
+                    </div>
+                </td>
+                <td>lǚxíng</td>
+                <td>travel</td>
+            </tr>
+            
+            <!-- Строка 15 -->
+            <tr>
+                <td>
+                    <div class="character-container">
+                        <span class="character" data-char="暑">暑</span>
+                        <div class="writer-container" id="writer-暑-0"></div>
+                    </div>
+                    <div class="character-container">
+                        <span class="character" data-char="假">假</span>
+                        <div class="writer-container" id="writer-假-0"></div>
+                    </div>
+                </td>
+                <td>shǔjià</td>
+                <td>summer holiday</td>
+            </tr>
+            
+            <!-- Строка 16 -->
+            <tr>
+                <td>
+                    <div class="character-container">
+                        <span class="character" data-char="假">假</span>
+                        <div class="writer-container" id="writer-假-1"></div>
+                    </div>
+                    <div class="character-container">
+                        <span class="character" data-char="期">期</span>
+                        <div class="writer-container" id="writer-期-0"></div>
+                    </div>
+                </td>
+                <td>jiàqī</td>
+                <td>holiday</td>
+            </tr>
+            
+            <!-- Строка 17 -->
+            <tr>
+                <td>
+                    <div class="character-container">
+                        <span class="character" data-char="第">第</span>
+                        <div class="writer-container" id="writer-第-0"></div>
+                    </div>
+                    <div class="character-container">
+                        <span class="character" data-char="一">一</span>
+                        <div class="writer-container" id="writer-一-1"></div>
+                    </div>
+                    <div class="character-container">
+                        <span class="character" data-char="个">个</span>
+                        <div class="writer-container" id="writer-个-0"></div>
+                    </div>
+                </td>
+                <td>dì-yī gè</td>
+                <td>the first</td>
+            </tr>
+            
+            <!-- Строка 18 -->
+            <tr>
+                <td>
+                    <div class="character-container">
+                        <span class="character" data-char="桂">桂</span>
+                        <div class="writer-container" id="writer-桂-0"></div>
+                    </div>
+                    <div class="character-container">
+                        <span class="character" data-char="林">林</span>
+                        <div class="writer-container" id="writer-林-0"></div>
+                    </div>
+                </td>
+                <td>Guìlín</td>
+                <td>Guilin</td>
+            </tr>
+            
+            <!-- Строка 19 -->
+            <tr>
+                <td>
+                    <div class="character-container">
+                        <span class="character" data-char="火">火</span>
+                        <div class="writer-container" id="writer-火-0"></div>
+                    </div>
+                    <div class="character-container">
+                        <span class="character" data-char="车">车</span>
+                        <div class="writer-container" id="writer-车-2"></div>
+                    </div>
+                </td>
+                <td>huǒchē</td>
+                <td>train</td>
+            </tr>
+            
+            <!-- Строка 20 -->
+            <tr>
+                <td>
+                    <div class="character-container">
+                        <span class="character" data-char="船">船</span>
+                        <div class="writer-container" id="writer-船-0"></div>
+                    </div>
+                </td>
+                <td>chuán</td>
+                <td>boat</td>
+            </tr>
+            
+            <!-- Строка 21 -->
+            <tr>
+                <td>
+                    <div class="character-container">
+                        <span class="character" data-char="游">游</span>
+                        <div class="writer-container" id="writer-游-0"></div>
+                    </div>
+                    <div class="character-container">
+                        <span class="character" data-char="览">览</span>
+                        <div class="writer-container" id="writer-览-0"></div>
+                    </div>
+                </td>
+                <td>yóulǎn</td>
+                <td>go sightseeing</td>
+            </tr>
+            
+            <!-- Строка 22 -->
+            <tr>
+                <td>
+                    <div class="character-container">
+                        <span class="character" data-char="爬">爬</span>
+                        <div class="writer-container" id="writer-爬-0"></div>
+                    </div>
+                    <div class="character-container">
+                        <span class="character" data-char="山">山</span>
+                        <div class="writer-container" id="writer-山-0"></div>
+                    </div>
+                </td>
+                <td>páshān</td>
+                <td>climb a mountain</td>
+            </tr>
+            
+            <!-- Строка 23 -->
+            <tr>
+                <td>
+                    <div class="character-container">
+                        <span class="character" data-char="拍">拍</span>
+                        <div class="writer-container" id="writer-拍-0"></div>
+                    </div>
+                    <div class="character-container">
+                        <span class="character" data-char="照">照</span>
+                        <div class="writer-container" id="writer-照-0"></div>
+                    </div>
+                </td>
+                <td>pāizhào</td>
+                <td>take photos</td>
+            </tr>
+            
+            <!-- Строка 24 -->
+            <tr>
+                <td>
+                    <div class="character-container">
+                        <span class="character" data-char="参">参</span>
+                        <div class="writer-container" id="writer-参-0"></div>
+                    </div>
+                    <div class="character-container">
+                        <span class="character" data-char="观">观</span>
+                        <div class="writer-container" id="writer-观-0"></div>
+                    </div>
+                </td>
+                <td>cānguān</td>
+                <td>visit (a place)</td>
+            </tr>
+            
+            <!-- Строка 25 -->
+            <tr>
+                <td>
+                    <div class="character-container">
+                        <span class="character" data-char="景">景</span>
+                        <div class="writer-container" id="writer-景-0"></div>
+                    </div>
+                    <div class="character-container">
+                        <span class="character" data-char="点">点</span>
+                        <div class="writer-container" id="writer-点-0"></div>
+                    </div>
+                </td>
+                <td>jǐngdiǎn</td>
+                <td>scenic site</td>
+            </tr>
+            
+            <!-- Строка 26 -->
+            <tr>
+                <td>
+                    <div class="character-container">
+                        <span class="character" data-char="骑">骑</span>
+                        <div class="writer-container" id="writer-骑-0"></div>
+                    </div>
+                </td>
+                <td>qí</td>
+                <td>ride (bicycle, etc)</td>
+            </tr>
+            
+            <!-- Строка 27 -->
+            <tr>
+                <td>
+                    <div class="character-container">
+                        <span class="character" data-char="自">自</span>
+                        <div class="writer-container" id="writer-自-0"></div>
+                    </div>
+                    <div class="character-container">
+                        <span class="character" data-char="行">行</span>
+                        <div class="writer-container" id="writer-行-1"></div>
+                    </div>
+                    <div class="character-container">
+                        <span class="character" data-char="车">车</span>
+                        <div class="writer-container" id="writer-车-3"></div>
+                    </div>
+                </td>
+                <td>zìxíngchē</td>
+                <td>bicycle</td>
+            </tr>
+            
+            <!-- Строка 28 -->
+            <tr>
+                <td>
+                    <div class="character-container">
+                        <span class="character" data-char="飞">飞</span>
+                        <div class="writer-container" id="writer-飞-0"></div>
+                    </div>
+                    <div class="character-container">
+                        <span class="character" data-char="机">机</span>
+                        <div class="writer-container" id="writer-机-0"></div>
+                    </div>
+                </td>
+                <td>fēijī</td>
+                <td>aeroplane</td>
+            </tr>
+            
+            <!-- Строка 29 -->
+            <tr>
+                <td>
+                    <div class="character-container">
+                        <span class="character" data-char="加">加</span>
+                        <div class="writer-container" id="writer-加-0"></div>
+                    </div>
+                    <div class="character-container">
+                        <span class="character" data-char="油">油</span>
+                        <div class="writer-container" id="writer-油-0"></div>
+                    </div>
+                    <div class="character-container">
+                        <span class="character" data-char="站">站</span>
+                        <div class="writer-container" id="writer-站-0"></div>
+                    </div>
+                </td>
+                <td>jiāyóuzhàn</td>
+                <td>petrol station</td>
+            </tr>
+            
+            <!-- Строка 30 -->
+            <tr>
+                <td>
+                    <div class="character-container">
+                        <span class="character" data-char="火">火</span>
+                        <div class="writer-container" id="writer-火-1"></div>
+                    </div>
+                    <div class="character-container">
+                        <span class="character" data-char="车">车</span>
+                        <div class="writer-container" id="writer-车-4"></div>
+                    </div>
+                    <div class="character-container">
+                        <span class="character" data-char="站">站</span>
+                        <div class="writer-container" id="writer-站-1"></div>
+                    </div>
+                </td>
+                <td>huǒchēzhàn</td>
+                <td>railway station</td>
+            </tr>
+            
+            <!-- Строка 31 -->
+            <tr>
+                <td>
+                    <div class="character-container">
+                        <span class="character" data-char="停">停</span>
+                        <div class="writer-container" id="writer-停-0"></div>
+                    </div>
+                    <div class="character-container">
+                        <span class="character" data-char="车">车</span>
+                        <div class="writer-container" id="writer-车-5"></div>
+                    </div>
+                    <div class="character-container">
+                        <span class="character" data-char="场">场</span>
+                        <div class="writer-container" id="writer-场-0"></div>
+                    </div>
+                </td>
+                <td>tíngchēchǎng</td>
+                <td>car park</td>
+            </tr>
+            
+            <!-- Строка 32 -->
+            <tr>
+                <td>
+                    <div class="character-container">
+                        <span class="character" data-char="飞">飞</span>
+                        <div class="writer-container" id="writer-飞-1"></div>
+                    </div>
+                    <div class="character-container">
+                        <span class="character" data-char="机">机</span>
+                        <div class="writer-container" id="writer-机-1"></div>
+                    </div>
+                    <div class="character-container">
+                        <span class="character" data-char="场">场</span>
+                        <div class="writer-container" id="writer-场-1"></div>
+                    </div>
+                </td>
+                <td>fēijīchǎng</td>
+                <td>airport</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Находим все контейнеры для анимации
+            const writerContainers = document.querySelectorAll('.writer-container');
+            
+            // Для каждого контейнера создаем анимацию
+            writerContainers.forEach(container => {
+                // Получаем соответствующий иероглиф
+                const charElement = container.previousElementSibling;
+                if (charElement && charElement.classList.contains('character')) {
+                    const char = charElement.getAttribute('data-char');
+                    
+                    // Создаем анимацию
+                    const writer = HanziWriter.create(container.id, char, {
+                        width: 60,
+                        height: 60,
+                        padding: 2,
+                        showOutline: true,
+                        strokeAnimationSpeed: 1.5,
+                        delayBetweenStrokes: 150,
+                        strokeColor: '#e74c3c'
+                    });
+                    
+                    // Функция для бесконечной анимации
+                    function animateInLoop() {
+                        writer.animateCharacter({
+                            onComplete: () => {
+                                setTimeout(animateInLoop, 1000);
+                            }
+                        });
+                    }
+                    
+                    // Запускаем анимацию
+                    animateInLoop();
+                    
+                    // Добавляем обработчик клика
+                    charElement.addEventListener('click', function() {
+                        writer.cancelAnimation();
+                        animateInLoop();
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
