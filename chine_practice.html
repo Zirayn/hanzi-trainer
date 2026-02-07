@@ -1,0 +1,550 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Прописи: погода — 汉字 + пиньинь + перевод (анимация написания)</title>
+  <style>
+    :root{
+      --cell: 104px;
+      --gap: 14px;
+      --line: rgba(30, 41, 59, .18);
+      --diag: rgba(30, 41, 59, .10);
+      --text: #0f172a;
+      --muted: rgba(15, 23, 42, .65);
+      --card: #ffffff;
+      --bg: #f6f7fb;
+      --shadow: 0 10px 30px rgba(2, 6, 23, .08);
+      --radius: 16px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
+      color: var(--text);
+      background: radial-gradient(1200px 600px at 20% -10%, rgba(99,102,241,.12), transparent 60%),
+                  radial-gradient(1200px 700px at 100% 0%, rgba(34,197,94,.10), transparent 55%),
+                  var(--bg);
+    }
+    header{
+      padding: 24px 16px 10px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    h1{
+      font-size: 20px;
+      margin: 0 0 8px;
+      letter-spacing: .2px;
+    }
+    p.sub{
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.35;
+      font-size: 14px;
+    }
+    .wrap{
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 14px 16px 44px;
+      display: grid;
+      gap: 14px;
+    }
+    .toolbar{
+      background: var(--card);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 14px;
+      display:flex;
+      flex-wrap:wrap;
+      gap: 10px 12px;
+      align-items:center;
+      justify-content: space-between;
+    }
+    .controls{
+      display:flex;
+      flex-wrap:wrap;
+      gap: 10px 12px;
+      align-items:center;
+    }
+    .btn{
+      appearance:none;
+      border: 1px solid rgba(2, 6, 23, .12);
+      background: #fff;
+      border-radius: 12px;
+      padding: 10px 12px;
+      font-size: 14px;
+      cursor:pointer;
+      box-shadow: 0 1px 0 rgba(2,6,23,.04);
+      transition: transform .04s ease, box-shadow .15s ease, border-color .15s ease;
+      user-select:none;
+      white-space: nowrap;
+    }
+    .btn:hover{ border-color: rgba(2,6,23,.20); box-shadow: 0 8px 18px rgba(2,6,23,.08); }
+    .btn:active{ transform: translateY(1px); }
+    .btn.primary{
+      border-color: rgba(99,102,241,.35);
+      background: linear-gradient(180deg, rgba(99,102,241,.10), rgba(99,102,241,.02));
+    }
+    .tog{
+      display:flex;
+      gap: 10px;
+      align-items:center;
+      flex-wrap:wrap;
+      color: var(--muted);
+      font-size: 14px;
+    }
+    .switch{
+      display:flex;
+      align-items:center;
+      gap: 8px;
+      cursor:pointer;
+      user-select:none;
+    }
+    .switch input{ transform: scale(1.1); }
+    .grid{
+      display:grid;
+      gap: 14px;
+      grid-template-columns: 1fr;
+    }
+    @media (min-width: 900px){
+      .grid{ grid-template-columns: 1fr 1fr; }
+    }
+    .panel{
+      background: var(--card);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 14px;
+      overflow:hidden;
+    }
+    .panel h2{
+      font-size: 16px;
+      margin: 0 0 10px;
+    }
+    .wordlist{
+      display:flex;
+      flex-direction:column;
+      gap: 12px;
+    }
+    .word{
+      border: 1px solid rgba(2, 6, 23, .08);
+      border-radius: 14px;
+      padding: 10px;
+      display:grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 12px;
+      align-items:center;
+      background: linear-gradient(180deg, rgba(2,6,23,.015), rgba(2,6,23,0));
+    }
+    .word:hover{ border-color: rgba(2,6,23,.14); }
+    .cells{
+      display:flex;
+      gap: 8px;
+      align-items:center;
+      flex-wrap:wrap;
+    }
+    /* 田字格 */
+    .cell{
+      width: var(--cell);
+      height: var(--cell);
+      border-radius: 14px;
+      position: relative;
+      overflow:hidden;
+      border: 1px solid rgba(2, 6, 23, .10);
+      background:
+        linear-gradient(45deg, transparent 49.4%, var(--diag) 49.5%, var(--diag) 50.5%, transparent 50.6%),
+        linear-gradient(-45deg, transparent 49.4%, var(--diag) 49.5%, var(--diag) 50.5%, transparent 50.6%),
+        linear-gradient(to right, transparent 49.4%, var(--line) 49.5%, var(--line) 50.5%, transparent 50.6%),
+        linear-gradient(to bottom, transparent 49.4%, var(--line) 49.5%, var(--line) 50.5%, transparent 50.6%),
+        linear-gradient(180deg, rgba(2,6,23,.02), rgba(2,6,23,0));
+    }
+    .cell .target{
+      width: 100%;
+      height: 100%;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      cursor:pointer;
+      touch-action: manipulation;
+    }
+    .cell .hint{
+      position:absolute;
+      bottom: 6px;
+      right: 8px;
+      font-size: 11px;
+      color: rgba(15, 23, 42, .45);
+      background: rgba(255,255,255,.75);
+      border: 1px solid rgba(2,6,23,.08);
+      border-radius: 999px;
+      padding: 2px 8px;
+      backdrop-filter: blur(6px);
+      pointer-events:none;
+    }
+    .meta{
+      display:flex;
+      flex-direction:column;
+      gap: 2px;
+      min-width: 0;
+    }
+    .hanzi{
+      font-size: 18px;
+      letter-spacing: .5px;
+      font-weight: 650;
+    }
+    .pinyin{ color: var(--muted); font-size: 13px; }
+    .ru{
+      color: rgba(15, 23, 42, .75);
+      font-size: 13px;
+      line-height: 1.25;
+    }
+    .word-actions{ display:flex; gap: 8px; align-items:center; }
+    .mini{ padding: 9px 10px; font-size: 13px; border-radius: 12px; }
+    .banner{
+      display:none;
+      margin-top: 10px;
+      border-radius: 14px;
+      padding: 10px 12px;
+      border: 1px solid rgba(239,68,68,.25);
+      background: rgba(239,68,68,.06);
+      color: rgba(127,29,29,.95);
+      font-size: 13px;
+      line-height: 1.3;
+    }
+    footer{
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 16px 18px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.35;
+    }
+    code{
+      background: rgba(2,6,23,.06);
+      padding: 2px 6px;
+      border-radius: 8px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size: 12px;
+    }
+  </style>
+</head>
+<body>
+<header>
+  <h1>Прописи: погода — 汉字 + пиньинь + перевод</h1>
+  <p class="sub">
+    Нажми/тапни по клетке с иероглифом, чтобы проиграть анимацию написания (stroke order).
+    В каждой строке есть кнопка «Анимировать слово». Можно также «Анимировать всё».
+  </p>
+</header>
+
+<div class="wrap">
+  <div class="toolbar">
+    <div class="controls">
+      <button class="btn primary" id="animateAll">Анимировать всё</button>
+      <button class="btn" id="stopAll">Стоп</button>
+      <button class="btn" id="resetAll">Сбросить</button>
+    </div>
+
+    <div class="tog">
+      <label class="switch">
+        <input type="checkbox" id="showOutline" checked />
+        <span>Показывать контур</span>
+      </label>
+      <label class="switch">
+        <input type="checkbox" id="showCharacter" />
+        <span>Показывать образец</span>
+      </label>
+      <label class="switch">
+        <input type="checkbox" id="slowMode" />
+        <span>Медленнее</span>
+      </label>
+    </div>
+  </div>
+
+  <div class="banner" id="cdnError">
+    Не удалось загрузить библиотеку для анимации (HanziWriter) или данные штрихов.
+    Проверь интернет или открой страницу через GitHub Pages / обычный сервер.
+    Для локального запуска: <code>python3 -m http.server 8000</code> и затем открыть <code>http://localhost:8000</code>.
+  </div>
+
+  <div class="grid">
+    <section class="panel">
+      <h2>Слова (группа 1)</h2>
+      <div class="wordlist" id="listA"></div>
+    </section>
+
+    <section class="panel">
+      <h2>Слова (группа 2)</h2>
+      <div class="wordlist" id="listB"></div>
+    </section>
+  </div>
+</div>
+
+<footer>
+  <div>
+    Подсказка для GitHub Pages: переименуй файл в <code>index.html</code> и загрузи в репозиторий → Settings → Pages → Deploy from branch.
+  </div>
+</footer>
+
+<script src="https://unpkg.com/hanzi-writer@3.5.0/dist/hanzi-writer.min.js"></script>
+
+<script>
+  const GROUP_A = [
+    { hanzi: "预报", pinyin: "yùbào", ru: "прогноз (forecast)" },
+    { hanzi: "起",   pinyin: "qǐ",    ru: "с, начиная с (since, starting from)" },
+    { hanzi: "空气", pinyin: "kōngqì",ru: "воздух (air)" },
+    { hanzi: "将",   pinyin: "jiāng", ru: "будет (будущее время; письменн.)" },
+    { hanzi: "影响", pinyin: "yǐngxiǎng", ru: "влиять; воздействовать (influence; affect)" },
+    { hanzi: "部分", pinyin: "bùfen", ru: "часть (part)" },
+    { hanzi: "地区", pinyin: "dìqū",  ru: "район; регион (area)" },
+    { hanzi: "受",   pinyin: "shòu",  ru: "подвергаться; получать (suffer/receive)" },
+    { hanzi: "下降", pinyin: "xiàjiàng", ru: "снижаться (decrease)" },
+    { hanzi: "白天", pinyin: "báitiān", ru: "днём (daytime)" },
+    { hanzi: "夜间", pinyin: "yèjiān", ru: "ночью (nighttime)" },
+  ];
+
+  const GROUP_B = [
+    { hanzi: "差别", pinyin: "chābié", ru: "разница (difference)" },
+    { hanzi: "达到", pinyin: "dádào",  ru: "достигать (reach; get up to)" },
+    { hanzi: "以上", pinyin: "yǐshàng", ru: "выше; больше (above)" },
+    { hanzi: "上",   pinyin: "shàng",  ru: "на; сверху (above; on top of)" },
+    { hanzi: "多云", pinyin: "duōyún", ru: "облачно (cloudy)" },
+    { hanzi: "转",   pinyin: "zhuǎn",  ru: "изменяться (change)" },
+    { hanzi: "晴",   pinyin: "qíng",   ru: "ясно (sunny)" },
+    { hanzi: "阴",   pinyin: "yīn",    ru: "пасмурно (overcast)" },
+    { hanzi: "零下", pinyin: "língxià", ru: "ниже нуля (below zero)" },
+    { hanzi: "小",   pinyin: "xiǎo",   ru: "маленький (small)" },
+    { hanzi: "雨",   pinyin: "yǔ",     ru: "дождь (rain)" },
+  ];
+
+  const DATA_BASE = "https://cdn.jsdelivr.net/npm/hanzi-writer-data@2.0.1/";
+
+  function makeCharDataLoader() {
+    return function(char) {
+      const url = DATA_BASE + encodeURIComponent(char) + ".json";
+      return fetch(url).then(r => {
+        if (!r.ok) throw new Error("char data fetch failed: " + url);
+        return r.json();
+      });
+    };
+  }
+
+  const WRITERS = new Map();
+  let stopFlag = false;
+
+  function el(tag, attrs={}, children=[]) {
+    const e = document.createElement(tag);
+    for (const [k,v] of Object.entries(attrs)) {
+      if (k === "class") e.className = v;
+      else if (k.startsWith("on") && typeof v === "function") e.addEventListener(k.slice(2), v);
+      else if (k === "html") e.innerHTML = v;
+      else e.setAttribute(k, v);
+    }
+    for (const c of children) e.appendChild(c);
+    return e;
+  }
+
+  function makeWordRow(word, groupId, wordIndex) {
+    const chars = Array.from(word.hanzi);
+    const cellsWrap = el("div", { class:"cells" });
+
+    chars.forEach((ch, ci) => {
+      const id = `w-${groupId}-${wordIndex}-${ci}`;
+      const target = el("div", { class:"target", id });
+      const cell = el("div", { class:"cell" }, [
+        target,
+        el("div", { class:"hint", html:"тап" })
+      ]);
+
+      cell.addEventListener("click", async (ev) => {
+        ev.preventDefault();
+        await animateById(id);
+      });
+
+      cellsWrap.appendChild(cell);
+    });
+
+    const meta = el("div", { class:"meta" }, [
+      el("div", { class:"hanzi", html: word.hanzi }),
+      el("div", { class:"pinyin", html: word.pinyin }),
+      el("div", { class:"ru", html: word.ru })
+    ]);
+
+    const actions = el("div", { class:"word-actions" }, [
+      el("button", { class:"btn mini", html:"Анимировать слово", onclick: async (e) => {
+        e.preventDefault();
+        await animateWord(groupId, wordIndex);
+      }}),
+      el("button", { class:"btn mini", html:"Сброс", onclick: (e) => {
+        e.preventDefault();
+        resetWord(groupId, wordIndex);
+      }})
+    ]);
+
+    return el("div", { class:"word" }, [cellsWrap, meta, actions]);
+  }
+
+  function buildList(containerId, words, groupId) {
+    const container = document.getElementById(containerId);
+    container.innerHTML = "";
+    words.forEach((w, i) => container.appendChild(makeWordRow(w, groupId, i)));
+  }
+
+  function getOptions() {
+    const showOutline = document.getElementById("showOutline").checked;
+    const showCharacter = document.getElementById("showCharacter").checked;
+    const slowMode = document.getElementById("slowMode").checked;
+    return { showOutline, showCharacter, slowMode };
+  }
+
+  function initWritersForAllWords() {
+    WRITERS.clear();
+    stopFlag = false;
+
+    const { showOutline, showCharacter, slowMode } = getOptions();
+    const charDataLoader = makeCharDataLoader();
+
+    const makeWriter = (id, ch) => {
+      const node = document.getElementById(id);
+      if (!node) return;
+      node.innerHTML = "";
+
+      const writer = HanziWriter.create(id, ch, {
+        width: 96,
+        height: 96,
+        padding: 10,
+        showOutline,
+        showCharacter,
+        strokeAnimationSpeed: slowMode ? 0.6 : 1.2,
+        delayBetweenStrokes: slowMode ? 220 : 120,
+        charDataLoader
+      });
+
+      WRITERS.set(id, writer);
+    };
+
+    const all = [
+      { list: GROUP_A, gid:"A" },
+      { list: GROUP_B, gid:"B" },
+    ];
+
+    for (const g of all) {
+      g.list.forEach((w, wi) => {
+        Array.from(w.hanzi).forEach((ch, ci) => {
+          const id = `w-${g.gid}-${wi}-${ci}`;
+          makeWriter(id, ch);
+        });
+      });
+    }
+  }
+
+  function resetWord(groupId, wordIndex) {
+    const list = groupId === "A" ? GROUP_A : GROUP_B;
+    const chars = Array.from(list[wordIndex].hanzi);
+    chars.forEach((_, ci) => {
+      const id = `w-${groupId}-${wordIndex}-${ci}`;
+      const w = WRITERS.get(id);
+      if (!w) return;
+      try { w.cancelAnimation(); } catch(e){}
+      try { w.hideCharacter(); } catch(e){}
+      if (document.getElementById("showCharacter").checked) {
+        try { w.showCharacter(); } catch(e){}
+      }
+    });
+  }
+
+  function resetAll() {
+    stopFlag = true;
+    for (const w of WRITERS.values()) {
+      try { w.cancelAnimation(); } catch(e){}
+      try { w.hideCharacter(); } catch(e){}
+      if (document.getElementById("showCharacter").checked) {
+        try { w.showCharacter(); } catch(e){}
+      }
+    }
+    setTimeout(() => { stopFlag = false; }, 50);
+  }
+
+  async function animateById(id) {
+    const w = WRITERS.get(id);
+    if (!w || stopFlag) return;
+
+    try { w.cancelAnimation(); } catch(e){}
+
+    try {
+      const res = w.animateCharacter();
+      if (res && typeof res.then === "function") {
+        await res;
+        return;
+      }
+    } catch (e) {}
+
+    await new Promise((resolve) => {
+      try { w.animateCharacter({ onComplete: resolve }); }
+      catch(e){ resolve(); }
+    });
+  }
+
+  async function animateWord(groupId, wordIndex) {
+    const list = groupId === "A" ? GROUP_A : GROUP_B;
+    const chars = Array.from(list[wordIndex].hanzi);
+    for (let ci = 0; ci < chars.length; ci++) {
+      if (stopFlag) return;
+      const id = `w-${groupId}-${wordIndex}-${ci}`;
+      await animateById(id);
+      await new Promise(r => setTimeout(r, 120));
+    }
+  }
+
+  async function animateAll() {
+    stopFlag = false;
+    for (let wi = 0; wi < GROUP_A.length; wi++) {
+      if (stopFlag) return;
+      await animateWord("A", wi);
+      await new Promise(r => setTimeout(r, 160));
+    }
+    for (let wi = 0; wi < GROUP_B.length; wi++) {
+      if (stopFlag) return;
+      await animateWord("B", wi);
+      await new Promise(r => setTimeout(r, 160));
+    }
+  }
+
+  function wireToolbar() {
+    document.getElementById("animateAll").addEventListener("click", (e) => { e.preventDefault(); animateAll(); });
+    document.getElementById("stopAll").addEventListener("click", (e) => { e.preventDefault(); stopFlag = true; });
+    document.getElementById("resetAll").addEventListener("click", (e) => { e.preventDefault(); resetAll(); });
+
+    ["showOutline","showCharacter","slowMode"].forEach(id => {
+      document.getElementById(id).addEventListener("change", () => initWritersForAllWords());
+    });
+  }
+
+  function showCdnError() {
+    document.getElementById("cdnError").style.display = "block";
+  }
+
+  async function bootstrap() {
+    buildList("listA", GROUP_A, "A");
+    buildList("listB", GROUP_B, "B");
+    wireToolbar();
+
+    if (!window.HanziWriter) {
+      showCdnError();
+      return;
+    }
+
+    try {
+      initWritersForAllWords();
+      const probe = "晴";
+      const url = DATA_BASE + encodeURIComponent(probe) + ".json";
+      const r = await fetch(url, { method: "GET" });
+      if (!r.ok) throw new Error("probe failed");
+    } catch (e) {
+      console.warn(e);
+      showCdnError();
+    }
+  }
+
+  bootstrap();
+</script>
+</body>
+</html>
