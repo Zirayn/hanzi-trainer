@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Китайские прописи</title>
+    <script src="https://cdn.jsdelivr.net/npm/hanzi-writer@3.5/dist/hanzi-writer.min.js"></script>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            margin: 0;
+            padding: 15px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            font-size: 1.4rem;
+            margin-bottom: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            display: grid;
+            /* Адаптивная сетка для телефонов */
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 15px;
+        }
+
+        .word-card {
+            background: white;
+            border-radius: 8px;
+            padding: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .pinyin {
+            font-size: 1rem;
+            color: #d35400;
+            font-weight: bold;
+        }
+
+        .translation {
+            font-size: 0.85rem;
+            color: #7f8c8d;
+            margin-bottom: 8px;
+            line-height: 1.2;
+        }
+
+        .hanzi-row {
+            display: flex;
+            justify-content: center;
+            gap: 5px;
+        }
+
+        /* Стиль клетки (Tian Zi Ge) */
+        .character-wrapper {
+            width: 60px; /* Размер для телефона */
+            height: 60px;
+            cursor: pointer;
+            position: relative;
+            /* Красная сетка прописей */
+            border: 1px solid #e74c3c; 
+            background-color: #fff;
+            background-image: 
+                linear-gradient(45deg, transparent 49%, #fadbd8 49%, #fadbd8 51%, transparent 51%),
+                linear-gradient(-45deg, transparent 49%, #fadbd8 49%, #fadbd8 51%, transparent 51%),
+                linear-gradient(to right, transparent 49%, #fadbd8 49%, #fadbd8 51%, transparent 51%),
+                linear-gradient(to bottom, transparent 49%, #fadbd8 49%, #fadbd8 51%, transparent 51%);
+        }
+
+        /* Убираем подсветку при тапе на мобильных */
+        .character-wrapper {
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .hint {
+            text-align: center;
+            margin: 20px 0;
+            font-size: 0.9rem;
+            color: #888;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Погода (天气)</h1>
+    <p class="hint">Нажми на иероглиф для анимации</p>
+    
+    <div class="container" id="app"></div>
+
+    <script>
+        const vocabulary = [
+            { chars: "预报", pinyin: "yùbào", trans: "forecast" },
+            { chars: "起", pinyin: "qǐ", trans: "since/start" },
+            { chars: "空气", pinyin: "kōngqì", trans: "air" },
+            { chars: "将", pinyin: "jiāng", trans: "will (future)" },
+            { chars: "影响", pinyin: "yǐngxiǎng", trans: "influence" },
+            { chars: "部分", pinyin: "bùfen", trans: "part" },
+            { chars: "地区", pinyin: "dìqū", trans: "area" },
+            { chars: "受", pinyin: "shòu", trans: "suffer/receive" },
+            { chars: "下降", pinyin: "xiàjiàng", trans: "decrease" },
+            { chars: "白天", pinyin: "báitiān", trans: "daytime" },
+            { chars: "夜间", pinyin: "yèjiān", trans: "nighttime" },
+            { chars: "差别", pinyin: "chābié", trans: "difference" },
+            { chars: "达到", pinyin: "dádào", trans: "reach" },
+            { chars: "以上", pinyin: "yǐshàng", trans: "above" },
+            { chars: "上", pinyin: "shàng", trans: "top/above" },
+            { chars: "多云", pinyin: "duōyún", trans: "cloudy" },
+            { chars: "转", pinyin: "zhuǎn", trans: "change/turn" },
+            { chars: "晴", pinyin: "qíng", trans: "sunny" },
+            { chars: "阴", pinyin: "yīn", trans: "overcast" },
+            { chars: "零下", pinyin: "língxià", trans: "below zero" },
+            { chars: "小", pinyin: "xiǎo", trans: "small" },
+            { chars: "雨", pinyin: "yǔ", trans: "rain" }
+        ];
+
+        const app = document.getElementById('app');
+
+        vocabulary.forEach((item, index) => {
+            const card = document.createElement('div');
+            card.className = 'word-card';
+            card.innerHTML = `<div class="pinyin">${item.pinyin}</div><div class="translation">${item.trans}</div>`;
+            
+            const hanziRow = document.createElement('div');
+            hanziRow.className = 'hanzi-row';
+            card.appendChild(hanziRow);
+            app.appendChild(card);
+
+            item.chars.split('').forEach((char, charIndex) => {
+                const uniqueId = `char-${index}-${charIndex}`;
+                const wrapper = document.createElement('div');
+                wrapper.id = uniqueId;
+                wrapper.className = 'character-wrapper';
+                hanziRow.appendChild(wrapper);
+
+                // Загружаем иероглиф
+                setTimeout(() => {
+                    const writer = HanziWriter.create(uniqueId, char, {
+                        width: 60,
+                        height: 60,
+                        padding: 4,
+                        showOutline: true,
+                        strokeAnimationSpeed: 1.5, // Чуть быстрее для динамики
+                        delayBetweenStrokes: 150,
+                        strokeColor: '#000000', // Черная тушь
+                        outlineColor: '#DDDDDD', // Серый контур для подсказки
+                        showCharacter: false, // Скрываем иероглиф до анимации (или true, если хотите видеть сразу)
+                    });
+                    
+                    // Показываем серый контур сразу, чтобы было видно что писать
+                    writer.showOutline(); 
+
+                    wrapper.addEventListener('click', () => writer.animateCharacter());
+                }, 0);
+            });
+        });
+    </script>
+</body>
+</html>
