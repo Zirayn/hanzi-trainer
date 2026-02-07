@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>汉字书写练习</title>
+<script src="https://cdn.jsdelivr.net/npm/hanzi-writer@3.5/dist/hanzi-writer.min.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700;900&family=Noto+Sans+SC:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1a1a2e;
+    --rice: #f5f0e8;
+    --grid-line: #c4b8a4;
+    --grid-dash: #d8cfc2;
+    --accent: #b8432f;
+    --accent-light: #e8654f;
+    --pinyin-color: #6b7b3a;
+    --eng-color: #8a7560;
+    --card-bg: #faf7f2;
+    --shadow: rgba(26,26,46,0.08);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--rice);
+    background-image:
+      radial-gradient(circle at 20% 80%, rgba(184,67,47,0.03) 0%, transparent 50%),
+      radial-gradient(circle at 80% 20%, rgba(107,123,58,0.03) 0%, transparent 50%);
+    font-family: 'Noto Sans SC', sans-serif;
+    color: var(--ink);
+    min-height: 100vh;
+    padding: 1.5rem;
+  }
+
+  header {
+    text-align: center;
+    margin-bottom: 2rem;
+    padding: 1.5rem 0;
+  }
+
+  header h1 {
+    font-family: 'Noto Serif SC', serif;
+    font-weight: 900;
+    font-size: clamp(1.6rem, 4vw, 2.4rem);
+    color: var(--ink);
+    letter-spacing: 0.15em;
+    position: relative;
+    display: inline-block;
+  }
+
+  header h1::after {
+    content: '';
+    display: block;
+    width: 60%;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, var(--accent), transparent);
+    margin: 0.5rem auto 0;
+    border-radius: 2px;
+  }
+
+  .subtitle {
+    font-size: 0.85rem;
+    color: var(--eng-color);
+    margin-top: 0.5rem;
+    font-weight: 300;
+    letter-spacing: 0.05em;
+  }
+
+  .word-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.25rem;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .word-card {
+    background: var(--card-bg);
+    border-radius: 12px;
+    padding: 1rem 1.1rem;
+    box-shadow: 0 2px 12px var(--shadow), 0 1px 3px var(--shadow);
+    border: 1px solid rgba(196,184,164,0.3);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .word-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px var(--shadow), 0 2px 6px var(--shadow);
+  }
+
+  .word-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 0.6rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid rgba(196,184,164,0.25);
+  }
+
+  .pinyin {
+    font-size: 0.95rem;
+    color: var(--pinyin-color);
+    font-weight: 500;
+    letter-spacing: 0.03em;
+  }
+
+  .english {
+    font-size: 0.8rem;
+    color: var(--eng-color);
+    font-style: italic;
+    text-align: right;
+    max-width: 55%;
+  }
+
+  .hanzi-row {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .hanzi-cell {
+    position: relative;
+    width: 100px;
+    height: 100px;
+    cursor: pointer;
+    border-radius: 4px;
+    overflow: hidden;
+    background: #fff;
+    border: 1.5px solid var(--grid-line);
+    transition: border-color 0.2s;
+  }
+
+  .hanzi-cell:hover {
+    border-color: var(--accent);
+  }
+
+  .hanzi-cell::before,
+  .hanzi-cell::after {
+    content: '';
+    position: absolute;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  /* vertical center line */
+  .hanzi-cell::before {
+    left: 50%;
+    top: 8%;
+    bottom: 8%;
+    width: 1px;
+    border-left: 1px dashed var(--grid-dash);
+  }
+
+  /* horizontal center line */
+  .hanzi-cell::after {
+    top: 50%;
+    left: 8%;
+    right: 8%;
+    height: 1px;
+    border-top: 1px dashed var(--grid-dash);
+  }
+
+  /* diagonal lines via extra elements */
+  .hanzi-cell .diag {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .hanzi-cell .diag::before,
+  .hanzi-cell .diag::after {
+    content: '';
+    position: absolute;
+    width: 141%;
+    height: 0;
+    border-top: 1px dashed rgba(216,207,194,0.5);
+    top: 50%;
+    left: 50%;
+    transform-origin: center;
+  }
+
+  .hanzi-cell .diag::before {
+    transform: translate(-50%, -50%) rotate(45deg);
+  }
+
+  .hanzi-cell .diag::after {
+    transform: translate(-50%, -50%) rotate(-45deg);
+  }
+
+  .hanzi-cell svg {
+    position: relative;
+    z-index: 1;
+  }
+
+  .play-hint {
+    position: absolute;
+    bottom: 3px;
+    right: 5px;
+    font-size: 0.55rem;
+    color: var(--accent-light);
+    opacity: 0;
+    transition: opacity 0.2s;
+    z-index: 2;
+    pointer-events: none;
+  }
+
+  .hanzi-cell:hover .play-hint {
+    opacity: 1;
+  }
+
+  /* Animation overlay */
+  .anim-overlay {
+    display: none;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(26,26,46,0.6);
+    backdrop-filter: blur(4px);
+    z-index: 100;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+  }
+
+  .anim-overlay.active {
+    display: flex;
+  }
+
+  .anim-box {
+    background: #fff;
+    border-radius: 16px;
+    padding: 1.5rem;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .anim-char-container {
+    position: relative;
+    width: 220px;
+    height: 220px;
+    border: 2px solid var(--grid-line);
+    border-radius: 8px;
+    background: #fff;
+    overflow: hidden;
+  }
+
+  .anim-char-container::before,
+  .anim-char-container::after {
+    content: '';
+    position: absolute;
+    z-index: 0;
+  }
+
+  .anim-char-container::before {
+    left: 50%;
+    top: 5%;
+    bottom: 5%;
+    width: 1px;
+    border-left: 1px dashed var(--grid-dash);
+  }
+
+  .anim-char-container::after {
+    top: 50%;
+    left: 5%;
+    right: 5%;
+    height: 1px;
+    border-top: 1px dashed var(--grid-dash);
+  }
+
+  .anim-diag {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .anim-diag::before,
+  .anim-diag::after {
+    content: '';
+    position: absolute;
+    width: 141%;
+    height: 0;
+    border-top: 1px dashed rgba(216,207,194,0.5);
+    top: 50%;
+    left: 50%;
+    transform-origin: center;
+  }
+
+  .anim-diag::before { transform: translate(-50%, -50%) rotate(45deg); }
+  .anim-diag::after { transform: translate(-50%, -50%) rotate(-45deg); }
+
+  .anim-char-container svg {
+    position: relative;
+    z-index: 1;
+  }
+
+  .anim-info {
+    text-align: center;
+  }
+
+  .anim-info .char-display {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--ink);
+  }
+
+  .anim-info .pinyin-display {
+    color: var(--pinyin-color);
+    font-size: 0.95rem;
+  }
+
+  .anim-buttons {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .anim-btn {
+    padding: 0.45rem 1.1rem;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    font-family: 'Noto Sans SC', sans-serif;
+    transition: all 0.15s;
+  }
+
+  .btn-replay {
+    background: var(--accent);
+    color: #fff;
+  }
+
+  .btn-replay:hover {
+    background: var(--accent-light);
+  }
+
+  .btn-close {
+    background: rgba(196,184,164,0.3);
+    color: var(--ink);
+  }
+
+  .btn-close:hover {
+    background: rgba(196,184,164,0.5);
+  }
+
+  .btn-quiz {
+    background: var(--pinyin-color);
+    color: #fff;
+  }
+
+  .btn-quiz:hover {
+    background: #7d8e48;
+  }
+
+  @media (max-width: 500px) {
+    body { padding: 1rem 0.75rem; }
+    .word-grid { gap: 1rem; }
+    .hanzi-cell { width: 85px; height: 85px; }
+    .anim-char-container { width: 180px; height: 180px; }
+    header h1 { letter-spacing: 0.08em; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>汉字书写练习</h1>
+  <p class="subtitle">Нажмите на иероглиф для анимации написания</p>
+</header>
+
+<div class="word-grid" id="wordGrid"></div>
+
+<div class="anim-overlay" id="animOverlay">
+  <div class="anim-box">
+    <div class="anim-info">
+      <span class="pinyin-display" id="animPinyin"></span>
+    </div>
+    <div class="anim-char-container" id="animTarget">
+      <div class="anim-diag"></div>
+    </div>
+    <div class="anim-buttons">
+      <button class="anim-btn btn-replay" id="btnReplay">▶ Повтор</button>
+      <button class="anim-btn btn-quiz" id="btnQuiz">✍ Написать</button>
+      <button class="anim-btn btn-close" id="btnClose">✕ Закрыть</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const words = [
+  { pinyin: "yùbào", chars: "预报", en: "forecast" },
+  { pinyin: "qǐ", chars: "起", en: "since, starting from" },
+  { pinyin: "kōngqì", chars: "空气", en: "air" },
+  { pinyin: "jiāng", chars: "将", en: "for future tense (written)" },
+  { pinyin: "yǐngxiǎng", chars: "影响", en: "influence; affect" },
+  { pinyin: "bùfen", chars: "部分", en: "part" },
+  { pinyin: "dìqū", chars: "地区", en: "area" },
+  { pinyin: "shòu", chars: "受", en: "suffer, receive" },
+  { pinyin: "xiàjiàng", chars: "下降", en: "decrease" },
+  { pinyin: "báitiān", chars: "白天", en: "daytime" },
+  { pinyin: "yèjiān", chars: "夜间", en: "nighttime" },
+  { pinyin: "chābié", chars: "差别", en: "difference" },
+  { pinyin: "dádào", chars: "达到", en: "reach, get up to" },
+  { pinyin: "yǐshàng", chars: "以上", en: "above" },
+  { pinyin: "shàng", chars: "上", en: "above, on top of" },
+  { pinyin: "duōyún", chars: "多云", en: "cloudy" },
+  { pinyin: "zhuǎn", chars: "转", en: "change" },
+  { pinyin: "qíng", chars: "晴", en: "sunny" },
+  { pinyin: "yīn", chars: "阴", en: "overcast" },
+  { pinyin: "língxià", chars: "零下", en: "below zero" },
+  { pinyin: "xiǎo", chars: "小", en: "small" },
+  { pinyin: "yǔ", chars: "雨", en: "rain" },
+];
+
+const grid = document.getElementById('wordGrid');
+
+// Build cards
+words.forEach((w, wi) => {
+  const card = document.createElement('div');
+  card.className = 'word-card';
+
+  const header = document.createElement('div');
+  header.className = 'word-header';
+  header.innerHTML = `<span class="pinyin">${w.pinyin}</span><span class="english">${w.en}</span>`;
+  card.appendChild(header);
+
+  const row = document.createElement('div');
+  row.className = 'hanzi-row';
+
+  const charArr = Array.from(w.chars);
+  charArr.forEach((ch, ci) => {
+    const cell = document.createElement('div');
+    cell.className = 'hanzi-cell';
+    cell.dataset.char = ch;
+
+    const diag = document.createElement('div');
+    diag.className = 'diag';
+    cell.appendChild(diag);
+
+    const hint = document.createElement('div');
+    hint.className = 'play-hint';
+    hint.textContent = '▶';
+    cell.appendChild(hint);
+
+    const targetId = `char-${wi}-${ci}`;
+    const target = document.createElement('div');
+    target.id = targetId;
+    target.style.position = 'relative';
+    target.style.zIndex = '1';
+    cell.appendChild(target);
+
+    row.appendChild(cell);
+
+    // Create static writer
+    try {
+      HanziWriter.create(targetId, ch, {
+        width: 96,
+        height: 96,
+        padding: 6,
+        strokeColor: '#1a1a2e',
+        radicalColor: '#b8432f',
+        strokeAnimationSpeed: 1,
+        delayBetweenStrokes: 150,
+        showOutline: true,
+        showCharacter: true,
+        outlineColor: '#ddd8d0',
+      });
+    } catch(e) {}
+
+    cell.addEventListener('click', () => openAnimation(ch, w.pinyin));
+  });
+
+  card.appendChild(row);
+  grid.appendChild(card);
+});
+
+// Animation overlay
+const overlay = document.getElementById('animOverlay');
+const animTarget = document.getElementById('animTarget');
+const animPinyin = document.getElementById('animPinyin');
+let currentAnimWriter = null;
+let currentAnimChar = '';
+
+function openAnimation(ch, pinyin) {
+  currentAnimChar = ch;
+  animPinyin.textContent = `${ch}  ·  ${pinyin}`;
+  overlay.classList.add('active');
+
+  // Clear previous
+  const old = document.getElementById('animWriterDiv');
+  if (old) old.remove();
+
+  const div = document.createElement('div');
+  div.id = 'animWriterDiv';
+  div.style.position = 'relative';
+  div.style.zIndex = '1';
+  animTarget.appendChild(div);
+
+  currentAnimWriter = HanziWriter.create('animWriterDiv', ch, {
+    width: 216,
+    height: 216,
+    padding: 10,
+    strokeColor: '#1a1a2e',
+    radicalColor: '#b8432f',
+    strokeAnimationSpeed: 0.8,
+    delayBetweenStrokes: 300,
+    showOutline: true,
+    showCharacter: false,
+    outlineColor: '#ddd8d0',
+    drawingWidth: 4,
+  });
+
+  setTimeout(() => {
+    currentAnimWriter.animateCharacter();
+  }, 200);
+}
+
+document.getElementById('btnReplay').addEventListener('click', () => {
+  if (currentAnimWriter) {
+    currentAnimWriter.hideCharacter();
+    setTimeout(() => currentAnimWriter.animateCharacter(), 100);
+  }
+});
+
+document.getElementById('btnQuiz').addEventListener('click', () => {
+  if (currentAnimWriter) {
+    currentAnimWriter.hideCharacter();
+    currentAnimWriter.quiz({
+      showHintAfterMisses: 2,
+      highlightOnComplete: true,
+      strokeHighlightSpeed: 2,
+    });
+  }
+});
+
+document.getElementById('btnClose').addEventListener('click', () => {
+  overlay.classList.remove('active');
+  currentAnimWriter = null;
+});
+
+overlay.addEventListener('click', (e) => {
+  if (e.target === overlay) {
+    overlay.classList.remove('active');
+    currentAnimWriter = null;
+  }
+});
+</script>
+</body>
+</html>
