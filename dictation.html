@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>听写练习 — Подготовка к диктанту</title>
+<script src="https://cdn.jsdelivr.net/npm/hanzi-writer@3.5/dist/hanzi-writer.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg1:#f5ebe0;--bg2:#fef9f0;--bg3:#fff;--tx:#2d1810;--tx2:#5c3a28;--tx3:#6b5347;--tx4:#8b7a6b;--tx5:#b8a080;--hd1:#2d1810;--hd2:#5c3a28;--gold:#c0a888;--cream:#f5ebe0;--brd:#e8ddd4;--brd2:#d4c4b0;--card:#fff;--card2:#fef9f0;--card3:#f5ebe0;--accent:#8b5e3c;--red:#c0392b;--green:#27ae60;--orange:#e67e22;--tgl-off:#d4c4b0;--canvas:#fff;--grid1:#e0d8ce;--grid2:#ede6dc;--fb-ok-bg:#f0faf0;--fb-ok-brd:#b8e6b8;--fb-no-bg:#fff5f5;--fb-no-brd:#f0c0c0;--err-bg:#fff5f5;--err-brd:#f0e0e0;--hw-outline:#ddd4c8;--shadow:rgba(45,24,16,0.15)}
+.dark{--bg1:#1a1a2e;--bg2:#16213e;--bg3:#0f1528;--tx:#e8e0d8;--tx2:#c8b8a8;--tx3:#a09888;--tx4:#887868;--tx5:#706050;--hd1:#0f0f1a;--hd2:#1a1a30;--gold:#a08860;--cream:#e0d8c8;--brd:#2a2a40;--brd2:#353550;--card:#1e1e35;--card2:#242440;--card3:#2a2a45;--accent:#a07850;--red:#e74c3c;--green:#2ecc71;--orange:#f39c12;--tgl-off:#404060;--canvas:#1a1a30;--grid1:#2a2a40;--grid2:#222238;--fb-ok-bg:#1a2e1a;--fb-ok-brd:#2a5a2a;--fb-no-bg:#2e1a1a;--fb-no-brd:#5a2a2a;--err-bg:#2a1a1a;--err-brd:#3a2020;--hw-outline:#3a3a50;--shadow:rgba(0,0,0,0.3)}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:linear-gradient(180deg,var(--bg1) 0%,var(--bg2) 30%,var(--bg3) 100%);min-height:100vh;color:var(--tx);transition:background 0.3s,color 0.3s}
+.hdr{background:linear-gradient(135deg,var(--hd1),var(--hd2));padding:20px 20px 16px;text-align:center;border-radius:0 0 24px 24px;box-shadow:0 4px 20px var(--shadow);position:relative}
+.hdr-s{font-size:12px;color:var(--gold);letter-spacing:2px;margin-bottom:2px}
+.hdr h1{font-family:'Noto Serif SC',serif;font-size:28px;color:var(--cream);font-weight:700}
+.hdr-i{font-size:12px;color:var(--gold);margin-top:2px}
+.dm-btn{position:absolute;top:16px;right:16px;background:none;border:2px solid rgba(255,255,255,0.2);border-radius:50%;width:36px;height:36px;cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;transition:all 0.2s;color:var(--gold)}
+.dm-btn:hover{border-color:rgba(255,255,255,0.4);background:rgba(255,255,255,0.05)}
+.ct{max-width:560px;margin:0 auto;padding:0 16px 40px}
+.ng{display:flex;gap:6px;padding:12px 0 6px;justify-content:center;flex-wrap:wrap}
+.gb{padding:7px 13px;border-radius:10px;cursor:pointer;transition:all 0.2s;border:2px solid var(--brd);background:var(--card);color:var(--tx2);font-size:13px;font-weight:600}
+.gb.a{border-color:var(--accent);background:var(--accent);color:#fff}.gb.al{border-color:var(--red);background:var(--red);color:#fff}
+.nm{display:flex;gap:6px;padding:6px 0 10px;justify-content:center;flex-wrap:wrap}
+.mb{padding:9px 13px;border-radius:12px;cursor:pointer;transition:all 0.2s;border:2px solid var(--brd);background:var(--card);color:var(--tx2);font-size:13px;font-weight:600;display:flex;align-items:center;gap:5px}
+.mb.a{border-color:var(--accent);background:var(--accent);color:#fff}
+.sb{display:flex;align-items:center;justify-content:space-between;padding:7px 12px;background:var(--card);border:1px solid var(--brd);border-radius:10px;margin-bottom:10px;flex-wrap:wrap;gap:6px;font-size:13px;color:var(--tx3)}
+.sb-b{padding:5px 12px;border-radius:7px;cursor:pointer;border:1px solid var(--red);background:var(--fb-no-bg);color:var(--red);font-size:12px;font-weight:600}
+.sb-b:hover{background:var(--red);color:#fff}
+.pb{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.pt{flex:1;height:5px;background:var(--brd);border-radius:3px;overflow:hidden}
+.pf{height:100%;background:linear-gradient(90deg,var(--accent),var(--red));border-radius:3px;transition:width 0.3s}
+.px{font-size:13px;color:var(--tx4);font-weight:600}
+.cd{background:linear-gradient(135deg,var(--hd1),var(--hd2));border-radius:18px;padding:28px 20px;text-align:center;box-shadow:0 6px 24px var(--shadow);margin-bottom:14px}
+.cl{background:linear-gradient(135deg,var(--card2),var(--card3));border-radius:18px;padding:22px 18px;text-align:center;box-shadow:0 3px 16px rgba(0,0,0,0.06);border:2px solid var(--brd2);margin-bottom:10px}
+.lb{font-size:12px;color:var(--gold);letter-spacing:1px;margin-bottom:10px}
+.btn{padding:11px 22px;border:none;border-radius:11px;cursor:pointer;font-size:14px;font-weight:600;transition:all 0.2s;color:#fff}
+.btn:hover{transform:translateY(-1px)}
+.bb{background:var(--accent)}.br{background:var(--red)}.bg{background:var(--green)}
+.bw{display:flex;gap:10px;margin-top:10px}.bw .btn{flex:1}
+.bl2{background:none;border:none;color:var(--tx4);cursor:pointer;font-size:12px;text-decoration:underline;padding:6px}
+.tr{display:flex;align-items:center;gap:7px;justify-content:center;margin:6px 0;font-size:13px;color:var(--tx4)}
+.tg{position:relative;width:38px;height:20px;background:var(--tgl-off);border-radius:10px;cursor:pointer;transition:background 0.2s;border:none;padding:0}
+.tg.on{background:var(--accent)}
+.tg::after{content:'';position:absolute;left:2px;top:2px;width:16px;height:16px;background:#fff;border-radius:50%;transition:left 0.2s}
+.tg.on::after{left:20px}
+.cg{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin:14px 0}
+.cb{padding:12px 6px;border:2px solid var(--brd);border-radius:12px;background:var(--card);cursor:pointer;transition:all 0.15s;text-align:center;font-family:'Noto Serif SC',serif;font-size:22px;font-weight:700;color:var(--tx);min-height:58px;display:flex;align-items:center;justify-content:center}
+.cb:hover:not(.ok):not(.no):not(.us):not(.lk){border-color:var(--accent);background:var(--card2)}
+.cb.ok{border-color:var(--green);background:var(--green);color:#fff}.cb.no{border-color:var(--red);background:var(--red);color:#fff}
+.cb.us{opacity:0.25;pointer-events:none}.cb.lk{pointer-events:none}
+.sx{font-size:21px;line-height:2;color:var(--tx);font-family:'Noto Serif SC',serif;text-align:center;margin:6px 0}
+.spy{font-size:13px;color:var(--tx5);font-family:sans-serif;text-align:center;margin-bottom:2px}
+.strans{font-size:13px;color:var(--tx4);text-align:center;margin-bottom:4px;font-style:italic}
+.bk{display:inline-block;min-width:1.8em;border-bottom:2px dashed var(--brd2);text-align:center;margin:0 1px;font-family:'Noto Serif SC',serif;font-size:21px;color:var(--tx5);font-weight:700;vertical-align:baseline;padding:0 3px;transition:all 0.2s;cursor:pointer;line-height:1.3}
+.bk.ac{border-bottom:2.5px solid var(--accent);color:var(--accent);background:rgba(139,94,60,0.07);border-radius:3px 3px 0 0}
+.bk.fl{border-bottom-style:solid;border-bottom-color:var(--accent);color:var(--tx)}
+.bk.cok{border-bottom-color:var(--green);color:var(--green);background:rgba(39,174,96,0.06);border-radius:3px 3px 0 0}
+.bk.cno{border-bottom-color:var(--red);color:var(--red)}
+.bh{display:block;font-size:10px;color:var(--orange);font-family:sans-serif;font-weight:400;line-height:1}
+.fb{padding:10px 18px;border-radius:10px;text-align:center;font-weight:600;font-size:14px;margin:6px 0;animation:fi 0.2s}
+.fok{background:var(--fb-ok-bg);color:var(--green);border:1px solid var(--fb-ok-brd)}
+.fno{background:var(--fb-no-bg);color:var(--red);border:1px solid var(--fb-no-brd)}
+@keyframes fi{from{opacity:0;transform:translateY(3px)}to{opacity:1;transform:none}}
+.sc{font-size:13px;color:var(--tx4);text-align:center;margin-top:6px}
+.ha{display:flex;flex-direction:column;align-items:center;gap:10px;margin:14px 0}
+.hc{border:2px solid var(--brd2);border-radius:14px;overflow:hidden;background:var(--canvas);box-shadow:0 3px 10px rgba(0,0,0,0.06);position:relative}
+.hg{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:1}
+.hg line{stroke:var(--grid1);stroke-width:1}.hg .dg{stroke:var(--grid2);stroke-dasharray:6,4}
+.hp{display:flex;gap:6px;justify-content:center;margin:6px 0}
+.hd{width:40px;height:40px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:'Noto Serif SC',serif;font-size:20px;font-weight:700;border:2px solid var(--brd);color:var(--tx5);background:var(--card);transition:all 0.2s;position:relative;cursor:default}
+.hd.ha2{border-color:var(--accent);color:var(--accent);background:var(--card2);box-shadow:0 2px 6px rgba(139,94,60,0.15)}
+.hd.hok{border-color:var(--green);color:var(--green);background:var(--fb-ok-bg)}
+.hm{font-size:12px;color:var(--red);text-align:center;font-weight:600}
+.bdg{position:absolute;top:-5px;right:-5px;background:var(--red);color:#fff;border-radius:50%;width:15px;height:15px;font-size:9px;display:flex;align-items:center;justify-content:center;font-family:sans-serif}
+.rp{text-align:center;padding:28px 16px}
+.re{font-size:44px;margin-bottom:10px}
+.rt{font-family:'Noto Serif SC',serif;color:var(--tx);margin-bottom:3px;font-size:22px}
+.rs{color:var(--tx3);margin-bottom:14px;font-size:14px}
+.eb{margin:14px auto;max-width:400px;background:var(--err-bg);border-radius:10px;padding:14px;text-align:left}
+.et{font-size:12px;color:var(--red);font-weight:600;margin-bottom:6px}
+.er{display:flex;gap:6px;padding:5px 0;font-size:13px;color:var(--tx2);border-bottom:1px solid var(--err-brd);align-items:baseline;flex-wrap:wrap}
+.er:last-child{border:none}
+.ebg{display:inline-block;padding:1px 7px;background:var(--red);color:#fff;border-radius:5px;font-size:10px;font-weight:600;margin-left:auto}
+.sg{display:grid;grid-template-columns:1fr 1fr;gap:10px;max-width:340px;margin:0 auto}
+.scd{padding:14px;border-radius:10px;text-align:center}
+.sn{font-size:24px;font-weight:700;font-family:'Noto Serif SC',serif}
+.sl{font-size:11px;margin-top:3px}
+.s1{background:#f0f4ff;color:#2962b8}.s2{background:var(--fb-ok-bg);color:var(--green)}.s3{background:#fef6ee;color:var(--orange)}.s4{background:var(--fb-no-bg);color:var(--red)}
+.wl{padding:28px 16px;text-align:center}
+</style>
+</head>
+<body>
+<div class="hdr"><div class="hdr-s">ПОДГОТОВКА К ДИКТАНТУ</div><h1>听写练习</h1><div class="hdr-i">Unit 2 · 54 слова · 5 групп</div><button class="dm-btn" id="dm-btn" onclick="toggleDark()">🌙</button></div>
+<div class="ct" id="app"></div>
+<script>
+let isDark=false;
+function toggleDark(){isDark=!isDark;document.body.classList.toggle('dark',isDark);document.getElementById('dm-btn').textContent=isDark?'☀️':'🌙';try{localStorage.setItem('dm',isDark?'1':'0')}catch(e){}}
+try{if(localStorage.getItem('dm')==='1'){isDark=true;document.body.classList.add('dark');document.getElementById('dm-btn').textContent='☀️'}}catch(e){}
+
+const G=[
+{n:"1/5",w:[{h:"穿",p:"chuān",r:"носить одежду"},{h:"气温",p:"qìwēn",r:"температура воздуха"},{h:"度",p:"dù",r:"градус"},{h:"比",p:"bǐ",r:"чем (сравнивать)"},{h:"冷",p:"lěng",r:"холод"},{h:"听说",p:"tīngshuō",r:"говорят"},{h:"冬天",p:"dōngtiān",r:"зима"},{h:"风",p:"fēng",r:"ветер"},{h:"下雪",p:"xiàxuě",r:"идёт снег"},{h:"再",p:"zài",r:"тогда, снова"},{h:"差不多",p:"chàbuduō",r:"почти так же"}]},
+{n:"2/5",w:[{h:"一样",p:"yīyàng",r:"то же самое"},{h:"暖和",p:"nuǎnhuo",r:"тёплый и мягкий"},{h:"行",p:"xíng",r:"ок, хорошо"},{h:"虽然",p:"suīrán",r:"хотя, несмотря на"},{h:"如果",p:"rúguǒ",r:"если"},{h:"带",p:"dài",r:"брать"},{h:"预报",p:"yùbào",r:"прогноз"},{h:"起",p:"qǐ",r:"с, начиная с"},{h:"将",p:"jiāng",r:"будет (буд. вр.)"},{h:"影响",p:"yǐngxiǎng",r:"влиять"},{h:"受",p:"shòu",r:"подвергаться"}]},
+{n:"3/5",w:[{h:"差别",p:"chābié",r:"разница"},{h:"达到",p:"dádào",r:"достигать"},{h:"以上",p:"yǐshàng",r:"выше, больше"},{h:"上",p:"shàng",r:"на, сверху"},{h:"多云",p:"duōyún",r:"облачно"},{h:"小",p:"xiǎo",r:"маленький"},{h:"晴",p:"qíng",r:"ясно"},{h:"雨",p:"yǔ",r:"дождь"},{h:"能",p:"néng",r:"мочь, уметь"},{h:"为什么",p:"wèishénme",r:"почему"},{h:"得",p:"de",r:"суффикс степени"}]},
+{n:"4/5",w:[{h:"就",p:"jiù",r:"сразу, именно"},{h:"可能",p:"kěnéng",r:"возможно"},{h:"因为",p:"yīnwèi",r:"потому что"},{h:"早",p:"zǎo",r:"рано, ранний"},{h:"这么",p:"zhème",r:"так, настолько"},{h:"难",p:"nán",r:"трудный"},{h:"作业",p:"zuòyè",r:"домашняя работа"},{h:"还",p:"hái",r:"ещё, всё ещё"},{h:"完",p:"wán",r:"закончиться"},{h:"复习",p:"fùxí",r:"повторять"},{h:"准备",p:"zhǔnbèi",r:"готовиться"}]},
+{n:"5/5",w:[{h:"没关系",p:"méiguānxi",r:"ничего страшного"},{h:"下次",p:"xiàcì",r:"в следующий раз"},{h:"才",p:"cái",r:"только, лишь"},{h:"已经",p:"yǐjīng",r:"уже"},{h:"让",p:"ràng",r:"позволять"},{h:"用",p:"yòng",r:"использовать"},{h:"借",p:"jiè",r:"одалживать"},{h:"天气",p:"tiānqì",r:"погода"},{h:"一边",p:"yìbiān",r:"одновременно"},{h:"累",p:"lèi",r:"уставший"}]}
+];
+const AW=G.flatMap(g=>g.w);
+
+// 3+ sentences per word, organized by group
+const SG=[
+[
+// 穿 (3)
+{s:"冬天你要___暖和的毛衣和大衣。",a:"穿",t:"надевать",py:"dōngtiān nǐ yào ___ nuǎnhuo de máoyī hé dàyī.",tr:"Зимой нужно надевать тёплый свитер и пальто."},
+{s:"成都的气温在十度以下，你不能___短裤。",a:"穿",t:"надевать",py:"Chéngdū de qìwēn zài shí dù yǐxià, nǐ bù néng ___ duǎnkù.",tr:"При температуре ниже 10° в Чэнду нельзя носить шорты."},
+{s:"阿曼达想___T恤去西安旅行。",a:"穿",t:"надевать",py:"Āmàndá xiǎng ___ T xù qù Xī'ān lǚxíng.",tr:"Аманда хочет надеть футболку в поездку в Сиань."},
+// 气温 (3)
+{s:"成都冬天的___比北京高一点。",a:"气温",t:"температура",py:"Chéngdū dōngtiān de ___ bǐ Běijīng gāo yìdiǎn.",tr:"Зимняя температура в Чэнду немного выше, чем в Пекине."},
+{s:"听说明天___会下降四到八度。",a:"气温",t:"температура",py:"tīngshuō míngtiān ___ huì xiàjiàng sì dào bā dù.",tr:"Говорят, завтра температура упадёт на 4-8 градусов."},
+{s:"受冷空气的影响，北方的___将下降。",a:"气温",t:"температура",py:"shòu lěng kōngqì de yǐngxiǎng, běifāng de ___ jiāng xiàjiàng.",tr:"Под влиянием холодного воздуха температура на севере снизится."},
+// 度 (3)
+{s:"今天气温二十五___，很暖和。",a:"度",t:"градус",py:"jīntiān qìwēn èrshíwǔ ___, hěn nuǎnhuo.",tr:"Сегодня 25 градусов, тепло."},
+{s:"成都冬天的气温也在十___以下。",a:"度",t:"градус",py:"Chéngdū dōngtiān de qìwēn yě zài shí ___ yǐxià.",tr:"Зимой температура в Чэнду тоже ниже 10 градусов."},
+{s:"北方的气温将下降四到八___。",a:"度",t:"градус",py:"běifāng de qìwēn jiāng xiàjiàng sì dào bā ___.",tr:"Температура на севере снизится на 4-8 градусов."},
+// 比 (3)
+{s:"成都的冬天___西安暖和一点。",a:"比",t:"чем",py:"Chéngdū de dōngtiān ___ Xī'ān nuǎnhuo yìdiǎn.",tr:"Зима в Чэнду немного теплее, чем в Сиане."},
+{s:"今天的风___昨天大很多。",a:"比",t:"чем",py:"jīntiān de fēng ___ zuótiān dà hěn duō.",tr:"Сегодня ветер намного сильнее, чем вчера."},
+{s:"成都在南方，那里___北方暖和。",a:"比",t:"чем",py:"Chéngdū zài nánfāng, nàlǐ ___ běifāng nuǎnhuo.",tr:"Чэнду на юге, там теплее, чем на севере."},
+// 冷 (3)
+{s:"成都没有西安那么___。",a:"冷",t:"холодно",py:"Chéngdū méiyǒu Xī'ān nàme ___.",tr:"В Чэнду не так холодно, как в Сиане."},
+{s:"冬天北京很___，要穿大衣和围巾。",a:"冷",t:"холодно",py:"dōngtiān Běijīng hěn ___, yào chuān dàyī hé wéijīn.",tr:"Зимой в Пекине холодно, нужно носить пальто и шарф."},
+{s:"外面太___了，如果你出去，要带手套。",a:"冷",t:"холодно",py:"wàimiàn tài ___ le, rúguǒ nǐ chūqù, yào dài shǒutào.",tr:"На улице слишком холодно, если выходишь — бери перчатки."},
+// 听说 (3)
+{s:"___明天要下雪，风也会很大。",a:"听说",t:"говорят",py:"___ míngtiān yào xiàxuě, fēng yě huì hěn dà.",tr:"Говорят, завтра будет снег и сильный ветер."},
+{s:"___成都的冬天没有西安那么冷。",a:"听说",t:"говорят",py:"___ Chéngdū de dōngtiān méiyǒu Xī'ān nàme lěng.",tr:"Говорят, зима в Чэнду не такая холодная, как в Сиане."},
+{s:"___下个星期冷空气会影响北方地区。",a:"听说",t:"говорят",py:"___ xià gè xīngqī lěng kōngqì huì yǐngxiǎng běifāng dìqū.",tr:"Говорят, на следующей неделе холодный воздух повлияет на северные регионы."},
+// 冬天 (3)
+{s:"___的西安很冷，要穿毛衣和大衣。",a:"冬天",t:"зимой",py:"___ de Xī'ān hěn lěng, yào chuān máoyī hé dàyī.",tr:"Зимний Сиань холодный, нужны свитер и пальто."},
+{s:"成都的___比北京暖和一点。",a:"冬天",t:"зима",py:"Chéngdū de ___ bǐ Běijīng nuǎnhuo yìdiǎn.",tr:"Зима в Чэнду теплее, чем в Пекине."},
+{s:"___北京常常下雪，风也很大。",a:"冬天",t:"зимой",py:"___ Běijīng chángcháng xiàxuě, fēng yě hěn dà.",tr:"Зимой в Пекине часто идёт снег, и ветер сильный."},
+// 风 (3)
+{s:"今天___很大，出去要穿暖和的衣服。",a:"风",t:"ветер",py:"jīntiān ___ hěn dà, chūqù yào chuān nuǎnhuo de yīfu.",tr:"Сегодня сильный ветер, выходить нужно в тёплой одежде."},
+{s:"西安冬天的___比成都大很多。",a:"风",t:"ветер",py:"Xī'ān dōngtiān de ___ bǐ Chéngdū dà hěn duō.",tr:"Зимний ветер в Сиане намного сильнее, чем в Чэнду."},
+{s:"听说明天___不大，可以出去玩。",a:"风",t:"ветер",py:"tīngshuō míngtiān ___ bú dà, kěyǐ chūqù wán.",tr:"Говорят, завтра ветер несильный, можно пойти гулять."},
+// 下雪 (3)
+{s:"北京冬天常常___，非常漂亮。",a:"下雪",t:"идёт снег",py:"Běijīng dōngtiān chángcháng ___, fēicháng piàoliang.",tr:"Зимой в Пекине часто идёт снег, очень красиво."},
+{s:"天气预报说后天会___，气温也会下降。",a:"下雪",t:"идти снег",py:"tiānqì yùbào shuō hòutiān huì ___, qìwēn yě huì xiàjiàng.",tr:"Прогноз погоды говорит, послезавтра будет снег и похолодает."},
+{s:"如果明天___，我们就不出去了。",a:"下雪",t:"пойдёт снег",py:"rúguǒ míngtiān ___, wǒmen jiù bù chūqù le.",tr:"Если завтра будет снег, мы не пойдём гулять."},
+// 再 (3)
+{s:"今天太冷了，我们___去吧。",a:"再",t:"потом",py:"jīntiān tài lěng le, wǒmen ___ qù ba.",tr:"Сегодня слишком холодно, пойдём в другой раз."},
+{s:"你先回家，我们明天___见面吧。",a:"再",t:"потом",py:"nǐ xiān huíjiā, wǒmen míngtiān ___ jiànmiàn ba.",tr:"Иди домой, увидимся завтра."},
+{s:"现在风太大了，等风小了___出去。",a:"再",t:"потом",py:"xiànzài fēng tài dà le, děng fēng xiǎo le ___ chūqù.",tr:"Сейчас ветер слишком сильный, подождём, пока стихнет, потом выйдем."},
+// 差不多 (3)
+{s:"成都和西安的冬天___一样冷。",a:"差不多",t:"почти",py:"Chéngdū hé Xī'ān de dōngtiān ___ yīyàng lěng.",tr:"Зима в Чэнду и Сиане почти одинаково холодная."},
+{s:"这两个城市的气温___。",a:"差不多",t:"почти одинаковы",py:"zhè liǎng gè chéngshì de qìwēn ___.",tr:"Температура в этих двух городах почти одинаковая."},
+{s:"他们穿的衣服___，都是毛衣和大衣。",a:"差不多",t:"примерно одинак.",py:"tāmen chuān de yīfu ___, dōu shì máoyī hé dàyī.",tr:"Одежда у них примерно одинаковая — свитера и пальто."},
+],
+[
+// 一样 (3)
+{s:"成都的天气和西安___冷吗？",a:"一样",t:"одинаково",py:"Chéngdū de tiānqì hé Xī'ān ___ lěng ma?",tr:"В Чэнду так же холодно, как в Сиане?"},
+{s:"今天和昨天的气温不___，今天暖和一点。",a:"一样",t:"одинаковы",py:"jīntiān hé zuótiān de qìwēn bù ___, jīntiān nuǎnhuo yìdiǎn.",tr:"Температура сегодня и вчера не одинаковая, сегодня теплее."},
+{s:"北京和西安的冬天___冷。",a:"一样",t:"одинаково",py:"Běijīng hé Xī'ān de dōngtiān ___ lěng.",tr:"Зима в Пекине и Сиане одинаково холодная."},
+// 暖和 (3)
+{s:"成都在南方，那里比北方___。",a:"暖和",t:"тепло",py:"Chéngdū zài nánfāng, nàlǐ bǐ běifāng ___.",tr:"Чэнду на юге, там теплее, чем на севере."},
+{s:"虽然今天有太阳，但是不太___。",a:"暖和",t:"тепло",py:"suīrán jīntiān yǒu tàiyáng, dànshì bú tài ___.",tr:"Хотя сегодня солнечно, но не очень тепло."},
+{s:"穿上毛衣和大衣，你就会觉得___了。",a:"暖和",t:"тепло",py:"chuān shang máoyī hé dàyī, nǐ jiù huì juéde ___ le.",tr:"Наденешь свитер и пальто — станет тепло."},
+// 行 (3)
+{s:"我们明天去看天气预报，___不___？",a:"行",t:"ок",py:"wǒmen míngtiān qù kàn tiānqì yùbào, ___ bu ___?",tr:"Посмотрим завтра прогноз погоды, ок?"},
+{s:"穿毛衣和大衣去西安，你觉得___吗？",a:"行",t:"годится",py:"chuān máoyī hé dàyī qù Xī'ān, nǐ juéde ___ ma?",tr:"Поехать в Сиань в свитере и пальто — подойдёт?"},
+{s:"我们周末再去公园吧。——___！",a:"行",t:"ок",py:"wǒmen zhōumò zài qù gōngyuán ba. —— ___!",tr:"Пойдём в парк на выходных. — Ок!"},
+// 虽然 (3)
+{s:"___成都没有西安那么冷，但是也要穿暖和的衣服。",a:"虽然",t:"хотя",py:"___ Chéngdū méiyǒu Xī'ān nàme lěng, dànshì yě yào chuān nuǎnhuo de yīfu.",tr:"Хотя в Чэнду не так холодно, как в Сиане, всё равно нужно одеваться тепло."},
+{s:"___今天是晴天，但是风很大。",a:"虽然",t:"хотя",py:"___ jīntiān shì qíngtiān, dànshì fēng hěn dà.",tr:"Хотя сегодня ясно, но ветер сильный."},
+{s:"___外面很冷，但是永民还想出去玩。",a:"虽然",t:"хотя",py:"___ wàimiàn hěn lěng, dànshì Yǒngmín hái xiǎng chūqù wán.",tr:"Хотя на улице холодно, Юнмин всё равно хочет пойти гулять."},
+// 如果 (3)
+{s:"___明天下雪，你就多穿一点衣服。",a:"如果",t:"если",py:"___ míngtiān xiàxuě, nǐ jiù duō chuān yìdiǎn yīfu.",tr:"Если завтра будет снег, оденься потеплее."},
+{s:"___你想看起来很酷，可以戴墨镜。",a:"如果",t:"если",py:"___ nǐ xiǎng kàn qǐlái hěn kù, kěyǐ dài mòjìng.",tr:"Если хочешь выглядеть круто, можешь надеть солнечные очки."},
+{s:"___气温在十度以下，你不能穿短裤。",a:"如果",t:"если",py:"___ qìwēn zài shí dù yǐxià, nǐ bù néng chuān duǎnkù.",tr:"Если температура ниже 10 градусов, нельзя носить шорты."},
+// 带 (3)
+{s:"去西安旅行，记得___毛衣和手套。",a:"带",t:"взять",py:"qù Xī'ān lǚxíng, jìde ___ máoyī hé shǒutào.",tr:"В поездку в Сиань не забудь взять свитер и перчатки."},
+{s:"如果可能下雨，出门要___雨伞。",a:"带",t:"взять",py:"rúguǒ kěnéng xià yǔ, chūmén yào ___ yǔsǎn.",tr:"Если возможен дождь, нужно взять зонт."},
+{s:"天气预报说明天很冷，你要___围巾吗？",a:"带",t:"взять",py:"tiānqì yùbào shuō míngtiān hěn lěng, nǐ yào ___ wéijīn ma?",tr:"Прогноз говорит, завтра холодно — возьмёшь шарф?"},
+// 预报 (3)
+{s:"天气___说从下个星期起会变冷。",a:"预报",t:"прогноз",py:"tiānqì ___ shuō cóng xià gè xīngqī qǐ huì biàn lěng.",tr:"Прогноз погоды говорит, что со следующей недели похолодает."},
+{s:"你看了今天的天气___吗？明天多云转晴。",a:"预报",t:"прогноз",py:"nǐ kàn le jīntiān de tiānqì ___ ma? míngtiān duōyún zhuǎn qíng.",tr:"Ты видел сегодняшний прогноз? Завтра облачно, потом прояснится."},
+{s:"天气___说西安二月九号会下大雪。",a:"预报",t:"прогноз",py:"tiānqì ___ shuō Xī'ān èr yuè jiǔ hào huì xià dà xuě.",tr:"Прогноз говорит, в Сиане 9 февраля будет сильный снег."},
+// 起 (3)
+{s:"从下个星期___，冷空气将影响北方地区。",a:"起",t:"начиная с",py:"cóng xià gè xīngqī ___, lěng kōngqì jiāng yǐngxiǎng běifāng dìqū.",tr:"Начиная со следующей недели, холодный воздух повлияет на север."},
+{s:"从明天___，气温将下降很多。",a:"起",t:"начиная с",py:"cóng míngtiān ___, qìwēn jiāng xiàjiàng hěn duō.",tr:"Начиная с завтра, температура значительно снизится."},
+{s:"从十二月___，北京的天气就很冷了。",a:"起",t:"начиная с",py:"cóng shí'èr yuè ___, Běijīng de tiānqì jiù hěn lěng le.",tr:"Начиная с декабря, в Пекине становится холодно."},
+// 将 (3)
+{s:"冷空气___影响我国大部分地区。",a:"将",t:"будет",py:"lěng kōngqì ___ yǐngxiǎng wǒguó dà bùfen dìqū.",tr:"Холодный воздух повлияет на большую часть территории страны."},
+{s:"北方的气温___下降四到八度。",a:"将",t:"будет",py:"běifāng de qìwēn ___ xiàjiàng sì dào bā dù.",tr:"Температура на севере понизится на 4-8 градусов."},
+{s:"温差___达到十五度以上。",a:"将",t:"будет",py:"wēnchā ___ dádào shíwǔ dù yǐshàng.",tr:"Разница температур достигнет 15 градусов и выше."},
+// 影响 (3)
+{s:"冷空气将___我国大部分地区。",a:"影响",t:"повлиять на",py:"lěng kōngqì jiāng ___ wǒguó dà bùfen dìqū.",tr:"Холодный воздух повлияет на большую часть страны."},
+{s:"天气不好___了我们的旅行计划。",a:"影响",t:"повлияла на",py:"tiānqì bù hǎo ___ le wǒmen de lǚxíng jìhuà.",tr:"Плохая погода повлияла на наши планы поездки."},
+{s:"下雪会不会___明天的出行？",a:"影响",t:"повлиять на",py:"xiàxuě huì bu huì ___ míngtiān de chūxíng?",tr:"Снегопад повлияет на завтрашнюю поездку?"},
+// 受 (3)
+{s:"___冷空气的影响，北方的气温将下降。",a:"受",t:"из-за",py:"___ lěng kōngqì de yǐngxiǎng, běifāng de qìwēn jiāng xiàjiàng.",tr:"Из-за влияния холодного воздуха температура на севере понизится."},
+{s:"西安___冷空气影响，后天会下大雪。",a:"受",t:"подвергнется",py:"Xī'ān ___ lěng kōngqì yǐngxiǎng, hòutiān huì xià dà xuě.",tr:"Из-за холодного воздуха в Сиане послезавтра будет снег."},
+{s:"北方地区___到很大的影响。",a:"受",t:"подверглись",py:"běifāng dìqū ___ dào hěn dà de yǐngxiǎng.",tr:"Северные районы подверглись сильному влиянию."},
+],
+[
+// 差别 (3)
+{s:"白天和夜间的气温___很大。",a:"差别",t:"разница",py:"báitiān hé yèjiān de qìwēn ___ hěn dà.",tr:"Разница температур днём и ночью большая."},
+{s:"很多地方白天和夜间的气温___将达到十度。",a:"差别",t:"разница",py:"hěn duō dìfang báitiān hé yèjiān de qìwēn ___ jiāng dádào shí dù.",tr:"Во многих местах разница температур дня и ночи достигнет 10 градусов."},
+{s:"成都和西安的气温没有太大的___。",a:"差别",t:"разница",py:"Chéngdū hé Xī'ān de qìwēn méiyǒu tài dà de ___.",tr:"Между Чэнду и Сианем нет большой разницы температур."},
+// 达到 (3)
+{s:"西北一些地方的温差将___十五度以上。",a:"达到",t:"достигнуть",py:"xīběi yìxiē dìfang de wēnchā jiāng ___ shíwǔ dù yǐshàng.",tr:"В некоторых северо-западных районах разница температур достигнет 15° и выше."},
+{s:"夏天成都的气温可以___四十度。",a:"达到",t:"достигнуть",py:"xiàtiān Chéngdū de qìwēn kěyǐ ___ sìshí dù.",tr:"Летом температура в Чэнду может достигнуть 40 градусов."},
+{s:"今天气温将___三十度，非常热。",a:"达到",t:"достигнуть",py:"jīntiān qìwēn jiāng ___ sānshí dù, fēicháng rè.",tr:"Сегодня температура достигнет 30 градусов, очень жарко."},
+// 以上 (3)
+{s:"温差将在十五度___。",a:"以上",t:"и выше",py:"wēnchā jiāng zài shíwǔ dù ___.",tr:"Разница температур будет 15 градусов и выше."},
+{s:"如果气温在三十度___，就不要出去运动了。",a:"以上",t:"и выше",py:"rúguǒ qìwēn zài sānshí dù ___, jiù bùyào chūqù yùndòng le.",tr:"Если температура 30° и выше, лучше не заниматься спортом на улице."},
+{s:"西安二月七号的气温在零下四度___。",a:"以上",t:"и выше",py:"Xī'ān èr yuè qī hào de qìwēn zài líng xià sì dù ___.",tr:"В Сиане 7 февраля температура от минус 4 градусов и выше."},
+// 上 (3)
+{s:"书在桌子___，你看见了吗？",a:"上",t:"на",py:"shū zài zhuōzi ___, nǐ kànjiàn le ma?",tr:"Книга на столе, ты видишь?"},
+{s:"手套在床___，别忘了带。",a:"上",t:"на",py:"shǒutào zài chuáng ___, bié wàng le dài.",tr:"Перчатки на кровати, не забудь взять."},
+{s:"围巾在椅子___，出门的时候穿上。",a:"上",t:"на",py:"wéijīn zài yǐzi ___, chūmén de shíhou chuān shang.",tr:"Шарф на стуле, наденьте, когда выходите."},
+// 多云 (3)
+{s:"西安二月七号的天气是___转晴。",a:"多云",t:"облачно",py:"Xī'ān èr yuè qī hào de tiānqì shì ___ zhuǎn qíng.",tr:"В Сиане 7 февраля — облачно, потом прояснится."},
+{s:"明天___，不冷也不热，可以出去玩。",a:"多云",t:"облачно",py:"míngtiān ___, bù lěng yě bú rè, kěyǐ chūqù wán.",tr:"Завтра облачно, не холодно и не жарко, можно гулять."},
+{s:"天气预报说后天___转阴，可能会下雨。",a:"多云",t:"облачно",py:"tiānqì yùbào shuō hòutiān ___ zhuǎn yīn, kěnéng huì xià yǔ.",tr:"Прогноз говорит, послезавтра облачно, потом пасмурно, возможен дождь."},
+// 小 (3)
+{s:"这件毛衣___了一点，你穿不了。",a:"小",t:"мал",py:"zhè jiàn máoyī ___ le yìdiǎn, nǐ chuān bù liǎo.",tr:"Этот свитер маловат, тебе не подойдёт."},
+{s:"成都二月九号会有___雨。",a:"小",t:"мелкий",py:"Chéngdū èr yuè jiǔ hào huì yǒu ___ yǔ.",tr:"В Чэнду 9 февраля будет небольшой дождь."},
+{s:"外面的风不大，只有___风。",a:"小",t:"лёгкий",py:"wàimiàn de fēng bú dà, zhǐ yǒu ___ fēng.",tr:"На улице ветер несильный, лишь лёгкий ветерок."},
+// 晴 (3)
+{s:"成都二月七号是___天，气温一到七度。",a:"晴",t:"ясный",py:"Chéngdū èr yuè qī hào shì ___ tiān, qìwēn yī dào qī dù.",tr:"В Чэнду 7 февраля ясно, температура 1-7 градусов."},
+{s:"明天多云转___，适合出去旅行。",a:"晴",t:"ясно",py:"míngtiān duōyún zhuǎn ___, shìhé chūqù lǚxíng.",tr:"Завтра облачно, потом ясно — хорошо для поездки."},
+{s:"___天的时候，阿曼达喜欢去公园。",a:"晴",t:"ясный",py:"___ tiān de shíhou, Āmàndá xǐhuan qù gōngyuán.",tr:"В ясную погоду Аманда любит ходить в парк."},
+// 雨 (3)
+{s:"成都二月九号会下小___。",a:"雨",t:"дождь",py:"Chéngdū èr yuè jiǔ hào huì xià xiǎo ___.",tr:"В Чэнду 9 февраля будет небольшой дождь."},
+{s:"如果下___的话，记得带雨伞。",a:"雨",t:"дождь",py:"rúguǒ xià ___ dehuà, jìde dài yǔsǎn.",tr:"Если будет дождь, не забудь зонт."},
+{s:"今天有大___，我们不去公园了。",a:"雨",t:"дождь",py:"jīntiān yǒu dà ___, wǒmen bú qù gōngyuán le.",tr:"Сегодня сильный дождь, мы не идём в парк."},
+// 能 (3)
+{s:"气温在十度以下，你不___穿短裤。",a:"能",t:"можно",py:"qìwēn zài shí dù yǐxià, nǐ bù ___ chuān duǎnkù.",tr:"При температуре ниже 10° нельзя носить шорты."},
+{s:"明天是晴天，我们___去公园玩。",a:"能",t:"можно",py:"míngtiān shì qíngtiān, wǒmen ___ qù gōngyuán wán.",tr:"Завтра ясно, мы можем пойти в парк."},
+{s:"你___不___帮我看一下天气预报？",a:"能",t:"можешь",py:"nǐ ___ bu ___ bāng wǒ kàn yíxià tiānqì yùbào?",tr:"Можешь посмотреть для меня прогноз погоды?"},
+// 为什么 (3)
+{s:"你___这么早就起床了？",a:"为什么",t:"почему",py:"nǐ ___ zhème zǎo jiù qǐchuáng le?",tr:"Почему ты так рано встал?"},
+{s:"___成都比西安暖和？因为成都在南方。",a:"为什么",t:"почему",py:"___ Chéngdū bǐ Xī'ān nuǎnhuo? yīnwèi Chéngdū zài nánfāng.",tr:"Почему в Чэнду теплее? Потому что Чэнду на юге."},
+{s:"你___不带围巾？外面很冷！",a:"为什么",t:"почему",py:"nǐ ___ bú dài wéijīn? wàimiàn hěn lěng!",tr:"Почему ты не берёшь шарф? На улице холодно!"},
+// 得 (3)
+{s:"马克中文说___很好，老师很高兴。",a:"得",t:"степень",py:"Mǎkè Zhōngwén shuō ___ hěn hǎo, lǎoshī hěn gāoxìng.",tr:"Марк говорит по-китайски очень хорошо, учитель рад."},
+{s:"阿曼达觉___西安比成都冷很多。",a:"得",t:"(дополнение)",py:"Āmàndá jué ___ Xī'ān bǐ Chéngdū lěng hěn duō.",tr:"Аманда считает, что в Сиане намного холоднее, чем в Чэнду."},
+{s:"今天他来___很早，八点就到了。",a:"得",t:"степень",py:"jīntiān tā lái ___ hěn zǎo, bā diǎn jiù dào le.",tr:"Сегодня он пришёл очень рано, уже к восьми."},
+],
+[
+// 就 (3)
+{s:"马克一吃完早饭___出去了。",a:"就",t:"сразу",py:"Mǎkè yī chī wán zǎofàn ___ chūqù le.",tr:"Марк, едва поев, сразу вышел."},
+{s:"如果明天是晴天，我们___去公园。",a:"就",t:"тогда",py:"rúguǒ míngtiān shì qíngtiān, wǒmen ___ qù gōngyuán.",tr:"Если завтра ясно, мы тогда пойдём в парк."},
+{s:"老师一来，我们___开始上课了。",a:"就",t:"сразу",py:"lǎoshī yī lái, wǒmen ___ kāishǐ shàngkè le.",tr:"Как только учитель пришёл, мы сразу начали урок."},
+// 可能 (3)
+{s:"明天___会下雨，记得带雨伞。",a:"可能",t:"возможно",py:"míngtiān ___ huì xià yǔ, jìde dài yǔsǎn.",tr:"Завтра, возможно, будет дождь, не забудь зонт."},
+{s:"这次中文考试___比上次难。",a:"可能",t:"возможно",py:"zhè cì Zhōngwén kǎoshì ___ bǐ shàng cì nán.",tr:"Этот экзамен по китайскому, возможно, сложнее предыдущего."},
+{s:"他今天___不来上课了，因为他生病了。",a:"可能",t:"возможно",py:"tā jīntiān ___ bù lái shàngkè le, yīnwèi tā shēngbìng le.",tr:"Он сегодня, возможно, не придёт, потому что заболел."},
+// 因为 (3)
+{s:"我今天迟到了，___路上人很多。",a:"因为",t:"потому что",py:"wǒ jīntiān chídào le, ___ lùshang rén hěn duō.",tr:"Я опоздал, потому что на дороге было много людей."},
+{s:"___天气不好，我们没去公园。",a:"因为",t:"из-за того что",py:"___ tiānqì bù hǎo, wǒmen méi qù gōngyuán.",tr:"Из-за плохой погоды мы не пошли в парк."},
+{s:"马克觉得很不好意思，___他迟到了。",a:"因为",t:"потому что",py:"Mǎkè juéde hěn bùhǎoyìsi, ___ tā chídào le.",tr:"Марку стыдно, потому что он опоздал."},
+// 早 (3)
+{s:"你为什么这么___就起床了？",a:"早",t:"рано",py:"nǐ wèishénme zhème ___ jiù qǐchuáng le?",tr:"Почему ты так рано встал?"},
+{s:"马克每天很___起床，七点半就出门了。",a:"早",t:"рано",py:"Mǎkè měitiān hěn ___ qǐchuáng, qī diǎn bàn jiù chūmén le.",tr:"Марк каждый день встаёт рано, выходит в 7:30."},
+{s:"老师来得很___，已经在教室等我们了。",a:"早",t:"рано",py:"lǎoshī lái de hěn ___, yǐjīng zài jiàoshì děng wǒmen le.",tr:"Учитель пришёл рано, уже ждал нас в классе."},
+// 这么 (3)
+{s:"成都冬天___暖和，可以穿短裤吗？",a:"这么",t:"так",py:"Chéngdū dōngtiān ___ nuǎnhuo, kěyǐ chuān duǎnkù ma?",tr:"Зимой в Чэнду так тепло, что можно носить шорты?"},
+{s:"你为什么___早就起来了？",a:"这么",t:"так",py:"nǐ wèishénme ___ zǎo jiù qǐlái le?",tr:"Почему ты так рано встал?"},
+{s:"今天的中文作业___难，我还没做完。",a:"这么",t:"настолько",py:"jīntiān de Zhōngwén zuòyè ___ nán, wǒ hái méi zuò wán.",tr:"Сегодня домашка по китайскому такая сложная, я ещё не доделал."},
+// 难 (3)
+{s:"今天的中文作业太___了！",a:"难",t:"трудная",py:"jīntiān de Zhōngwén zuòyè tài ___ le!",tr:"Сегодня домашка по китайскому слишком трудная!"},
+{s:"这个中文故事不___，你可以试试读。",a:"难",t:"трудный",py:"zhège Zhōngwén gùshì bù ___, nǐ kěyǐ shìshi dú.",tr:"Этот рассказ на китайском нетрудный, попробуй прочитать."},
+{s:"虽然考试很___，但是我准备好了。",a:"难",t:"трудный",py:"suīrán kǎoshì hěn ___, dànshì wǒ zhǔnbèi hǎo le.",tr:"Хотя экзамен трудный, я подготовился."},
+// 作业 (3)
+{s:"今天的中文___太难了，我还没做完。",a:"作业",t:"домашка",py:"jīntiān de Zhōngwén ___ tài nán le, wǒ hái méi zuò wán.",tr:"Сегодня домашка по китайскому слишком сложная, я ещё не доделал."},
+{s:"马克一写完___就上床睡觉了。",a:"作业",t:"домашку",py:"Mǎkè yī xiě wán ___ jiù shàngchuáng shuìjiào le.",tr:"Марк, дописав домашку, сразу лёг спать."},
+{s:"老师给了我们很多___，今天很忙。",a:"作业",t:"заданий",py:"lǎoshī gěi le wǒmen hěn duō ___, jīntiān hěn máng.",tr:"Учитель дал много заданий, сегодня мы заняты."},
+// 还 (3)
+{s:"我___没做完今天的中文作业。",a:"还",t:"ещё",py:"wǒ ___ méi zuò wán jīntiān de Zhōngwén zuòyè.",tr:"Я ещё не доделал сегодняшнюю домашку по китайскому."},
+{s:"他___没吃早饭就出去了。",a:"还",t:"ещё",py:"tā ___ méi chī zǎofàn jiù chūqù le.",tr:"Он даже не поев, уже ушёл."},
+{s:"虽然很晚了，马克___在做作业。",a:"还",t:"всё ещё",py:"suīrán hěn wǎn le, Mǎkè ___ zài zuò zuòyè.",tr:"Хотя уже поздно, Марк всё ещё делает домашку."},
+// 完 (3)
+{s:"马克还没写___今天的日记。",a:"完",t:"до конца",py:"Mǎkè hái méi xiě ___ jīntiān de rìjì.",tr:"Марк ещё не дописал сегодняшний дневник."},
+{s:"你的中文作业做___了吗？",a:"完",t:"до конца",py:"nǐ de Zhōngwén zuòyè zuò ___ le ma?",tr:"Ты доделал домашку по китайскому?"},
+{s:"我一写___日记就上床睡觉。",a:"完",t:"(до конца)",py:"wǒ yī xiě ___ rìjì jiù shàngchuáng shuìjiào.",tr:"Как только допишу дневник, сразу ложусь спать."},
+// 复习 (3)
+{s:"马克要___下个星期的中文考试。",a:"复习",t:"повторять",py:"Mǎkè yào ___ xià gè xīngqī de Zhōngwén kǎoshì.",tr:"Марку нужно готовиться к экзамену по китайскому на следующей неделе."},
+{s:"考试以前我每天都在___中文。",a:"复习",t:"повторять",py:"kǎoshì yǐqián wǒ měitiān dōu zài ___ Zhōngwén.",tr:"Перед экзаменом я каждый день повторяю китайский."},
+{s:"你___了吗？明天的考试可能很难。",a:"复习",t:"повторил",py:"nǐ ___ le ma? míngtiān de kǎoshì kěnéng hěn nán.",tr:"Ты повторил? Завтрашний экзамен может быть трудным."},
+// 准备 (3)
+{s:"你___什么时候去西安旅行？",a:"准备",t:"собираешься",py:"nǐ ___ shénme shíhou qù Xī'ān lǚxíng?",tr:"Когда ты собираешься поехать в Сиань?"},
+{s:"阿曼达在___去成都要带的衣服。",a:"准备",t:"готовит",py:"Āmàndá zài ___ qù Chéngdū yào dài de yīfu.",tr:"Аманда готовит одежду для поездки в Чэнду."},
+{s:"马克___好了明天的中文考试。",a:"准备",t:"подготовился",py:"Mǎkè ___ hǎo le míngtiān de Zhōngwén kǎoshì.",tr:"Марк подготовился к завтрашнему экзамену по китайскому."},
+],
+[
+// 没关系 (3)
+{s:"我迟到了，对不起！——___，下次别迟到了。",a:"没关系",t:"ничего",py:"wǒ chídào le, duìbuqǐ! —— ___, xiàcì bié chídào le.",tr:"Я опоздал, извини! — Ничего, в следующий раз не опаздывай."},
+{s:"作业没做完？___，明天再交也可以。",a:"没关系",t:"ничего",py:"zuòyè méi zuò wán? ___, míngtiān zài jiāo yě kěyǐ.",tr:"Домашку не доделал? Ничего, можно сдать завтра."},
+{s:"___，这次考试虽然难，但是你已经很努力了。",a:"没关系",t:"ничего",py:"___, zhè cì kǎoshì suīrán nán, dànshì nǐ yǐjīng hěn nǔlì le.",tr:"Ничего, хотя экзамен сложный, ты уже очень старался."},
+// 下次 (3)
+{s:"这次作业太难了，___我一定做完。",a:"下次",t:"в след. раз",py:"zhè cì zuòyè tài nán le, ___ wǒ yídìng zuò wán.",tr:"В этот раз домашка слишком сложная, в следующий раз точно сделаю."},
+{s:"___去西安旅行，我要多带暖和的衣服。",a:"下次",t:"в след. раз",py:"___ qù Xī'ān lǚxíng, wǒ yào duō dài nuǎnhuo de yīfu.",tr:"В следующий раз поеду в Сиань — возьму больше тёплой одежды."},
+{s:"___我们一起去图书馆借中文故事书吧。",a:"下次",t:"в след. раз",py:"___ wǒmen yìqǐ qù túshūguǎn jiè Zhōngwén gùshì shū ba.",tr:"В следующий раз пойдём вместе в библиотеку взять книгу на китайском."},
+// 才 (3)
+{s:"马克晚上十一点___回到宿舍。",a:"才",t:"только",py:"Mǎkè wǎnshang shíyī diǎn ___ huídào sùshè.",tr:"Марк только в 11 вечера вернулся в общежитие."},
+{s:"他八点五分___到教室，老师已经在上课了。",a:"才",t:"только",py:"tā bā diǎn wǔ fēn ___ dào jiàoshì, lǎoshī yǐjīng zài shàngkè le.",tr:"Он только в 8:05 пришёл в класс, а учитель уже вёл урок."},
+{s:"我___吃完早饭，你们等一下。",a:"才",t:"только что",py:"wǒ ___ chī wán zǎofàn, nǐmen děng yíxià.",tr:"Я только что доел завтрак, подождите."},
+// 已经 (3)
+{s:"马克到教室的时候，老师___在上课了。",a:"已经",t:"уже",py:"Mǎkè dào jiàoshì de shíhou, lǎoshī ___ zài shàngkè le.",tr:"Когда Марк пришёл в класс, учитель уже вёл урок."},
+{s:"___八点了，你还没起床吗？",a:"已经",t:"уже",py:"___ bā diǎn le, nǐ hái méi qǐchuáng ma?",tr:"Уже 8 часов, а ты ещё не встал?"},
+{s:"我___写完日记了，可以上床睡觉了。",a:"已经",t:"уже",py:"wǒ ___ xiě wán rìjì le, kěyǐ shàngchuáng shuìjiào le.",tr:"Я уже дописал дневник, можно ложиться спать."},
+// 让 (3)
+{s:"上课的时候，老师___我们读中文故事。",a:"让",t:"велел",py:"shàngkè de shíhou, lǎoshī ___ wǒmen dú Zhōngwén gùshì.",tr:"На уроке учитель велел нам читать рассказы на китайском."},
+{s:"妈妈不___我在冬天穿短裤出去。",a:"让",t:"разрешает",py:"māma bù ___ wǒ zài dōngtiān chuān duǎnkù chūqù.",tr:"Мама не разрешает мне зимой выходить в шортах."},
+{s:"你___我用一下你的雨伞，好吗？",a:"让",t:"позволь",py:"nǐ ___ wǒ yòng yíxià nǐ de yǔsǎn, hǎo ma?",tr:"Позволь мне воспользоваться твоим зонтом, хорошо?"},
+// 用 (3)
+{s:"有些同学觉得读故事没有___。",a:"用",t:"пользы",py:"yǒuxiē tóngxué juéde dú gùshì méiyǒu ___.",tr:"Некоторые одноклассники считают, что читать рассказы бесполезно."},
+{s:"我可以___你的电脑写中文作业吗？",a:"用",t:"использовать",py:"wǒ kěyǐ ___ nǐ de diànnǎo xiě Zhōngwén zuòyè ma?",tr:"Можно мне использовать твой компьютер для домашки по китайскому?"},
+{s:"马克___中文和朋友说话，觉得很开心。",a:"用",t:"используя",py:"Mǎkè ___ Zhōngwén hé péngyou shuōhuà, juéde hěn kāixīn.",tr:"Марк говорит с друзьями на китайском и очень рад."},
+// 借 (3)
+{s:"马克想去图书馆___几本中文故事书。",a:"借",t:"взять",py:"Mǎkè xiǎng qù túshūguǎn ___ jǐ běn Zhōngwén gùshì shū.",tr:"Марк хочет взять в библиотеке несколько книг на китайском."},
+{s:"你可以___我的围巾，我今天不出去。",a:"借",t:"одолжить",py:"nǐ kěyǐ ___ wǒ de wéijīn, wǒ jīntiān bù chūqù.",tr:"Можешь взять мой шарф, я сегодня не выхожу."},
+{s:"我想___你的中文词典用一下，可以吗？",a:"借",t:"одолжить",py:"wǒ xiǎng ___ nǐ de Zhōngwén cídiǎn yòng yíxià, kěyǐ ma?",tr:"Я хочу одолжить твой словарь китайского, можно?"},
+// 天气 (3)
+{s:"今天___很好，我们在公园拍了漂亮的照片。",a:"天气",t:"погода",py:"jīntiān ___ hěn hǎo, wǒmen zài gōngyuán pāi le piàoliang de zhàopiàn.",tr:"Сегодня погода хорошая, мы сфотографировались в парке."},
+{s:"成都的___怎么样？和西安一样冷吗？",a:"天气",t:"погода",py:"Chéngdū de ___ zěnmeyàng? hé Xī'ān yīyàng lěng ma?",tr:"Какая погода в Чэнду? Так же холодно, как в Сиане?"},
+{s:"看了___预报以后，阿曼达决定带毛衣去旅行。",a:"天气",t:"погоды",py:"kàn le ___ yùbào yǐhòu, Āmàndá juédìng dài máoyī qù lǚxíng.",tr:"Посмотрев прогноз погоды, Аманда решила взять свитер в поездку."},
+// 一边 (3)
+{s:"晚上我们___吃饭___说话，大家都很高兴。",a:"一边|一边",t:"одновр.|одновр.",py:"wǎnshang wǒmen ___ chīfàn ___ shuōhuà, dàjiā dōu hěn gāoxìng.",tr:"Вечером мы ели и разговаривали, все были рады."},
+{s:"马克喜欢___做作业___听中文歌。",a:"一边|一边",t:"одновр.|одновр.",py:"Mǎkè xǐhuan ___ zuò zuòyè ___ tīng Zhōngwén gē.",tr:"Марк любит делать домашку и одновременно слушать китайские песни."},
+{s:"阿曼达___看天气预报___准备旅行的衣服。",a:"一边|一边",t:"одновр.|одновр.",py:"Āmàndá ___ kàn tiānqì yùbào ___ zhǔnbèi lǚxíng de yīfu.",tr:"Аманда смотрит прогноз погоды и одновременно готовит одежду для поездки."},
+// 累 (3)
+{s:"马克晚上十一点才回到宿舍，觉得很___。",a:"累",t:"уставший",py:"Mǎkè wǎnshang shíyī diǎn cái huídào sùshè, juéde hěn ___.",tr:"Марк вернулся в 11 вечера и чувствовал себя уставшим."},
+{s:"今天真忙，我觉得非常___。",a:"累",t:"уставший",py:"jīntiān zhēn máng, wǒ juéde fēicháng ___.",tr:"Сегодня был очень занят, чувствую себя уставшим."},
+{s:"虽然很___，但是马克还是写完了日记。",a:"累",t:"устал",py:"suīrán hěn ___, dànshì Mǎkè háishi xiě wán le rìjì.",tr:"Хотя устал, Марк всё равно дописал дневник."},
+]
+];
+
+function sh(a){const b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]]}return b}
+function E(t,a,...c){const e=document.createElement(t);if(a)for(const[k,v]of Object.entries(a)){if(k==='cls')e.className=v;else if(k==='sty'&&typeof v==='object')Object.assign(e.style,v);else if(k.startsWith('on'))e.addEventListener(k.slice(2).toLowerCase(),v);else e.setAttribute(k,v)}for(const x of c){if(typeof x==='string')e.appendChild(document.createTextNode(x));else if(x)e.appendChild(x)}return e}
+const $=document.getElementById('app');
+function R(c){$.innerHTML='';$.appendChild(c)}
+
+const S={on:false,fl:{c:0,w:0,t:0},di:{c:0,w:0,t:0},se:{c:0,w:0,t:0},hw:{c:0,w:0,t:0},st:null};
+const MS={};let grp=-1,mode=null,hwW=null;
+function gW(){return grp===-1?[...AW]:[...G[grp].w]}
+function gSn(){return grp===-1?SG.flat():[...SG[grp]]}
+function sk(m){return m+'_'+grp}
+function gSt(m,fn){if(!MS[sk(m)])MS[sk(m)]=fn();return MS[sk(m)]}
+function rSt(m){delete MS[sk(m)]}
+function sT(){return{c:S.fl.c+S.di.c+S.se.c+S.hw.c,w:S.fl.w+S.di.w+S.se.w+S.hw.w}}
+
+function renderMain(){
+  const f=E('div');
+  const gn=E('div',{cls:'ng'});
+  gn.appendChild(E('button',{cls:'gb'+(grp===-1?' al':''),onClick:()=>{grp=-1;mode=null;renderMain()}},'Все'));
+  G.forEach((g,i)=>{gn.appendChild(E('button',{cls:'gb'+(grp===i?' a':''),onClick:()=>{grp=i;mode=null;renderMain()}},g.n))});f.appendChild(gn);
+  const mn=E('div',{cls:'nm'});
+  [{id:'fl',i:'🃏',l:'Карточки'},{id:'di',i:'🎯',l:'Диктант'},{id:'se',i:'📝',l:'Предложения'},{id:'hw',i:'✍️',l:'Письмо'}].forEach(m=>{
+    mn.appendChild(E('button',{cls:'mb'+(mode===m.id?' a':''),onClick:()=>{mode=m.id;renderMain()}},E('span',null,m.i),E('span',null,m.l)))});f.appendChild(mn);
+  if(S.on){
+    const st=sT(),mins=Math.round((Date.now()-S.st)/60000);
+    const sb=E('div',{cls:'sb'});sb.innerHTML=`<span>⏱${mins}м ✓${st.c} ✗${st.w}</span>`;
+    sb.appendChild(E('button',{cls:'sb-b',onClick:showSum},'Завершить'));f.appendChild(sb);
+  } else {
+    f.appendChild(E('div',{sty:{textAlign:'center',marginBottom:'10px'}},E('button',{cls:'btn bb',sty:{padding:'9px 24px',fontSize:'13px'},onClick:()=>{
+      S.on=true;S.st=Date.now();S.fl={c:0,w:0,t:0};S.di={c:0,w:0,t:0};S.se={c:0,w:0,t:0};S.hw={c:0,w:0,t:0};for(const k in MS)delete MS[k];renderMain();
+    }},'▶ Начать сессию')));
+  }
+  const ct=E('div');
+  if(!mode){const w=gW();ct.innerHTML=`<div class="wl"><div style="font-size:42px;margin-bottom:10px">📖</div><h2 style="font-family:'Noto Serif SC',serif;margin-bottom:6px;font-size:20px">${grp===-1?'Все ('+w.length+')':'Карточка '+G[grp].n+' ('+w.length+')'}</h2><p style="color:#6b5347;margin-bottom:14px;font-size:14px">Выберите режим</p><div style="display:flex;flex-wrap:wrap;gap:6px;justify-content:center;max-width:400px;margin:0 auto">${w.map(x=>`<span style="padding:5px 10px;background:var(--card);border:1px solid var(--brd);border-radius:7px;font-family:'Noto Serif SC',serif;font-size:16px;font-weight:700">${x.h}</span>`).join('')}</div></div>`}
+  else if(mode==='fl')rFlash(ct);else if(mode==='di')rDict(ct);else if(mode==='se')rSent(ct);else if(mode==='hw')rHW(ct);
+  f.appendChild(ct);R(f);
+}
+
+function showSum(){
+  const mins=Math.round((Date.now()-S.st)/60000),st=sT(),tot=st.c+st.w,pct=tot>0?Math.round(st.c/tot*100):0;
+  const f=E('div');f.appendChild(Object.assign(E('div',{cls:'rp'}),{innerHTML:`<div class="re">${pct>=80?'🏆':pct>=50?'💪':'📚'}</div><h2 class="rt">Сессия завершена!</h2><p class="rs">${mins}м · ${tot} заданий · ${pct}%</p>`}));
+  const g=E('div',{cls:'sg'});[{l:'Карточки',d:S.fl,c:'s1'},{l:'Диктант',d:S.di,c:'s2'},{l:'Предложения',d:S.se,c:'s3'},{l:'Письмо',d:S.hw,c:'s4'}].forEach(x=>{if(x.d.t>0){const c=E('div',{cls:'scd '+x.c});c.innerHTML=`<div class="sn">${x.d.c}/${x.d.t}</div><div class="sl">${x.l}</div>`;g.appendChild(c)}});f.appendChild(g);
+  f.appendChild(E('div',{sty:{textAlign:'center',marginTop:'18px'}},E('button',{cls:'btn bb',onClick:()=>{S.on=false;for(const k in MS)delete MS[k];mode=null;renderMain()}},'Новая сессия')));R(f);
+}
+
+// ====== FLASH ======
+function rFlash(ct){
+  const s=gSt('fl',()=>({dk:sh(gW()),i:0,st:0,kn:new Set(),un:new Set()}));
+  (function d(){
+    ct.innerHTML='';if(s.i>=s.dk.length){
+      ct.innerHTML=`<div class="rp"><div class="re">${s.kn.size>=s.dk.length*0.8?'🏆':'💪'}</div><h2 class="rt">Раунд завершён!</h2><p class="rs">Знаю: ${s.kn.size} · Не знаю: ${s.un.size}</p></div>`;
+      const b=E('div',{sty:{display:'flex',gap:'10px',justifyContent:'center',flexWrap:'wrap'}});
+      b.appendChild(E('button',{cls:'btn bb',onClick:()=>{rSt('fl');renderMain()}},'Заново'));
+      if(s.un.size>0)b.appendChild(E('button',{cls:'btn br',onClick:()=>{MS[sk('fl')]={dk:sh([...s.un].map(i=>s.dk[i])),i:0,st:0,kn:new Set(),un:new Set()};renderMain()}},`Повторить (${s.un.size})`));ct.appendChild(b);return}
+    const w=s.dk[s.i];
+    ct.appendChild(E('div',{cls:'pb'},E('div',{cls:'pt'},E('div',{cls:'pf',sty:{width:(s.i/s.dk.length*100)+'%'}})),E('span',{cls:'px'},`${s.i+1}/${s.dk.length}`)));
+    const c=E('div',{cls:'cd',onClick:()=>{if(s.st<2){s.st++;d()}}});c.appendChild(E('div',{cls:'lb'},s.st===0?'ВСПОМНИТЕ ЗНАЧЕНИЕ':s.st===1?'ПИНЬИНЬ':'ОТВЕТ'));
+    c.appendChild(E('div',{sty:{fontSize:'64px',color:'var(--cream)',fontFamily:"'Noto Serif SC',serif",fontWeight:700,lineHeight:'1.2'}},w.h));
+    if(s.st>=1)c.appendChild(E('div',{sty:{fontSize:'17px',color:'var(--gold)',marginTop:'6px'}},w.p));
+    if(s.st>=2)c.appendChild(E('div',{sty:{fontSize:'17px',color:'var(--cream)',marginTop:'6px'}},w.r));
+    if(s.st<2)c.appendChild(E('div',{sty:{fontSize:'11px',color:'var(--tx4)',marginTop:'14px'}},s.st===0?'нажмите → пиньинь':'нажмите → значение'));ct.appendChild(c);
+    const bs=E('div',{cls:'bw'});
+    bs.appendChild(E('button',{cls:'btn br',onClick:()=>{s.un.add(s.i);if(S.on){S.fl.w++;S.fl.t++}s.i++;s.st=0;d()}},'Не знаю'));
+    bs.appendChild(E('button',{cls:'btn bg',onClick:()=>{s.kn.add(s.i);if(S.on){S.fl.c++;S.fl.t++}s.i++;s.st=0;d()}},'Знаю ✓'));ct.appendChild(bs);
+    ct.appendChild(E('div',{cls:'sc'},`✓${s.kn.size} ✗${s.un.size}`))})();
+}
+
+// ====== DICTATION - FIXED SCORING ======
+function rDict(ct){
+  const s=gSt('di',()=>{const dk=sh(gW());return{dk,i:0,correct:0,ww:[],ch:mCh(dk[0]),pin:false,wp:null,lk:false,hadErr:false}});
+  function mCh(w){return sh([w,...sh(AW.filter(x=>x.h!==w.h)).slice(0,5)])}
+  function adv(){
+    // Score: correct only if NO errors on this word
+    if(!s.hadErr)s.correct++;
+    s.i++;s.wp=null;s.lk=false;s.hadErr=false;
+    if(s.i<s.dk.length)s.ch=mCh(s.dk[s.i]);d();
+  }
+  function d(){
+    ct.innerHTML='';if(s.i>=s.dk.length){
+      const wrong=s.dk.length-s.correct;const pct=Math.round(s.correct/s.dk.length*100);
+      ct.innerHTML=`<div class="rp"><div class="re">${pct>=80?'🏆':pct>=50?'💪':'📚'}</div><h2 class="rt">Результат: ${pct}%</h2><p class="rs">Правильно: ${s.correct} из ${s.dk.length}</p></div>`;
+      if(s.ww.length>0){const eb=E('div',{cls:'eb'});eb.appendChild(E('div',{cls:'et'},'Ошибки:'));s.ww.forEach(w=>{eb.appendChild(E('div',{cls:'er'},E('span',{sty:{fontFamily:"'Noto Serif SC',serif",fontWeight:700,fontSize:'18px'}},w.h),E('span',{sty:{color:'var(--red)'}},w.p),E('span',{sty:{color:'var(--tx4)'}},'— '+w.r)))});ct.appendChild(eb)}
+      const b=E('div',{sty:{display:'flex',gap:'10px',justifyContent:'center',flexWrap:'wrap',marginTop:'14px'}});
+      b.appendChild(E('button',{cls:'btn bb',onClick:()=>{rSt('di');renderMain()}},'Заново'));
+      if(s.ww.length>0)b.appendChild(E('button',{cls:'btn br',onClick:()=>{const dk=sh(s.ww);MS[sk('di')]={dk,i:0,correct:0,ww:[],ch:mCh(dk[0]),pin:s.pin,wp:null,lk:false,hadErr:false};renderMain()}},`Ошибки (${s.ww.length})`));ct.appendChild(b);return}
+    const w=s.dk[s.i];
+    ct.appendChild(E('div',{cls:'pb'},E('div',{cls:'pt'},E('div',{cls:'pf',sty:{width:(s.i/s.dk.length*100)+'%'}})),E('span',{cls:'px'},`${s.i+1}/${s.dk.length}`)));
+    const tg=E('div',{cls:'tr'});tg.appendChild(E('span',null,'Пиньинь'));tg.appendChild(E('button',{cls:'tg'+(s.pin?' on':''),onClick:()=>{s.pin=!s.pin;d()}}));ct.appendChild(tg);
+    const c=E('div',{cls:'cd'});c.appendChild(E('div',{cls:'lb'},'ВЫБЕРИТЕ ИЕРОГЛИФ'));
+    c.appendChild(E('div',{sty:{fontSize:'20px',color:'var(--cream)',fontWeight:500,marginBottom:'6px'}},w.r));
+    if(s.pin)c.appendChild(E('div',{sty:{fontSize:'15px',color:'var(--gold)'}},w.p));ct.appendChild(c);
+    const gr=E('div',{cls:'cg'});
+    s.ch.forEach(x=>{let cl='cb';if(s.lk&&x.h===w.h)cl+=' ok';else if(s.wp===x.h)cl+=' no';if(s.lk)cl+=' lk';
+      gr.appendChild(E('button',{cls:cl,onClick:()=>{if(s.lk)return;if(x.h===w.h){s.lk=true;if(S.on){if(!s.hadErr)S.di.c++;else S.di.w++;S.di.t++}d();setTimeout(adv,600)}else{s.wp=x.h;if(!s.hadErr){s.hadErr=true;s.ww.push(w)}d()}}},x.h))});ct.appendChild(gr);
+    if(s.wp&&!s.lk)ct.appendChild(E('div',{cls:'fb fno'},'Попробуйте ещё'));
+    ct.appendChild(E('div',{cls:'sc'},`✓${s.correct} ✗${s.ww.length}`));}d();
+}
+
+// ====== SENTENCES - with translation toggle, count=words ======
+function rSent(ct){
+  const s=gSt('se',()=>{
+    const pool=gSn(),wc=gW().length;
+    const dk=sh(pool).slice(0,wc);// same count as words
+    return{dk,i:0,correct:0,wi:[],bl:{},ab:0,wp:new Set(),ch:mSCh(dk[0]),lk:false,ok:false,sp:false,str:false,hv:{},hadErr:false};
+  });
+  function mSCh(it){
+    const ans=it.a.split('|'),cs=new Set(ans),pool=gW().filter(w=>!cs.has(w.h));
+    const dist=sh(pool).slice(0,Math.max(4,6-ans.length));
+    const aw=ans.map(a=>AW.find(w=>w.h===a)||{h:a,p:'',r:''});
+    const all2=sh([...aw,...dist]);const seen=new Set();return all2.filter(c=>{if(seen.has(c.h))return false;seen.add(c.h);return true});
+  }
+  function adv(){if(!s.hadErr)s.correct++;s.i++;s.bl={};s.ab=0;s.wp=new Set();s.lk=false;s.ok=false;s.hv={};s.hadErr=false;if(s.i<s.dk.length)s.ch=mSCh(s.dk[s.i]);d();}
+  function d(){
+    ct.innerHTML='';if(s.i>=s.dk.length){
+      const pct=Math.round(s.correct/s.dk.length*100);
+      ct.innerHTML=`<div class="rp"><div class="re">${pct>=80?'🏆':pct>=50?'💪':'📚'}</div><h2 class="rt">Результат: ${pct}%</h2><p class="rs">Правильно: ${s.correct} из ${s.dk.length}</p></div>`;
+      if(s.wi.length>0){const eb=E('div',{cls:'eb'});eb.appendChild(E('div',{cls:'et'},'Ошибки:'));s.wi.forEach(it=>{const ans=it.a.split('|');let f2=it.s;ans.forEach(a=>{f2=f2.replace('___','【'+a+'】')});eb.appendChild(E('div',{cls:'er',sty:{fontFamily:"'Noto Serif SC',serif",fontSize:'15px'}},f2))});ct.appendChild(eb)}
+      const b=E('div',{sty:{display:'flex',gap:'10px',justifyContent:'center',marginTop:'14px',flexWrap:'wrap'}});
+      b.appendChild(E('button',{cls:'btn bb',onClick:()=>{rSt('se');renderMain()}},'Новый раунд'));
+      if(s.wi.length>0)b.appendChild(E('button',{cls:'btn br',onClick:()=>{const dk=sh(s.wi);MS[sk('se')]={dk,i:0,correct:0,wi:[],bl:{},ab:0,wp:new Set(),ch:mSCh(dk[0]),lk:false,ok:false,sp:s.sp,str:s.str,hv:{},hadErr:false};renderMain()}},'Ошибки'));ct.appendChild(b);return}
+    const it=s.dk[s.i],ans=it.a.split('|'),hints=it.t.split('|'),parts=it.s.split('___');
+    ct.appendChild(E('div',{cls:'pb'},E('div',{cls:'pt'},E('div',{cls:'pf',sty:{width:(s.i/s.dk.length*100)+'%'}})),E('span',{cls:'px'},`${s.i+1}/${s.dk.length}`)));
+    // Toggles row
+    const tgs=E('div',{sty:{display:'flex',gap:'14px',justifyContent:'center',flexWrap:'wrap',marginBottom:'4px'}});
+    const t1=E('div',{cls:'tr',sty:{margin:0}});t1.appendChild(E('span',null,'Пиньинь'));t1.appendChild(E('button',{cls:'tg'+(s.sp?' on':''),onClick:()=>{s.sp=!s.sp;d()}}));tgs.appendChild(t1);
+    const t2=E('div',{cls:'tr',sty:{margin:0}});t2.appendChild(E('span',null,'Перевод'));t2.appendChild(E('button',{cls:'tg'+(s.str?' on':''),onClick:()=>{s.str=!s.str;d()}}));tgs.appendChild(t2);
+    ct.appendChild(tgs);
+    // Card
+    const box=E('div',{cls:'cl'});box.appendChild(E('div',{sty:{fontSize:'11px',color:'var(--tx4)',letterSpacing:'1px',marginBottom:'6px'}},'ЗАПОЛНИТЕ ПРОПУСКИ'));
+    if(s.sp&&it.py)box.appendChild(E('div',{cls:'spy'},it.py));
+    if(s.str&&it.tr)box.appendChild(E('div',{cls:'strans'},it.tr));
+    const sd=E('div',{cls:'sx'});let bi=0;
+    parts.forEach((p,pi)=>{sd.appendChild(document.createTextNode(p));if(pi<parts.length-1){
+      const idx=bi,val=s.bl[idx],isAct=idx===s.ab&&!s.lk,isDone=val===ans[idx];
+      let cl='bk';if(isDone)cl+=' cok fl';else if(isAct)cl+=' ac';
+      const slot=E('span',{cls:cl,onClick:()=>{if(isAct&&!s.lk){s.hv[idx]=!s.hv[idx];d()}}});
+      if(val)slot.textContent=val;
+      else if(s.hv[idx]&&isAct)slot.appendChild(E('span',{cls:'bh'},hints[idx]));
+      else slot.innerHTML='&nbsp;&nbsp;&nbsp;';
+      sd.appendChild(slot);bi++}});
+    box.appendChild(sd);ct.appendChild(box);
+    if(!s.lk){
+      ct.appendChild(E('div',{sty:{fontSize:'11px',color:'var(--tx5)',textAlign:'center',marginBottom:'4px',fontStyle:'italic'}},'нажмите на пропуск для подсказки'));
+      const used=new Set(Object.entries(s.bl).filter(([k,v])=>v&&v===ans[+k]).map(([,v])=>v));
+      const gr=E('div',{cls:'cg'});s.ch.forEach(c=>{const isU=used.has(c.h);let cl='cb';if(isU)cl+=' us';
+        gr.appendChild(E('button',{cls:cl,onClick:()=>{if(s.lk||isU)return;
+          if(c.h===ans[s.ab]){s.bl[s.ab]=c.h;s.hv={};if(ans.every((_,i)=>s.bl[i]===ans[i])){s.lk=true;s.ok=true;if(S.on){if(!s.hadErr)S.se.c++;else S.se.w++;S.se.t++}d();setTimeout(adv,800)}else{s.ab++;d()}}
+          else{s.bl[s.ab]=c.h;s.wp.add(s.ab+'_'+c.h);if(!s.hadErr){s.hadErr=true;s.wi.push(it)}d();setTimeout(()=>{delete s.bl[s.ab];d()},500)}}},c.h))});ct.appendChild(gr)}
+    if(s.lk&&s.ok)ct.appendChild(E('div',{cls:'fb fok'},'✓ Правильно!'));
+    ct.appendChild(E('div',{cls:'sc'},`✓${s.correct} ✗${s.wi.length}`));}d();
+}
+
+// ====== HANDWRITING - FIXED char progress ======
+function rHW(ct){
+  const s=gSt('hw',()=>({dk:sh(gW()),i:0,ci:0,pn:false,sc:{c:0,w:0},cm:{},outline:false,trans:false}));
+  const hwWriters=[];
+
+  function curM(){return s.cm[s.i+'_'+s.ci]||0}
+  function wordMaxM(wi){let mx=0;const ch=[...s.dk[wi].h];for(let i=0;i<ch.length;i++)mx=Math.max(mx,s.cm[wi+'_'+i]||0);return mx}
+  function wordTotalM(wi){let t=0;const ch=[...s.dk[wi].h];for(let i=0;i<ch.length;i++)t+=(s.cm[wi+'_'+i]||0);return t}
+
+  function nextW(){
+    const mx=wordMaxM(s.i);
+    if(mx>=3){s.sc.w++;if(S.on){S.hw.w++;S.hw.t++}}else{s.sc.c++;if(S.on){S.hw.c++;S.hw.t++}}
+    s.i++;s.ci=0;s.trans=false;d();
+  }
+
+  function mkGrid(sz){
+    const svgNS='http://www.w3.org/2000/svg';const svg=document.createElementNS(svgNS,'svg');
+    svg.setAttribute('class','hg');svg.setAttribute('width',sz);svg.setAttribute('height',sz);
+    const m=sz/2;
+    [{x1:m,y1:0,x2:m,y2:sz},{x1:0,y1:m,x2:sz,y2:m},{x1:0,y1:0,x2:sz,y2:sz,d:1},{x1:sz,y1:0,x2:0,y2:sz,d:1}].forEach(l=>{
+      const ln=document.createElementNS(svgNS,'line');ln.setAttribute('x1',l.x1);ln.setAttribute('y1',l.y1);
+      ln.setAttribute('x2',l.x2);ln.setAttribute('y2',l.y2);if(l.d)ln.setAttribute('class','dg');svg.appendChild(ln)});
+    return svg;
+  }
+
+  function initQuiz(ci,chars){
+    const id='hw-c'+ci;const el=document.getElementById(id);if(!el)return;el.innerHTML='';
+    const sz=parseInt(el.parentElement.style.width);
+    const _sc=isDark?'#e8e0d8':'#2d1810',_oc=isDark?'#3a3a50':'#ddd4c8';
+    try{
+      const w=HanziWriter.create(id,chars[ci],{width:sz,height:sz,padding:Math.max(8,sz*0.07),
+        showOutline:s.outline,showCharacter:false,strokeColor:_sc,outlineColor:_oc,
+        highlightColor:'#e74c3c',highlightOnComplete:true,drawingWidth:Math.max(8,sz*0.05),
+        showHintAfterMisses:2,highlightCompleteColor:'#2ecc71'});
+      hwWriters[ci]=w;
+      w.quiz({
+        onMistake:()=>{
+          const k=s.i+'_'+ci;s.cm[k]=(s.cm[k]||0)+1;
+          const bdg=document.getElementById('bdg-'+ci);
+          if(bdg){bdg.textContent=s.cm[k];bdg.style.display='flex'}
+        },
+        onComplete:()=>{
+          // Mark canvas as done visually
+          const box=document.getElementById('hbox-'+ci);
+          if(box){box.style.borderColor='var(--green)';box.style.opacity='1'}
+          if(ci<chars.length-1){
+            s.ci=ci+1;
+            // Activate next canvas
+            setTimeout(()=>{
+              const nb=document.getElementById('hbox-'+s.ci);
+              if(nb){nb.style.borderColor='var(--accent)';nb.style.opacity='1'}
+              const ob=document.getElementById('hbox-'+ci);
+              if(ob)ob.style.opacity='0.6';
+              initQuiz(s.ci,chars);
+            },400);
+          } else {
+            s.trans=true;
+            // Show all as done
+            for(let j=0;j<chars.length;j++){
+              const b=document.getElementById('hbox-'+j);
+              if(b){b.style.borderColor='var(--green)';b.style.opacity='1'}
+            }
+            // Show result below
+            const mx=wordMaxM(s.i);
+            const fb=E('div',{cls:'fb fok',id:'hw-fb'},'✓ '+s.dk[s.i].h+(mx>0?' (макс.ош.: '+mx+')':' — отлично!'));
+            const sk2=document.getElementById('hw-skip');
+            if(sk2)sk2.replaceWith(fb);
+            setTimeout(nextW,1200);
+          }
+        }
+      });
+    }catch(e){el.innerHTML='<div style="padding:10px;color:var(--red);font-size:12px">⚠</div>'}
+  }
+
+  function d(){
+    ct.innerHTML='';hwWriters.length=0;hwW=null;
+    if(s.i>=s.dk.length){
+      const pct=s.dk.length>0?Math.round(s.sc.c/s.dk.length*100):0;
+      ct.innerHTML=`<div class="rp"><div class="re">${pct>=80?'🏆':pct>=50?'💪':'📚'}</div><h2 class="rt">Результат: ${pct}%</h2><p class="rs">Правильно: ${s.sc.c} из ${s.dk.length}</p></div>`;
+      const hard=[];s.dk.forEach((w,wi)=>{if(wordMaxM(wi)>=3)hard.push({w,t:wordTotalM(wi)})});
+      if(hard.length>0){const eb=E('div',{cls:'eb'});eb.appendChild(E('div',{cls:'et'},'≥3 ошибок — повторите:'));
+        hard.forEach(({w,t})=>{const r=E('div',{cls:'er'});r.appendChild(E('span',{sty:{fontFamily:"'Noto Serif SC',serif",fontWeight:700,fontSize:'18px'}},w.h));r.appendChild(E('span',{sty:{color:'var(--red)'}},w.p));r.appendChild(E('span',{sty:{color:'var(--tx4)'}},'— '+w.r));r.appendChild(E('span',{cls:'ebg'},t+' ош.'));eb.appendChild(r)});ct.appendChild(eb)}
+      const b=E('div',{sty:{display:'flex',gap:'10px',justifyContent:'center',marginTop:'14px',flexWrap:'wrap'}});
+      b.appendChild(E('button',{cls:'btn bb',onClick:()=>{rSt('hw');renderMain()}},'Заново'));
+      if(hard.length>0)b.appendChild(E('button',{cls:'btn br',onClick:()=>{const dk=sh(hard.map(x=>x.w));MS[sk('hw')]={dk,i:0,ci:0,pn:false,sc:{c:0,w:0},cm:{},outline:false,trans:false};renderMain()}},`Повторить (${hard.length})`));ct.appendChild(b);return}
+
+    const w=s.dk[s.i],chars=[...w.h],nc=chars.length;
+    ct.appendChild(E('div',{cls:'pb'},E('div',{cls:'pt'},E('div',{cls:'pf',sty:{width:(s.i/s.dk.length*100)+'%'}})),E('span',{cls:'px'},`${s.i+1}/${s.dk.length}`)));
+    // Toggles
+    const tr2=E('div',{sty:{display:'flex',gap:'14px',justifyContent:'center',marginBottom:'6px'}});
+    const t1=E('div',{cls:'tr',sty:{margin:0}});t1.appendChild(E('span',null,'Контур'));
+    t1.appendChild(E('button',{cls:'tg'+(s.outline?' on':''),onClick:()=>{
+      s.outline=!s.outline;
+      hwWriters.forEach(wr=>{if(wr){try{if(s.outline)wr.showOutline();else wr.hideOutline()}catch(e){}}});
+      t1.querySelector('.tg').className='tg'+(s.outline?' on':'');
+    }}));tr2.appendChild(t1);
+    const t2=E('div',{cls:'tr',sty:{margin:0}});t2.appendChild(E('span',null,'Пиньинь'));
+    t2.appendChild(E('button',{cls:'tg'+(s.pn?' on':''),onClick:()=>{s.pn=!s.pn;const p=document.getElementById('hwpy');if(p)p.style.display=s.pn?'block':'none';t2.querySelector('.tg').className='tg'+(s.pn?' on':'')}}));tr2.appendChild(t2);
+    ct.appendChild(tr2);
+    // Card
+    const cd=E('div',{cls:'cd',sty:{padding:'16px 20px'}});cd.appendChild(E('div',{cls:'lb'},'НАПИШИТЕ'));
+    cd.appendChild(E('div',{sty:{fontSize:'20px',color:'var(--cream)',fontWeight:500}},w.r));
+    cd.appendChild(E('div',{id:'hwpy',sty:{fontSize:'15px',color:'var(--gold)',marginTop:'3px',display:s.pn?'block':'none'}},w.p));ct.appendChild(cd);
+
+    // Calculate canvas sizes
+    const maxW=Math.min(520,window.innerWidth-40);
+    const gap=nc>1?8:0;
+    const SZ=nc===1?Math.min(280,maxW):Math.min(200,Math.floor((maxW-(nc-1)*gap)/nc));
+
+    // Canvas row
+    const row=E('div',{sty:{display:'flex',gap:gap+'px',justifyContent:'center',margin:'10px 0',alignItems:'flex-start'}});
+    chars.forEach((c,ci)=>{
+      const isActive=ci===s.ci&&!s.trans;
+      const isDone=ci<s.ci;
+      const col=E('div',{sty:{display:'flex',flexDirection:'column',alignItems:'center',gap:'4px'}});
+      const box=E('div',{cls:'hc',id:'hbox-'+ci,sty:{
+        width:SZ+'px',height:SZ+'px',position:'relative',
+        borderColor:isDone?'var(--green)':(isActive?'var(--accent)':'var(--brd2)'),
+        opacity:isDone?'0.6':(isActive?'1':'0.4'),
+        transition:'all 0.3s'
+      }});
+      box.appendChild(mkGrid(SZ));
+      const tgt=E('div',{id:'hw-c'+ci,sty:{position:'absolute',top:0,left:0,width:'100%',height:'100%',zIndex:2}});
+      box.appendChild(tgt);
+      col.appendChild(box);
+      // Error badge below each canvas
+      const m=s.cm[s.i+'_'+ci]||0;
+      const bdg=E('div',{id:'bdg-'+ci,sty:{
+        fontSize:'11px',color:'var(--red)',fontWeight:600,textAlign:'center',
+        display:m>0?'flex':'none',alignItems:'center',justifyContent:'center',gap:'2px'
+      }});
+      bdg.textContent=m>0?m:'';
+      if(m>0)bdg.textContent='✗'+m;
+      col.appendChild(bdg);
+      row.appendChild(col);
+    });
+    ct.appendChild(row);
+
+    ct.appendChild(E('div',{sty:{fontSize:'11px',color:'var(--tx4)',textAlign:'center',marginBottom:'4px'}},'Подсказка штриха после 2 ошибок'));
+
+    if(!s.trans){
+      ct.appendChild(E('div',{sty:{textAlign:'center',marginTop:'4px'},id:'hw-skip'},
+        E('button',{cls:'bl2',onClick:()=>{for(let ci=s.ci;ci<chars.length;ci++)s.cm[s.i+'_'+ci]=99;nextW()}},'Пропустить')));
+    }
+    ct.appendChild(E('div',{cls:'sc'},`✓${s.sc.c} ✗${s.sc.w}`));
+
+    // Init first active quiz
+    if(!s.trans){setTimeout(()=>initQuiz(s.ci,chars),80)}
+  }d();
+}
+
+renderMain();
+</script>
+</body>
+</html>
