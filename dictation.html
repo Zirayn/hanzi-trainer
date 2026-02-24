@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>听写练习 — Подготовка к диктанту</title>
+<script src="https://cdn.jsdelivr.net/npm/hanzi-writer@3.5/dist/hanzi-writer.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:linear-gradient(180deg,#f5ebe0 0%,#fef9f0 30%,#fff 100%);min-height:100vh;color:#2d1810}
+.header{background:linear-gradient(135deg,#2d1810,#5c3a28);padding:24px 20px 20px;text-align:center;border-radius:0 0 24px 24px;box-shadow:0 4px 20px rgba(45,24,16,0.2)}
+.header-sub{font-size:13px;color:#c0a888;letter-spacing:2px;margin-bottom:4px}
+.header h1{font-family:'Noto Serif SC',serif;font-size:32px;color:#f5ebe0;font-weight:700}
+.header-info{font-size:13px;color:#c0a888;margin-top:4px}
+.container{max-width:560px;margin:0 auto;padding:0 16px 40px}
+.nav-groups{display:flex;gap:6px;padding:16px 0 8px;justify-content:center;flex-wrap:wrap}
+.gbtn{padding:8px 14px;border-radius:10px;cursor:pointer;transition:all 0.2s;border:2px solid #e8ddd4;background:#fff;color:#5c3a28;font-size:13px;font-weight:600}
+.gbtn.ac{border-color:#8b5e3c;background:#8b5e3c;color:#fff;box-shadow:0 2px 8px rgba(139,94,60,0.3)}
+.gbtn.all{border-color:#c0392b;background:#c0392b;color:#fff}
+.nav-modes{display:flex;gap:6px;padding:8px 0 12px;justify-content:center;flex-wrap:wrap}
+.mbtn{padding:10px 14px;border-radius:14px;cursor:pointer;transition:all 0.2s;border:2px solid #e8ddd4;background:#fff;color:#5c3a28;font-size:13px;font-weight:600;display:flex;align-items:center;gap:6px}
+.mbtn.ac{border-color:#8b5e3c;background:#8b5e3c;color:#fff;box-shadow:0 2px 8px rgba(139,94,60,0.3)}
+.sbar{display:flex;align-items:center;justify-content:space-between;padding:8px 14px;background:#fff;border:1px solid #e8ddd4;border-radius:12px;margin-bottom:12px;flex-wrap:wrap;gap:8px}
+.sbar-stats{font-size:13px;color:#6b5347;display:flex;gap:12px;flex-wrap:wrap}
+.sbar-btn{padding:6px 14px;border-radius:8px;cursor:pointer;border:1px solid #e8b4b4;background:#fff5f5;color:#c0392b;font-size:12px;font-weight:600;transition:all 0.2s}
+.sbar-btn:hover{background:#c0392b;color:#fff}
+.pbar{display:flex;align-items:center;gap:12px;margin-bottom:16px}
+.ptr{flex:1;height:6px;background:#e8ddd4;border-radius:3px;overflow:hidden}
+.pfl{height:100%;background:linear-gradient(90deg,#8b5e3c,#c0392b);border-radius:3px;transition:width 0.3s}
+.ptx{font-size:13px;color:#8b7a6b;font-weight:600;min-width:50px;text-align:right}
+.cdk{background:linear-gradient(135deg,#2d1810,#5c3a28);border-radius:20px;padding:32px 24px;text-align:center;box-shadow:0 8px 32px rgba(45,24,16,0.15);margin-bottom:16px}
+.cdl{background:linear-gradient(135deg,#fef9f0,#f5ebe0);border-radius:20px;padding:24px 20px;text-align:center;box-shadow:0 4px 20px rgba(45,24,16,0.08);border:2px solid #d4c4b0;margin-bottom:12px}
+.clbl{font-size:13px;color:#c0a888;letter-spacing:1px;margin-bottom:12px}
+.btn{padding:12px 24px;border:none;border-radius:12px;cursor:pointer;font-size:15px;font-weight:600;transition:all 0.2s;color:#fff}
+.btn:hover{transform:translateY(-1px)}
+.btn:disabled{opacity:0.5;cursor:default;transform:none}
+.bb{background:#8b5e3c;box-shadow:0 2px 8px rgba(139,94,60,0.3)}
+.br{background:#c0392b;box-shadow:0 2px 8px rgba(192,57,43,0.3)}
+.bg{background:#27ae60;box-shadow:0 2px 8px rgba(39,174,96,0.3)}
+.brow{display:flex;gap:12px;margin-top:12px}.brow .btn{flex:1}
+.blink{background:none;border:none;color:#8b7a6b;cursor:pointer;font-size:13px;text-decoration:underline;padding:8px}
+.trow{display:flex;align-items:center;gap:8px;justify-content:center;margin:8px 0;font-size:13px;color:#8b7a6b}
+.tgl{position:relative;width:40px;height:22px;background:#d4c4b0;border-radius:11px;cursor:pointer;transition:background 0.2s;border:none;padding:0}
+.tgl.on{background:#8b5e3c}
+.tgl::after{content:'';position:absolute;left:2px;top:2px;width:18px;height:18px;background:#fff;border-radius:50%;transition:left 0.2s}
+.tgl.on::after{left:20px}
+.cgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:16px 0}
+.cbtn{padding:14px 8px;border:2px solid #e8ddd4;border-radius:14px;background:#fff;cursor:pointer;transition:border-color 0.15s,background 0.15s,color 0.15s,box-shadow 0.15s,opacity 0.15s;text-align:center;font-family:'Noto Serif SC',serif;font-size:24px;font-weight:700;color:#2d1810;min-height:64px;display:flex;align-items:center;justify-content:center}
+.cbtn:hover:not(.ok):not(.no):not(.used):not(.lk){border-color:#8b5e3c;background:#fef9f0}
+.cbtn.ok{border-color:#27ae60;background:#27ae60;color:#fff;box-shadow:0 2px 12px rgba(39,174,96,0.3)}
+.cbtn.no{border-color:#c0392b;background:#c0392b;color:#fff;box-shadow:0 2px 12px rgba(192,57,43,0.3)}
+.cbtn.used{opacity:0.25;pointer-events:none}
+.cbtn.lk{pointer-events:none}
+
+/* Sentence styling - compact inline blanks */
+.sbox{font-size:22px;line-height:2;color:#2d1810;font-family:'Noto Serif SC',serif;text-align:center;margin:8px 0;word-break:keep-all}
+.spy{font-size:14px;line-height:1.8;color:#b8a080;font-family:sans-serif;text-align:center;margin-bottom:4px}
+.bl{display:inline-block;min-width:2em;border-bottom:2px dashed #d4c4b0;text-align:center;margin:0 1px;font-family:'Noto Serif SC',serif;font-size:22px;color:#c0a888;font-weight:700;vertical-align:baseline;padding:0 4px;transition:all 0.2s;cursor:pointer;line-height:1.4}
+.bl.act{border-bottom:2.5px solid #8b5e3c;color:#8b5e3c;background:rgba(139,94,60,0.06);border-radius:4px 4px 0 0}
+.bl.fl{border-bottom-style:solid;border-bottom-color:#8b5e3c;color:#2d1810}
+.bl.cok{border-bottom-color:#27ae60;color:#27ae60;background:rgba(39,174,96,0.06);border-radius:4px 4px 0 0}
+.bl.cno{border-bottom-color:#c0392b;color:#c0392b;background:rgba(192,57,43,0.06);border-radius:4px 4px 0 0}
+.bl-hint{display:block;font-size:11px;color:#e67e22;font-family:sans-serif;font-weight:400;line-height:1.1}
+.sent-note{font-size:12px;color:#b8a080;text-align:center;margin-bottom:6px;font-style:italic}
+
+.fb{padding:12px 20px;border-radius:12px;text-align:center;font-weight:600;font-size:15px;margin:8px 0;animation:fi 0.2s}
+.fok{background:#f0faf0;color:#27ae60;border:1px solid #b8e6b8}
+.fno{background:#fff5f5;color:#c0392b;border:1px solid #f0c0c0}
+@keyframes fi{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+.scl{font-size:13px;color:#8b7a6b;text-align:center;margin-top:8px}
+
+.hwa{display:flex;flex-direction:column;align-items:center;gap:12px;margin:16px 0}
+.hwc{border:2px solid #d4c4b0;border-radius:16px;overflow:hidden;background:#fff;box-shadow:0 4px 12px rgba(0,0,0,0.06);position:relative}
+.hwg{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:1}
+.hwg line{stroke:#e0d8ce;stroke-width:1}
+.hwg .dg{stroke:#ede6dc;stroke-dasharray:6,4}
+.hcp{display:flex;gap:8px;justify-content:center;margin:8px 0}
+.hcd{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:'Noto Serif SC',serif;font-size:18px;font-weight:700;border:2px solid #e8ddd4;color:#c0a888;background:#fff;transition:all 0.3s}
+.hcd.hca{border-color:#8b5e3c;color:#8b5e3c;background:#fef9f0;box-shadow:0 2px 8px rgba(139,94,60,0.15)}
+.hcd.hcok{border-color:#27ae60;color:#27ae60;background:#f0faf0}
+.hwm{font-size:13px;color:#c0392b;text-align:center;font-weight:600}
+.rp{text-align:center;padding:32px 20px}
+.re{font-size:48px;margin-bottom:12px}
+.rt{font-family:'Noto Serif SC',serif;color:#2d1810;margin-bottom:4px}
+.rs{color:#6b5347;margin-bottom:16px}
+.ebox{margin:16px auto;max-width:420px;background:#fff5f5;border-radius:12px;padding:16px;text-align:left}
+.etit{font-size:13px;color:#c0392b;font-weight:600;margin-bottom:8px}
+.erow{display:flex;gap:8px;padding:6px 0;font-size:14px;color:#5c3a28;border-bottom:1px solid #f0e0e0;align-items:baseline;flex-wrap:wrap}
+.erow:last-child{border:none}
+.ebdg{display:inline-block;padding:2px 8px;background:#c0392b;color:#fff;border-radius:6px;font-size:11px;font-weight:600;margin-left:auto}
+.sgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px;max-width:360px;margin:0 auto}
+.scard{padding:16px;border-radius:12px;text-align:center}
+.scn{font-size:28px;font-weight:700;font-family:'Noto Serif SC',serif}
+.sclab{font-size:12px;margin-top:4px}
+.sg{background:#f0faf0;color:#27ae60}.sr{background:#fff5f5;color:#c0392b}
+.sb2{background:#f0f4ff;color:#2962b8}.so{background:#fef6ee;color:#e67e22}
+.welcome{padding:32px 20px;text-align:center}
+</style>
+</head>
+<body>
+<div class="header">
+  <div class="header-sub">ПОДГОТОВКА К ДИКТАНТУ</div>
+  <h1>听写练习</h1>
+  <div class="header-info">Unit 2 · 54 слова · 5 групп</div>
+</div>
+<div class="container" id="app"></div>
+<script>
+const G=[
+{n:"1/5",w:[{h:"穿",p:"chuān",r:"носить одежду"},{h:"气温",p:"qìwēn",r:"температура воздуха"},{h:"度",p:"dù",r:"градус"},{h:"比",p:"bǐ",r:"чем (сравнивать)"},{h:"冷",p:"lěng",r:"холод"},{h:"听说",p:"tīngshuō",r:"говорят"},{h:"冬天",p:"dōngtiān",r:"зима"},{h:"风",p:"fēng",r:"ветер"},{h:"下雪",p:"xiàxuě",r:"идёт снег"},{h:"再",p:"zài",r:"тогда, снова"},{h:"差不多",p:"chàbuduō",r:"почти так же"}]},
+{n:"2/5",w:[{h:"一样",p:"yīyàng",r:"то же самое"},{h:"暖和",p:"nuǎnhuo",r:"тёплый и мягкий"},{h:"行",p:"xíng",r:"ок, хорошо"},{h:"虽然",p:"suīrán",r:"хотя, несмотря на"},{h:"如果",p:"rúguǒ",r:"если"},{h:"带",p:"dài",r:"брать"},{h:"预报",p:"yùbào",r:"прогноз"},{h:"起",p:"qǐ",r:"с, начиная с"},{h:"将",p:"jiāng",r:"будет (буд. вр.)"},{h:"影响",p:"yǐngxiǎng",r:"влиять"},{h:"受",p:"shòu",r:"подвергаться"}]},
+{n:"3/5",w:[{h:"差别",p:"chābié",r:"разница"},{h:"达到",p:"dádào",r:"достигать"},{h:"以上",p:"yǐshàng",r:"выше, больше"},{h:"上",p:"shàng",r:"на, сверху"},{h:"多云",p:"duōyún",r:"облачно"},{h:"小",p:"xiǎo",r:"маленький"},{h:"晴",p:"qíng",r:"ясно"},{h:"雨",p:"yǔ",r:"дождь"},{h:"能",p:"néng",r:"мочь, уметь"},{h:"为什么",p:"wèishénme",r:"почему"},{h:"得",p:"de",r:"суффикс степени"}]},
+{n:"4/5",w:[{h:"就",p:"jiù",r:"сразу, именно"},{h:"可能",p:"kěnéng",r:"возможно"},{h:"因为",p:"yīnwèi",r:"потому что"},{h:"早",p:"zǎo",r:"рано, ранний"},{h:"这么",p:"zhème",r:"так, настолько"},{h:"难",p:"nán",r:"трудный"},{h:"作业",p:"zuòyè",r:"домашняя работа"},{h:"还",p:"hái",r:"ещё, всё ещё"},{h:"完",p:"wán",r:"закончиться"},{h:"复习",p:"fùxí",r:"повторять"},{h:"准备",p:"zhǔnbèi",r:"готовиться"}]},
+{n:"5/5",w:[{h:"没关系",p:"méiguānxi",r:"ничего страшного"},{h:"下次",p:"xiàcì",r:"в следующий раз"},{h:"才",p:"cái",r:"только, лишь"},{h:"已经",p:"yǐjīng",r:"уже"},{h:"让",p:"ràng",r:"позволять"},{h:"用",p:"yòng",r:"использовать"},{h:"借",p:"jiè",r:"одалживать"},{h:"天气",p:"tiānqì",r:"погода"},{h:"一边",p:"yìbiān",r:"одновременно"},{h:"累",p:"lèi",r:"уставший"}]}
+];
+const AW=G.flatMap(g=>g.w);
+const SG=[
+[{s:"今天你___什么衣服？",a:"穿",t:"носить",py:"jīntiān nǐ ___ shénme yīfu?"},{s:"今天___二十五___。",a:"气温|度",t:"температура|градус",py:"jīntiān ___ èrshíwǔ ___."},{s:"成都___北京暖和。",a:"比",t:"чем",py:"Chéngdū ___ Běijīng nuǎnhuo."},{s:"___北京___。",a:"冬天|冷",t:"зима|холод",py:"___ Běijīng ___."},{s:"___明天天气不好。",a:"听说",t:"говорят",py:"___ míngtiān tiānqì bù hǎo."},{s:"外面___很大。",a:"风",t:"ветер",py:"wàimiàn ___ hěn dà."},{s:"听说明天要___。",a:"下雪",t:"снег",py:"tīngshuō míngtiān yào ___."},{s:"___一起去吧。",a:"再",t:"снова",py:"___ yìqǐ qù ba."},{s:"两个城市的天气___。",a:"差不多",t:"почти",py:"liǎng gè chéngshì de tiānqì ___."}],
+[{s:"今天和昨天___。",a:"一样",t:"то же",py:"jīntiān hé zuótiān ___."},{s:"今天很___。",a:"暖和",t:"тёплый",py:"jīntiān hěn ___."},{s:"这样可以吗？——___！",a:"行",t:"ок",py:"zhèyàng kěyǐ ma? —— ___!"},{s:"___成都不冷，但是也不热。",a:"虽然",t:"хотя",py:"___ Chéngdū bù lěng, dànshì yě bú rè."},{s:"___你冷，就多穿衣服。",a:"如果",t:"если",py:"___ nǐ lěng, jiù duō chuān yīfu."},{s:"记得___雨伞。",a:"带",t:"брать",py:"jìde ___ yǔsǎn."},{s:"天气___说明天多云。",a:"预报",t:"прогноз",py:"tiānqì ___ shuō míngtiān duōyún."},{s:"从下个星期___天气会变冷。",a:"起",t:"начиная с",py:"cóng xià gè xīngqī ___ tiānqì huì biàn lěng."},{s:"气温___达到三十度。",a:"将",t:"будет",py:"qìwēn ___ dádào sānshí dù."},{s:"冷空气将___北方地区。",a:"影响",t:"влиять",py:"lěng kōngqì jiāng ___ běifāng dìqū."},{s:"北方___冷空气的影响。",a:"受",t:"подвергаться",py:"běifāng ___ lěng kōngqì de yǐngxiǎng."}],
+[{s:"白天和夜间的气温___很大。",a:"差别",t:"разница",py:"báitiān hé yèjiān de qìwēn ___ hěn dà."},{s:"温度可以___四十度。",a:"达到",t:"достигать",py:"wēndù kěyǐ ___ sìshí dù."},{s:"三十度___。",a:"以上",t:"выше",py:"sānshí dù ___."},{s:"书在桌子___。",a:"上",t:"сверху",py:"shū zài zhuōzi ___."},{s:"明天___转晴。",a:"多云",t:"облачно",py:"míngtiān ___ zhuǎn qíng."},{s:"这件衣服___了一点。",a:"小",t:"маленький",py:"zhè jiàn yīfu ___ le yìdiǎn."},{s:"今天是___天。",a:"晴",t:"ясно",py:"jīntiān shì ___ tiān."},{s:"下___了，带伞吧。",a:"雨",t:"дождь",py:"xià ___ le, dài sǎn ba."},{s:"你___穿毛衣吗？",a:"能",t:"мочь",py:"nǐ ___ chuān máoyī ma?"},{s:"你___起来这么早？",a:"为什么",t:"почему",py:"nǐ ___ qǐlái zhème zǎo?"},{s:"他说___很好。",a:"得",t:"степень",py:"tā shuō ___ hěn hǎo."}],
+[{s:"我___出去了。",a:"就",t:"сразу",py:"wǒ ___ chūqù le."},{s:"明天___是晴天。",a:"可能",t:"возможно",py:"míngtiān ___ shì qíngtiān."},{s:"___我太忙了。",a:"因为",t:"потому что",py:"___ wǒ tài máng le."},{s:"今天你来得很___。",a:"早",t:"рано",py:"jīntiān nǐ lái de hěn ___."},{s:"___暖和！",a:"这么",t:"настолько",py:"___ nuǎnhuo!"},{s:"这个作业太___了！",a:"难",t:"трудный",py:"zhège zuòyè tài ___ le!"},{s:"我的___还没写完。",a:"作业",t:"дом.работа",py:"wǒ de ___ hái méi xiě wán."},{s:"我___没吃饭。",a:"还",t:"ещё",py:"wǒ ___ méi chīfàn."},{s:"我还没___。",a:"完",t:"закончить",py:"wǒ hái méi ___."},{s:"我要___考试。",a:"复习",t:"повторять",py:"wǒ yào ___ kǎoshì."},{s:"你___什么时候去？",a:"准备",t:"готовиться",py:"nǐ ___ shénme shíhou qù?"}],
+[{s:"___，我下次不迟到。",a:"没关系",t:"ничего",py:"___, wǒ xiàcì bú chídào."},{s:"___我来帮你吧。",a:"下次",t:"след.раз",py:"___ wǒ lái bāng nǐ ba."},{s:"他___三点到学校。",a:"才",t:"только",py:"tā ___ sān diǎn dào xuéxiào."},{s:"我___写完作业了。",a:"已经",t:"уже",py:"wǒ ___ xiě wán zuòyè le."},{s:"你___我用你的书吗？",a:"让",t:"позволять",py:"nǐ ___ wǒ yòng nǐ de shū ma?"},{s:"我___手机打电话。",a:"用",t:"использовать",py:"wǒ ___ shǒujī dǎ diànhuà."},{s:"你可以___我的书。",a:"借",t:"одалживать",py:"nǐ kěyǐ ___ wǒ de shū."},{s:"今天的___怎么样？",a:"天气",t:"погода",py:"jīntiān de ___ zěnmeyàng?"},{s:"我___做作业___听音乐。",a:"一边|一边",t:"одновр.|одновр.",py:"wǒ ___ zuò zuòyè ___ tīng yīnyuè."},{s:"今天我很___。",a:"累",t:"уставший",py:"jīntiān wǒ hěn ___."}]
+];
+
+function sh(a){const b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]]}return b}
+function E(t,a,...c){const e=document.createElement(t);if(a)for(const[k,v]of Object.entries(a)){if(k==='cls')e.className=v;else if(k==='sty'&&typeof v==='object')Object.assign(e.style,v);else if(k.startsWith('on'))e.addEventListener(k.slice(2).toLowerCase(),v);else e.setAttribute(k,v)}for(const x of c){if(typeof x==='string')e.appendChild(document.createTextNode(x));else if(x)e.appendChild(x)}return e}
+const $=document.getElementById('app');
+function R(c){$.innerHTML='';if(typeof c==='string')$.innerHTML=c;else $.appendChild(c)}
+
+const S={on:false,fl:{c:0,w:0,t:0},di:{c:0,w:0,t:0},se:{c:0,w:0,t:0},hw:{c:0,w:0,t:0},st:null};
+const MS={};
+let grp=-1,mode=null;
+function gW(){return grp===-1?[...AW]:[...G[grp].w]}
+function gS(){return grp===-1?SG.flat():[...SG[grp]]}
+function sk(m){return m+'_'+grp}
+function gSt(m,fn){if(!MS[sk(m)])MS[sk(m)]=fn();return MS[sk(m)]}
+function rSt(m){delete MS[sk(m)]}
+function sT(){return{c:S.fl.c+S.di.c+S.se.c+S.hw.c,w:S.fl.w+S.di.w+S.se.w+S.hw.w}}
+
+// Keep a global ref to current HanziWriter so we can toggle outline without redraw
+let hwWriter=null;
+
+function renderMain(){
+  const f=document.createDocumentFragment();
+  // Groups
+  const gn=E('div',{cls:'nav-groups'});
+  gn.appendChild(E('button',{cls:'gbtn'+(grp===-1?' all':''),onClick:()=>{grp=-1;mode=null;renderMain()}},'Все'));
+  G.forEach((g,i)=>{gn.appendChild(E('button',{cls:'gbtn'+(grp===i?' ac':''),onClick:()=>{grp=i;mode=null;renderMain()}},g.n))});
+  f.appendChild(gn);
+  // Modes
+  const mn=E('div',{cls:'nav-modes'});
+  [{id:'fl',i:'🃏',l:'Карточки'},{id:'di',i:'🎯',l:'Диктант'},{id:'se',i:'📝',l:'Предложения'},{id:'hw',i:'✍️',l:'Письмо'}].forEach(m=>{
+    mn.appendChild(E('button',{cls:'mbtn'+(mode===m.id?' ac':''),onClick:()=>{mode=m.id;renderMain()}},E('span',null,m.i),E('span',null,m.l)))});
+  f.appendChild(mn);
+  // Session
+  if(S.on){
+    const st=sT();const mins=Math.round((Date.now()-S.st)/60000);
+    const sb=E('div',{cls:'sbar'});
+    sb.innerHTML=`<div class="sbar-stats"><span>⏱ ${mins} мин</span><span>✓ ${st.c}</span><span>✗ ${st.w}</span></div>`;
+    sb.appendChild(E('button',{cls:'sbar-btn',onClick:showSum},'Завершить'));
+    f.appendChild(sb);
+  } else {
+    f.appendChild(E('div',{sty:{textAlign:'center',marginBottom:'12px'}},
+      E('button',{cls:'btn bb',sty:{padding:'10px 28px',fontSize:'14px'},onClick:()=>{
+        S.on=true;S.st=Date.now();S.fl={c:0,w:0,t:0};S.di={c:0,w:0,t:0};S.se={c:0,w:0,t:0};S.hw={c:0,w:0,t:0};
+        for(const k in MS)delete MS[k];renderMain();
+      }},'▶ Начать сессию')));
+  }
+  const ct=E('div');
+  if(!mode){
+    const w=gW();
+    ct.innerHTML=`<div class="welcome"><div style="font-size:48px;margin-bottom:12px">📖</div>
+      <h2 style="font-family:'Noto Serif SC',serif;margin-bottom:8px">${grp===-1?'Все слова ('+w.length+')':'Карточка '+G[grp].n+' ('+w.length+')'}</h2>
+      <p style="color:#6b5347;margin-bottom:16px">Выберите режим тренировки</p>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;justify-content:center;max-width:420px;margin:0 auto">
+      ${w.map(x=>`<span style="padding:6px 12px;background:#fff;border:1px solid #e8ddd4;border-radius:8px;font-family:'Noto Serif SC',serif;font-size:18px;font-weight:700">${x.h}</span>`).join('')}</div></div>`;
+  } else if(mode==='fl')rFlash(ct);
+  else if(mode==='di')rDict(ct);
+  else if(mode==='se')rSent(ct);
+  else if(mode==='hw')rHW(ct);
+  f.appendChild(ct);R(f);
+}
+
+function showSum(){
+  const mins=Math.round((Date.now()-S.st)/60000);const st=sT();const tot=st.c+st.w;const pct=tot>0?Math.round(st.c/tot*100):0;
+  const f=document.createDocumentFragment();
+  f.innerHTML='';
+  const p=E('div',{cls:'rp'});
+  p.innerHTML=`<div class="re">${pct>=80?'🏆':pct>=50?'💪':'📚'}</div><h2 class="rt">Сессия завершена!</h2><p class="rs">${mins} мин · ${tot} заданий · ${pct}% правильно</p>`;
+  f.appendChild(p);
+  const g=E('div',{cls:'sgrid'});
+  [{l:'Карточки',d:S.fl,c:'sb2'},{l:'Диктант',d:S.di,c:'sg'},{l:'Предложения',d:S.se,c:'so'},{l:'Письмо',d:S.hw,c:'sr'}].forEach(x=>{
+    if(x.d.t>0){const c=E('div',{cls:'scard '+x.c});c.innerHTML=`<div class="scn">${x.d.c}/${x.d.t}</div><div class="sclab">${x.l}</div>`;g.appendChild(c)}
+  });
+  f.appendChild(g);
+  f.appendChild(E('div',{sty:{textAlign:'center',marginTop:'20px'}},E('button',{cls:'btn bb',onClick:()=>{S.on=false;for(const k in MS)delete MS[k];mode=null;renderMain()}},'Новая сессия')));
+  R(f);
+}
+
+// ========== FLASHCARDS ==========
+function rFlash(ct){
+  const s=gSt('fl',()=>({dk:sh(gW()),i:0,st:0,kn:new Set(),un:new Set()}));
+  function d(){
+    ct.innerHTML='';
+    if(s.i>=s.dk.length){
+      ct.innerHTML=`<div class="rp"><div class="re">${s.kn.size>=s.dk.length*0.8?'🏆':'💪'}</div><h2 class="rt">Раунд завершён!</h2><p class="rs">Знаю: ${s.kn.size} · Не знаю: ${s.un.size}</p></div>`;
+      const b=E('div',{sty:{display:'flex',gap:'12px',justifyContent:'center',flexWrap:'wrap'}});
+      b.appendChild(E('button',{cls:'btn bb',onClick:()=>{rSt('fl');renderMain()}},'Заново'));
+      if(s.un.size>0)b.appendChild(E('button',{cls:'btn br',onClick:()=>{MS[sk('fl')]={dk:sh([...s.un].map(i=>s.dk[i])),i:0,st:0,kn:new Set(),un:new Set()};renderMain()}},`Повторить (${s.un.size})`));
+      ct.appendChild(b);return;
+    }
+    const w=s.dk[s.i];
+    ct.appendChild(E('div',{cls:'pbar'},E('div',{cls:'ptr'},E('div',{cls:'pfl',sty:{width:(s.i/s.dk.length*100)+'%'}})),E('span',{cls:'ptx'},`${s.i+1}/${s.dk.length}`)));
+    const c=E('div',{cls:'cdk',onClick:()=>{if(s.st<2){s.st++;d()}}});
+    c.appendChild(E('div',{cls:'clbl'},s.st===0?'ВСПОМНИТЕ ЗНАЧЕНИЕ':s.st===1?'ПОДСКАЗКА — ПИНЬИНЬ':'ОТВЕТ'));
+    c.appendChild(E('div',{sty:{fontSize:'72px',color:'#f5ebe0',fontFamily:"'Noto Serif SC',serif",fontWeight:700,lineHeight:'1.2'}},w.h));
+    if(s.st>=1)c.appendChild(E('div',{sty:{fontSize:'18px',color:'#c0a888',marginTop:'8px'}},w.p));
+    if(s.st>=2)c.appendChild(E('div',{sty:{fontSize:'18px',color:'#f5ebe0',marginTop:'8px'}},w.r));
+    if(s.st<2)c.appendChild(E('div',{sty:{fontSize:'12px',color:'#8b7a6b',marginTop:'16px'}},s.st===0?'нажмите → пиньинь':'нажмите → значение'));
+    ct.appendChild(c);
+    const bs=E('div',{cls:'brow'});
+    bs.appendChild(E('button',{cls:'btn br',onClick:()=>{s.un.add(s.i);if(S.on){S.fl.w++;S.fl.t++}s.i++;s.st=0;d()}},'Не знаю 😕'));
+    bs.appendChild(E('button',{cls:'btn bg',onClick:()=>{s.kn.add(s.i);if(S.on){S.fl.c++;S.fl.t++}s.i++;s.st=0;d()}},'Знаю! ✓'));
+    ct.appendChild(bs);
+    ct.appendChild(E('div',{cls:'scl'},`✓ ${s.kn.size} · ✗ ${s.un.size}`));
+  }
+  d();
+}
+
+// ========== DICTATION ==========
+function rDict(ct){
+  const s=gSt('di',()=>{const dk=sh(gW());return{dk,i:0,sc:{c:0,w:0},ww:[],ch:mCh(dk[0]),pin:false,wp:null,lk:false}});
+  function mCh(w){const p=AW.filter(x=>x.h!==w.h);return sh([w,...sh(p).slice(0,5)])}
+  function adv(){s.i++;s.wp=null;s.lk=false;if(s.i<s.dk.length)s.ch=mCh(s.dk[s.i]);d()}
+  function d(){
+    ct.innerHTML='';
+    if(s.i>=s.dk.length){
+      const pct=Math.round(s.sc.c/s.dk.length*100);
+      ct.innerHTML=`<div class="rp"><div class="re">${pct>=80?'🏆':pct>=50?'💪':'📚'}</div><h2 class="rt">Результат: ${pct}%</h2><p class="rs">Правильно: ${s.sc.c} из ${s.dk.length}</p></div>`;
+      if(s.ww.length>0){const eb=E('div',{cls:'ebox'});eb.appendChild(E('div',{cls:'etit'},'Ошибки:'));s.ww.forEach(w=>{eb.appendChild(E('div',{cls:'erow'},E('span',{sty:{fontFamily:"'Noto Serif SC',serif",fontWeight:700,fontSize:'20px'}},w.h),E('span',{sty:{color:'#c0392b'}},w.p),E('span',{sty:{color:'#8b7a6b'}},'— '+w.r)))});ct.appendChild(eb)}
+      const b=E('div',{sty:{display:'flex',gap:'12px',justifyContent:'center',flexWrap:'wrap',marginTop:'16px'}});
+      b.appendChild(E('button',{cls:'btn bb',onClick:()=>{rSt('di');renderMain()}},'Заново'));
+      if(s.ww.length>0)b.appendChild(E('button',{cls:'btn br',onClick:()=>{const dk=sh(s.ww);MS[sk('di')]={dk,i:0,sc:{c:0,w:0},ww:[],ch:mCh(dk[0]),pin:s.pin,wp:null,lk:false};renderMain()}},`Ошибки (${s.ww.length})`));
+      ct.appendChild(b);return;
+    }
+    const w=s.dk[s.i];
+    ct.appendChild(E('div',{cls:'pbar'},E('div',{cls:'ptr'},E('div',{cls:'pfl',sty:{width:(s.i/s.dk.length*100)+'%'}})),E('span',{cls:'ptx'},`${s.i+1}/${s.dk.length}`)));
+    const tg=E('div',{cls:'trow'});tg.appendChild(E('span',null,'Пиньинь'));
+    tg.appendChild(E('button',{cls:'tgl'+(s.pin?' on':''),onClick:()=>{s.pin=!s.pin;d()}}));ct.appendChild(tg);
+    const c=E('div',{cls:'cdk'});c.appendChild(E('div',{cls:'clbl'},'ВЫБЕРИТЕ ИЕРОГЛИФ'));
+    c.appendChild(E('div',{sty:{fontSize:'22px',color:'#f5ebe0',fontWeight:500,marginBottom:'8px'}},w.r));
+    if(s.pin)c.appendChild(E('div',{sty:{fontSize:'16px',color:'#c0a888'}},w.p));ct.appendChild(c);
+    const gr=E('div',{cls:'cgrid'});
+    s.ch.forEach(x=>{let cl='cbtn';if(s.lk&&x.h===w.h)cl+=' ok';else if(s.wp===x.h)cl+=' no';if(s.lk)cl+=' lk';
+      gr.appendChild(E('button',{cls:cl,onClick:()=>{if(s.lk)return;if(x.h===w.h){s.lk=true;s.sc.c++;if(S.on){S.di.c++;S.di.t++}d();setTimeout(adv,600)}else{s.wp=x.h;if(!s.ww.find(z=>z.h===w.h)){s.ww.push(w);s.sc.w++;if(S.on){S.di.w++;S.di.t++}}d()}}},x.h))});
+    ct.appendChild(gr);
+    if(s.wp&&!s.lk)ct.appendChild(E('div',{cls:'fb fno'},'Неправильно — попробуйте ещё'));
+    ct.appendChild(E('div',{cls:'scl'},`✓ ${s.sc.c} · ✗ ${s.sc.w}`));
+  }
+  d();
+}
+
+// ========== SENTENCES ==========
+function rSent(ct){
+  const s=gSt('se',()=>{
+    const all=gS();const dk=sh(all).slice(0,Math.min(12,all.length));
+    return{dk,i:0,sc:{c:0,w:0},wi:[],bl:{},ab:0,wp:new Set(),ch:mSCh(dk[0]),lk:false,ok:false,sp:false,hv:{}};
+  });
+  function mSCh(it){
+    const ans=it.a.split('|');const cs=new Set(ans);
+    const pool=gW().filter(w=>!cs.has(w.h));
+    const dist=sh(pool).slice(0,Math.max(4,6-ans.length));
+    const aw=ans.map(a=>AW.find(w=>w.h===a)||{h:a,p:'',r:''});
+    const all2=sh([...aw,...dist]);const seen=new Set();
+    return all2.filter(c=>{if(seen.has(c.h))return false;seen.add(c.h);return true});
+  }
+  function adv(){
+    s.i++;s.bl={};s.ab=0;s.wp=new Set();s.lk=false;s.ok=false;s.hv={};
+    if(s.i<s.dk.length)s.ch=mSCh(s.dk[s.i]);d();
+  }
+  function d(){
+    ct.innerHTML='';
+    if(s.i>=s.dk.length){
+      const pct=Math.round(s.sc.c/s.dk.length*100);
+      ct.innerHTML=`<div class="rp"><div class="re">${pct>=80?'🏆':pct>=50?'💪':'📚'}</div><h2 class="rt">Результат: ${pct}%</h2><p class="rs">Правильно: ${s.sc.c} из ${s.dk.length}</p></div>`;
+      if(s.wi.length>0){const eb=E('div',{cls:'ebox'});eb.appendChild(E('div',{cls:'etit'},'Ошибки:'));
+        s.wi.forEach(it=>{const ans=it.a.split('|');let f2=it.s;ans.forEach(a=>{f2=f2.replace('___','【'+a+'】')});
+          eb.appendChild(E('div',{cls:'erow',sty:{fontFamily:"'Noto Serif SC',serif",fontSize:'16px'}},f2))});ct.appendChild(eb)}
+      const b=E('div',{sty:{display:'flex',gap:'12px',justifyContent:'center',marginTop:'16px',flexWrap:'wrap'}});
+      b.appendChild(E('button',{cls:'btn bb',onClick:()=>{rSt('se');renderMain()}},'Новый раунд'));
+      if(s.wi.length>0)b.appendChild(E('button',{cls:'btn br',onClick:()=>{
+        const dk=sh(s.wi);MS[sk('se')]={dk,i:0,sc:{c:0,w:0},wi:[],bl:{},ab:0,wp:new Set(),ch:mSCh(dk[0]),lk:false,ok:false,sp:false,hv:{}};renderMain();
+      }},'Ошибки'));ct.appendChild(b);return;
+    }
+    const it=s.dk[s.i];const ans=it.a.split('|');const hints=it.t.split('|');const parts=it.s.split('___');
+    ct.appendChild(E('div',{cls:'pbar'},E('div',{cls:'ptr'},E('div',{cls:'pfl',sty:{width:(s.i/s.dk.length*100)+'%'}})),E('span',{cls:'ptx'},`${s.i+1}/${s.dk.length}`)));
+    // Pinyin toggle
+    const tg=E('div',{cls:'trow'});tg.appendChild(E('span',null,'Пиньинь предложения'));
+    tg.appendChild(E('button',{cls:'tgl'+(s.sp?' on':''),onClick:()=>{s.sp=!s.sp;d()}}));ct.appendChild(tg);
+    // Card
+    const box=E('div',{cls:'cdl'});
+    box.appendChild(E('div',{sty:{fontSize:'12px',color:'#8b7a6b',letterSpacing:'1px',marginBottom:'8px'}},'ЗАПОЛНИТЕ ПРОПУСКИ'));
+    if(s.sp&&it.py)box.appendChild(E('div',{cls:'spy'},it.py));
+    // Sentence
+    const sd=E('div',{cls:'sbox'});
+    let bi=0;
+    parts.forEach((p,pi)=>{
+      sd.appendChild(document.createTextNode(p));
+      if(pi<parts.length-1){
+        const idx=bi;const val=s.bl[idx];const isAct=idx===s.ab&&!s.lk;const isDone=val===ans[idx];
+        let cl='bl';
+        if(isDone)cl+=' cok fl';
+        else if(isAct)cl+=' act';
+        const slot=E('span',{cls:cl,onClick:()=>{if(isAct&&!s.lk){s.hv[idx]=!s.hv[idx];d()}}});
+        if(val){
+          slot.textContent=val;
+        } else if(s.hv[idx]&&isAct){
+          slot.appendChild(E('span',{cls:'bl-hint'},hints[idx]));
+        } else {
+          slot.innerHTML='&nbsp;&nbsp;&nbsp;&nbsp;';
+        }
+        sd.appendChild(slot);
+        bi++;
+      }
+    });
+    box.appendChild(sd);
+    ct.appendChild(box);
+    // Hint note
+    if(!s.lk)ct.appendChild(E('div',{sty:{fontSize:'12px',color:'#b8a080',textAlign:'center',marginBottom:'6px',fontStyle:'italic'}},'для подсказки нажмите на поле с пропуском'));
+    // Choices
+    if(!s.lk){
+      const used=new Set(Object.entries(s.bl).filter(([k,v])=>v&&v===ans[parseInt(k)]).map(([,v])=>v));
+      const gr=E('div',{cls:'cgrid'});
+      s.ch.forEach(c=>{
+        const isU=used.has(c.h);let cl='cbtn';if(isU)cl+=' used';
+        gr.appendChild(E('button',{cls:cl,onClick:()=>{
+          if(s.lk||isU)return;
+          if(c.h===ans[s.ab]){
+            s.bl[s.ab]=c.h;s.hv={};
+            if(ans.every((_,i)=>s.bl[i]===ans[i])){
+              s.lk=true;s.ok=true;s.sc.c++;if(S.on){S.se.c++;S.se.t++}d();setTimeout(adv,800);
+            } else {s.ab++;d()}
+          } else {
+            s.bl[s.ab]=c.h;s.wp.add(s.ab+'_'+c.h);
+            if(!s.wi.find(x=>x===it)){s.wi.push(it);s.sc.w++;if(S.on){S.se.w++;S.se.t++}}
+            d();setTimeout(()=>{delete s.bl[s.ab];d()},500);
+          }
+        }},c.h));
+      });ct.appendChild(gr);
+    }
+    if(s.lk&&s.ok)ct.appendChild(E('div',{cls:'fb fok'},'✓ Правильно!'));
+    ct.appendChild(E('div',{cls:'scl'},`✓ ${s.sc.c} · ✗ ${s.sc.w}`));
+  }
+  d();
+}
+
+// ========== HANDWRITING ==========
+function rHW(ct){
+  const s=gSt('hw',()=>({
+    dk:sh(gW()),i:0,ci:0,pn:false,
+    sc:{c:0,w:0},
+    charMist:{}, // per-character mistakes: charMist[wordIdx_charIdx] = count
+    outline:false,
+    trans:false
+  }));
+
+  function curCharMistakes(){return s.charMist[s.i+'_'+s.ci]||0}
+  function wordTotalMistakes(wi){
+    let t=0;const w=s.dk[wi];if(!w)return 0;
+    const chars=[...w.h];
+    for(let ci=0;ci<chars.length;ci++)t+=(s.charMist[wi+'_'+ci]||0);
+    return t;
+  }
+  function wordMaxCharMistakes(wi){
+    let mx=0;const w=s.dk[wi];if(!w)return 0;
+    const chars=[...w.h];
+    for(let ci=0;ci<chars.length;ci++)mx=Math.max(mx,s.charMist[wi+'_'+ci]||0);
+    return mx;
+  }
+
+  function nextW(){
+    const wm=wordMaxCharMistakes(s.i);
+    if(wm>=3){s.sc.w++;if(S.on){S.hw.w++;S.hw.t++}}
+    else{s.sc.c++;if(S.on){S.hw.c++;S.hw.t++}}
+    s.i++;s.ci=0;s.pn=false;s.trans=false;d();
+  }
+
+  function d(){
+    ct.innerHTML='';hwWriter=null;
+    if(s.i>=s.dk.length){
+      const pct=s.dk.length>0?Math.round(s.sc.c/s.dk.length*100):0;
+      ct.innerHTML=`<div class="rp"><div class="re">${pct>=80?'🏆':pct>=50?'💪':'📚'}</div><h2 class="rt">Результат: ${pct}%</h2><p class="rs">Правильно: ${s.sc.c} из ${s.dk.length}</p></div>`;
+      // Words where any char had >=3 mistakes
+      const hard=[];
+      s.dk.forEach((w,wi)=>{
+        const mx=wordMaxCharMistakes(wi);
+        if(mx>=3)hard.push({w,mx,total:wordTotalMistakes(wi)});
+      });
+      if(hard.length>0){
+        const eb=E('div',{cls:'ebox'});eb.appendChild(E('div',{cls:'etit'},'Иероглифы с ≥3 ошибками — повторите:'));
+        hard.forEach(({w,total})=>{
+          const row=E('div',{cls:'erow'});
+          row.appendChild(E('span',{sty:{fontFamily:"'Noto Serif SC',serif",fontWeight:700,fontSize:'20px'}},w.h));
+          row.appendChild(E('span',{sty:{color:'#c0392b'}},w.p));
+          row.appendChild(E('span',{sty:{color:'#8b7a6b'}},'— '+w.r));
+          row.appendChild(E('span',{cls:'ebdg'},total+' ош.'));
+          eb.appendChild(row);
+        });
+        ct.appendChild(eb);
+      }
+      const b=E('div',{sty:{display:'flex',gap:'12px',justifyContent:'center',marginTop:'16px',flexWrap:'wrap'}});
+      b.appendChild(E('button',{cls:'btn bb',onClick:()=>{rSt('hw');renderMain()}},'Заново'));
+      if(hard.length>0)b.appendChild(E('button',{cls:'btn br',onClick:()=>{
+        const dk=sh(hard.map(x=>x.w));
+        MS[sk('hw')]={dk,i:0,ci:0,pn:false,sc:{c:0,w:0},charMist:{},outline:false,trans:false};renderMain();
+      }},`Повторить (${hard.length})`));
+      ct.appendChild(b);return;
+    }
+    const w=s.dk[s.i];const chars=[...w.h];
+    ct.appendChild(E('div',{cls:'pbar'},E('div',{cls:'ptr'},E('div',{cls:'pfl',sty:{width:(s.i/s.dk.length*100)+'%'}})),E('span',{cls:'ptx'},`${s.i+1}/${s.dk.length}`)));
+    // Toggles - outline toggle uses writer API, not redraw
+    const tr=E('div',{sty:{display:'flex',gap:'16px',justifyContent:'center',marginBottom:'8px'}});
+    const t1=E('div',{cls:'trow',sty:{margin:'0'}});t1.appendChild(E('span',null,'Контур'));
+    t1.appendChild(E('button',{cls:'tgl'+(s.outline?' on':''),onClick:()=>{
+      s.outline=!s.outline;
+      // Toggle on existing writer without redraw
+      if(hwWriter){try{if(s.outline)hwWriter.showOutline();else hwWriter.hideOutline()}catch(e){}}
+      // Just update toggle button appearance
+      const btn=t1.querySelector('.tgl');if(btn){btn.className='tgl'+(s.outline?' on':'')}
+    }}));tr.appendChild(t1);
+    const t2=E('div',{cls:'trow',sty:{margin:'0'}});t2.appendChild(E('span',null,'Пиньинь'));
+    t2.appendChild(E('button',{cls:'tgl'+(s.pn?' on':''),onClick:()=>{s.pn=!s.pn;
+      // Update card without full redraw
+      const pyEl=document.getElementById('hw-py');
+      if(pyEl){pyEl.style.display=s.pn?'block':'none'}
+      const btn2=t2.querySelector('.tgl');if(btn2){btn2.className='tgl'+(s.pn?' on':'')}
+    }}));tr.appendChild(t2);
+    ct.appendChild(tr);
+    // Card
+    const cd=E('div',{cls:'cdk',sty:{padding:'20px 24px'}});
+    cd.appendChild(E('div',{cls:'clbl'},'НАПИШИТЕ'));
+    cd.appendChild(E('div',{sty:{fontSize:'22px',color:'#f5ebe0',fontWeight:500}},w.r));
+    const pyDiv=E('div',{id:'hw-py',sty:{fontSize:'16px',color:'#c0a888',marginTop:'4px',display:s.pn?'block':'none'}},w.p);
+    cd.appendChild(pyDiv);ct.appendChild(cd);
+    // Char dots
+    if(chars.length>1){
+      const dots=E('div',{cls:'hcp'});
+      chars.forEach((c,i)=>{let cl='hcd';if(i<s.ci)cl+=' hcok';else if(i===s.ci)cl+=' hca';
+        const dot=E('div',{cls:cl},i<s.ci?c:(i===s.ci?'?':'·'));
+        // Show per-char mistakes under dot if any
+        const cm=s.charMist[s.i+'_'+i]||0;
+        if(cm>0&&i<=s.ci){
+          dot.title=cm+' ош.';
+          dot.style.position='relative';
+          const badge=E('span',{sty:{position:'absolute',top:'-6px',right:'-6px',background:'#c0392b',color:'#fff',borderRadius:'50%',width:'16px',height:'16px',fontSize:'10px',display:'flex',alignItems:'center',justifyContent:'center',fontFamily:'sans-serif'}},String(cm));
+          dot.appendChild(badge);
+        }
+        dots.appendChild(dot)});
+      ct.appendChild(dots);
+    }
+    // Canvas
+    const SZ=280;const area=E('div',{cls:'hwa'});
+    const wrap=E('div',{cls:'hwc',sty:{width:SZ+'px',height:SZ+'px',position:'relative'}});
+    const svgNS='http://www.w3.org/2000/svg';const svg=document.createElementNS(svgNS,'svg');
+    svg.setAttribute('class','hwg');svg.setAttribute('width',SZ);svg.setAttribute('height',SZ);
+    const m=SZ/2;
+    [{x1:m,y1:0,x2:m,y2:SZ},{x1:0,y1:m,x2:SZ,y2:m},{x1:0,y1:0,x2:SZ,y2:SZ,dg:1},{x1:SZ,y1:0,x2:0,y2:SZ,dg:1}].forEach(l=>{
+      const ln=document.createElementNS(svgNS,'line');ln.setAttribute('x1',l.x1);ln.setAttribute('y1',l.y1);
+      ln.setAttribute('x2',l.x2);ln.setAttribute('y2',l.y2);if(l.dg)ln.setAttribute('class','dg');svg.appendChild(ln)});
+    wrap.appendChild(svg);
+    const tgt=E('div',{id:'hw-tgt',sty:{position:'absolute',top:0,left:0,width:'100%',height:'100%',zIndex:2}});
+    wrap.appendChild(tgt);area.appendChild(wrap);
+    // Current char mistake counter
+    const cm=curCharMistakes();
+    if(cm>0)area.appendChild(E('div',{cls:'hwm',id:'hw-mc'},'Ошибки: '+cm));
+    area.appendChild(E('div',{sty:{fontSize:'13px',color:'#8b7a6b',textAlign:'center'}},'Подсказка штриха после 2 ошибок'));
+    ct.appendChild(area);
+    if(!s.trans){
+      ct.appendChild(E('div',{sty:{textAlign:'center',marginTop:'8px'}},E('button',{cls:'blink',onClick:()=>{
+        // Skip = mark all remaining chars as 99 mistakes
+        const chars2=[...w.h];for(let ci=s.ci;ci<chars2.length;ci++)s.charMist[s.i+'_'+ci]=99;
+        nextW();
+      }},'Пропустить (не знаю)')));
+    } else {
+      const wm=wordMaxCharMistakes(s.i);
+      ct.appendChild(E('div',{cls:'fb fok'},'✓ '+w.h+(wm>0?' (макс. ошибок на иероглиф: '+wm+')':' — отлично!')));
+    }
+    ct.appendChild(E('div',{cls:'scl'},`✓ ${s.sc.c} · ✗ ${s.sc.w}`));
+    // Init writer
+    if(!s.trans){
+      setTimeout(()=>{
+        const t=document.getElementById('hw-tgt');if(!t)return;t.innerHTML='';
+        try{
+          hwWriter=HanziWriter.create('hw-tgt',chars[s.ci],{
+            width:SZ,height:SZ,padding:20,showOutline:s.outline,showCharacter:false,
+            strokeColor:'#2d1810',outlineColor:'#ddd4c8',highlightColor:'#c0392b',
+            highlightOnComplete:true,drawingWidth:16,showHintAfterMisses:2,highlightCompleteColor:'#27ae60'
+          });
+          hwWriter.quiz({
+            onMistake:()=>{
+              const key=s.i+'_'+s.ci;
+              s.charMist[key]=(s.charMist[key]||0)+1;
+              const mc=document.getElementById('hw-mc');
+              if(mc)mc.textContent='Ошибки: '+s.charMist[key];
+              else{const a2=document.querySelector('.hwa');if(a2){const md=E('div',{cls:'hwm',id:'hw-mc'},'Ошибки: '+s.charMist[key]);a2.insertBefore(md,a2.children[1])}}
+            },
+            onComplete:()=>{
+              if(s.ci<chars.length-1){s.ci++;setTimeout(d,500)}
+              else{s.trans=true;d();setTimeout(nextW,1000)}
+            }
+          });
+        }catch(e){t.innerHTML='<div style="padding:40px;color:#c0392b">Ошибка загрузки</div>'}
+      },60);
+    }
+  }
+  d();
+}
+
+renderMain();
+</script>
+</body>
+</html>
