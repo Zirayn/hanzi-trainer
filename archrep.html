@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Голосовой агент для архитектурного репозитория — План</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'DM Sans',sans-serif;background:#F8F9FB;color:#374151}
+.header{background:linear-gradient(135deg,#0F172A 0%,#1E293B 50%,#0F172A 100%);padding:48px 32px 40px;position:relative;overflow:hidden}
+.header::before{content:'';position:absolute;top:-60px;right:-60px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(124,92,252,.15) 0%,transparent 70%)}
+.header::after{content:'';position:absolute;bottom:-40px;left:30%;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,rgba(14,165,233,.1) 0%,transparent 70%)}
+.header-inner{max-width:900px;margin:0 auto;position:relative;z-index:1}
+.tag{display:inline-block;padding:4px 14px;border-radius:20px;background:rgba(124,92,252,.2);border:1px solid rgba(124,92,252,.3);font-size:12px;font-weight:600;color:#A78BFA;letter-spacing:1px;margin-bottom:16px;font-family:'Space Mono',monospace}
+h1{font-family:'Playfair Display',serif;font-size:36px;font-weight:800;color:#F8FAFC;margin:0 0 12px;line-height:1.2}
+.header p{font-size:16px;color:#94A3B8;max-width:600px;line-height:1.6}
+.gp-box{margin-top:32px;padding:20px;background:rgba(255,255,255,.04);border-radius:14px;border:1px solid rgba(255,255,255,.08)}
+.gp-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#64748B;margin-bottom:12px}
+.gp-flow{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.gp-step{padding:6px 14px;border-radius:8px;border:1px solid;color:#E2E8F0;font-size:13px;font-weight:600;white-space:nowrap}
+.gp-arrow{color:#475569;font-size:16px}
+.sber-box{margin-top:20px;padding:16px 20px;background:rgba(16,185,129,.08);border-radius:12px;border:1px solid rgba(16,185,129,.2);display:flex;gap:14px;align-items:flex-start}
+.sber-box .flag{font-size:22px;flex-shrink:0;margin-top:2px}
+.sber-title{font-size:14px;font-weight:700;color:#6EE7B7;margin-bottom:4px}
+.sber-desc{font-size:13px;color:#94A3B8;line-height:1.7}
+.sber-desc strong{color:#A7F3D0}
+.sber-desc .warn-tag{color:#FCD34D}
+.controls{max-width:900px;margin:0 auto;padding:20px 32px 0;display:flex;gap:8px}
+.controls button{padding:6px 16px;border-radius:8px;border:1px solid #E5E7EB;background:#fff;color:#6B7280;font-size:13px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif}
+.controls button:hover{background:#F9FAFB}
+.stages{max-width:900px;margin:0 auto;padding:16px 32px 48px;display:flex;flex-direction:column;gap:12px}
+.stage-card{background:#fff;border-radius:16px;border:1px solid #E5E7EB;overflow:hidden;transition:all .3s}
+.stage-card.open{box-shadow:0 4px 24px rgba(0,0,0,.06)}
+.stage-header{padding:20px 24px;cursor:pointer;display:flex;align-items:center;gap:16px;user-select:none}
+.stage-icon{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
+.stage-info{flex:1}
+.stage-title-row{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.stage-num{font-family:'Space Mono',monospace;font-size:13px;font-weight:700}
+.stage-title{font-family:'Playfair Display',serif;font-size:20px;font-weight:700;color:#111}
+.stage-subtitle{font-size:13px;color:#9CA3AF}
+.stage-desc{margin-top:4px;font-size:14px;color:#6B7280}
+.stage-chevron{width:32px;height:32px;border-radius:8px;background:#F9FAFB;display:flex;align-items:center;justify-content:center;font-size:16px;color:#9CA3AF;flex-shrink:0;transition:transform .3s}
+.stage-chevron.rotated{transform:rotate(180deg)}
+.stage-body{padding:0 24px 24px;border-top:1px solid #F3F4F6}
+.section{margin-top:24px}
+.section-title{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9CA3AF;margin:0 0 12px}
+.pipeline{display:flex;align-items:center;gap:6px;flex-wrap:wrap;padding:16px 0}
+.pill{padding:4px 12px;border-radius:20px;border:1px solid;font-size:12px;font-weight:500;white-space:nowrap}
+.arrow{opacity:.4;font-size:14px}
+.tools-grid{display:flex;flex-wrap:wrap;gap:12px}
+.tool-card{background:#fff;border:1px solid #E5E7EB;border-radius:12px;padding:16px;flex:1 1 220px;min-width:220px}
+.tool-header{display:flex;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap}
+.tool-name{font-weight:700;font-size:14px;color:#111}
+.badge{padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;border:1px solid;white-space:nowrap}
+.tool-desc{font-size:13px;color:#6B7280;line-height:1.5}
+.pitfalls-header{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#9CA3AF;padding-bottom:8px}
+.pitfall-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;padding:14px 0;border-bottom:1px solid #F3F4F6;font-size:13px;line-height:1.6}
+.warn{color:#DC2626;font-weight:600}
+.example{color:#6B7280;font-style:italic}
+.solution{color:#059669}
+.decision-item{display:flex;align-items:flex-start;gap:10px;padding:8px 12px;background:#FAFAFA;border-radius:8px;font-size:13px;line-height:1.5;margin-bottom:6px}
+.dec-num{font-weight:700;font-family:'Space Mono',monospace;flex-shrink:0}
+.match-levels,.decision-tree{display:flex;flex-direction:column;gap:8px}
+.match-row{display:grid;grid-template-columns:40px 100px 1fr 80px;gap:12px;align-items:center;padding:10px 14px;border-radius:8px;font-size:13px}
+.ml-level{font-family:'Space Mono',monospace;font-weight:700}
+.ml-name{font-weight:600;color:#111}
+.ml-desc{color:#6B7280}
+.ml-speed{color:#9CA3AF;font-size:11px;text-align:right}
+.dt-row{display:grid;grid-template-columns:200px 180px 1fr;gap:12px;align-items:center;padding:10px 14px;border-radius:8px;font-size:13px}
+.dt-cond{font-weight:600;color:#111}
+.dt-action{font-weight:600}
+.dt-detail{color:#6B7280}
+.dialog-box{background:#F9FAFB;border-radius:12px;padding:16px;display:flex;flex-direction:column;gap:12px}
+.dialog-msg{display:flex;gap:10px;align-items:flex-start}
+.msg-icon{width:28px;height:28px;border-radius:8px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:13px;color:#fff;font-weight:700}
+.msg-body{flex:1}
+.msg-user,.msg-agent{border-radius:10px;padding:10px 14px;font-size:13px;line-height:1.6}
+.msg-user{background:#EFF6FF;border:1px solid #BFDBFE}
+.msg-agent{background:#fff;border:1px solid #E5E7EB}
+.dialog-buttons{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
+.dialog-btn{padding:6px 14px;border-radius:8px;font-size:12px;font-weight:600}
+.hw-table{border-radius:10px;overflow:hidden;border:1px solid #E5E7EB}
+.hw-header,.hw-row{display:grid;grid-template-columns:1fr 1fr 80px 80px;gap:1px}
+.hw-header>div{background:#F9FAFB;padding:8px 12px;font-size:11px;font-weight:700;color:#6B7280;text-transform:uppercase;letter-spacing:1px}
+.hw-row>div{background:#fff;padding:10px 12px;font-size:13px;border-top:1px solid #F3F4F6}
+.checklist{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.check-item{display:flex;align-items:center;gap:8px;padding:8px 12px;background:#FAFAFA;border-radius:8px;font-size:13px}
+.checkbox{width:20px;height:20px;border-radius:5px;border:2px solid #D1D5DB;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:10px;color:#D1D5DB}
+.metrics-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.metric-card{background:#FAFAFA;border-radius:10px;padding:14px}
+.metric-name{font-weight:700;font-size:14px;color:#111}
+.metric-desc{font-size:12px;color:#6B7280;margin-top:2px}
+.metric-target{font-size:13px;font-weight:700;margin-top:6px;font-family:'Space Mono',monospace}
+.roadmap{position:relative;padding-left:24px}
+.rm-line{position:absolute;left:7px;top:8px;bottom:8px;width:2px}
+.rm-item{display:flex;gap:16px;margin-bottom:20px;position:relative}
+.rm-dot{width:16px;height:16px;border-radius:8px;border:2px solid;flex-shrink:0;position:absolute;left:-24px;top:2px;z-index:1}
+.rm-content{flex:1}
+.rm-header{display:flex;align-items:center;gap:10px;margin-bottom:4px}
+.rm-phase{font-weight:700;font-size:15px;color:#111}
+.rm-duration{padding:2px 10px;border-radius:10px;font-size:12px;font-weight:600;font-family:'Space Mono',monospace}
+.rm-what{font-size:13px;color:#6B7280}
+.rm-result{font-size:13px;color:#059669;font-weight:600;margin-top:4px}
+@media(max-width:700px){
+  .pitfalls-header,.pitfall-row{grid-template-columns:1fr}
+  .match-row{grid-template-columns:1fr}
+  .dt-row{grid-template-columns:1fr}
+  .metrics-grid,.checklist{grid-template-columns:1fr}
+  .hw-header,.hw-row{grid-template-columns:1fr}
+  h1{font-size:28px}
+}
+</style>
+</head>
+<body>
+<div class="header">
+  <div class="header-inner">
+    <div class="tag">СТРАТЕГИЧЕСКИЙ ПЛАН</div>
+    <h1>Голосовой агент для<br>архитектурного репозитория</h1>
+    <p>Пайплайн распознавания речи → извлечение смысла → сопоставление с репозиторием → регистрация объектов. Для закрытого контура банка, без внешних API.</p>
+    <div class="gp-box">
+      <div class="gp-label">Общий пайплайн</div>
+      <div class="gp-flow"><span class="gp-step" style="background:#E8443A20;border-color:#E8443A40">🎙️ Голос</span><span class="gp-arrow">→</span><span class="gp-step" style="background:#7C5CFC20;border-color:#7C5CFC40">📝 Текст</span><span class="gp-arrow">→</span><span class="gp-step" style="background:#0EA5E920;border-color:#0EA5E940">🧠 Смысл</span><span class="gp-arrow">→</span><span class="gp-step" style="background:#F59E0B20;border-color:#F59E0B40">🔍 Поиск</span><span class="gp-arrow">→</span><span class="gp-step" style="background:#10B98120;border-color:#10B98140">⚖️ Решение</span><span class="gp-arrow">→</span><span class="gp-step" style="background:#8B5CF620;border-color:#8B5CF640">💬 Диалог</span><span class="gp-arrow">→</span><span class="gp-step" style="background:#EC489920;border-color:#EC489940">📦 Запись</span><span class="gp-arrow">→</span><span class="gp-step" style="background:#06B6D420;border-color:#06B6D440">📈 Метрики</span></div>
+    </div>
+    <div class="sber-box">
+      <span class="flag">🇷🇺</span>
+      <div>
+        <div class="sber-title">Экосистема Сбера — полный open-source стек для банка (MIT-лицензия)</div>
+        <div class="sber-desc">В ноябре 2025 Сбер выложил в open-source: <strong>GigaChat Ultra Preview</strong> — мощнейшая российская LLM, №1 в MERA, быстрее GigaChat 2 MAX; <strong>GigaChat Lightning</strong> — компактная MoE-модель, работает на ноутбуке; <strong>GigaAM-v3</strong> — распознавание речи, обходит Whisper large-v3 на 50% для русского, 700К часов обучения. Всё можно развернуть в закрытом контуре, дообучить на своих данных, без зависимости от Сбера. Совместимо с LangChain (GigaChain). <span class="warn-tag">⚠️ Если банк — конкурент Сбера:</span> модели MIT, зависимости нет, но политический фактор уточняйте с руководством. Альтернатива — Qwen (Alibaba, Apache 2.0).</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="controls">
+  <button onclick="expandAll()">Развернуть все</button>
+  <button onclick="collapseAll()">Свернуть все</button>
+</div>
+
+<div class="stages">
+<div class="stage-card" id="stage-0">
+  <div class="stage-header" onclick="toggle(0)">
+    <div class="stage-icon" style="background:#E8443A12">🎙️</div>
+    <div class="stage-info">
+      <div class="stage-title-row">
+        <span class="stage-num" style="color:#E8443A">01</span>
+        <span class="stage-title">Распознавание речи</span>
+        <span class="stage-subtitle">Speech-to-Text</span>
+      </div>
+      <p class="stage-desc">Преобразование голоса архитектора в текст. GigaAM-v3 от Сбера — лидер для русского (обходит Whisper на 50%), open-source, MIT.</p>
+    </div>
+    <div class="stage-chevron" id="chevron-0">▼</div>
+  </div>
+  <div class="stage-body" id="body-0" style="display:none">
+    <div class="section"><h4 class="section-title">Пайплайн этапа</h4><div class="pipeline"><span class="pill" style="background:#E8443A18;border-color:#E8443A40;color:#E8443A">Голос пользователя</span><span class="arrow">→</span><span class="pill" style="background:#E8443A18;border-color:#E8443A40;color:#E8443A">Шумоподавление</span><span class="arrow">→</span><span class="pill" style="background:#E8443A18;border-color:#E8443A40;color:#E8443A">STT-модель</span><span class="arrow">→</span><span class="pill" style="background:#E8443A18;border-color:#E8443A40;color:#E8443A">Пост-обработка терминов</span><span class="arrow">→</span><span class="pill" style="background:#E8443A18;border-color:#E8443A40;color:#E8443A">Чистый текст</span></div></div><div class="section"><h4 class="section-title">Инструменты</h4><div class="tools-grid"><div class="tool-card">
+  <div class="tool-header"><span class="tool-name">GigaAM-v3 (Сбер)</span><span class="badge" style="background:#ECFDF5;color:#047857;border-color:#A7F3D0">Рекомендуем</span></div>
+  <p class="tool-desc">Лучшая open-source модель для русского (обходит Whisper на 50%). MIT-лицензия, 700К часов обучения. Пунктуация и нормализация из коробки.</p>
+</div><div class="tool-card">
+  <div class="tool-header"><span class="tool-name">Whisper large-v3</span><span class="badge" style="background:#FEF3C7;color:#92400E;border-color:#FDE68A">Альтернатива</span></div>
+  <p class="tool-desc">Self-hosted через faster-whisper. Хорошее качество, но уступает GigaAM на русском. MIT-лицензия.</p>
+</div><div class="tool-card">
+  <div class="tool-header"><span class="tool-name">NVIDIA NeMo</span><span class="badge" style="background:#FEF3C7;color:#92400E;border-color:#FDE68A">Альтернатива</span></div>
+  <p class="tool-desc">Модель stt_ru_conformer — обучена на русском. Можно дообучить на банковском корпусе. Apache 2.0.</p>
+</div><div class="tool-card">
+  <div class="tool-header"><span class="tool-name">Vosk</span><span class="badge" style="background:#EFF6FF;color:#1D4ED8;border-color:#BFDBFE">Бюджетный</span></div>
+  <p class="tool-desc">Полностью офлайн, работает на CPU. Качество ниже, но для быстрого прототипа подойдёт.</p>
+</div></div></div><div class="section"><h4 class="section-title">Подводные камни</h4><div class="pitfalls-header"><div>Проблема</div><div>Пример</div><div>Решение</div></div><div class="pitfall-row">
+  <div><span class="warn">⚠</span> Аббревиатуры не распознаются</div>
+  <div class="example">««API» → «а пи ай», «ESB» → «есби»»</div>
+  <div class="solution">✓ Кастомный словарь терминов + пост-обработка с таблицей замен</div>
+</div><div class="pitfall-row">
+  <div><span class="warn">⚠</span> Англицизмы в русской речи</div>
+  <div class="example">««Задеплоили order-service в прод»»</div>
+  <div class="solution">✓ Whisper справляется, но нужна проверка и нормализация</div>
+</div><div class="pitfall-row">
+  <div><span class="warn">⚠</span> Внутренние названия систем</div>
+  <div class="example">««Система Фрегат» → «система фрагат»»</div>
+  <div class="solution">✓ Загрузить все имена из репозитория в словарь STT</div>
+</div><div class="pitfall-row">
+  <div><span class="warn">⚠</span> Шум в переговорной</div>
+  <div class="example">«Несколько голосов, эхо»</div>
+  <div class="solution">✓ Шумоподавление (RNNoise) перед отправкой в STT</div>
+</div></div><div class="section"><h4 class="section-title">Ключевые решения на этом этапе</h4><div class="decision-item"><span class="dec-num" style="color:#E8443A">01</span>Выбрать STT: GigaAM-v3 (лучшее для русского, MIT) vs Whisper (более универсальная)</div><div class="decision-item"><span class="dec-num" style="color:#E8443A">02</span>Собрать словарь всех терминов из репозитория (названия систем, аббревиатуры, жаргон)</div><div class="decision-item"><span class="dec-num" style="color:#E8443A">03</span>Определить: один язык или русский + английский вперемешку?</div><div class="decision-item"><span class="dec-num" style="color:#E8443A">04</span>Решить: реальное время или обработка записей совещаний?</div><div class="decision-item"><span class="dec-num" style="color:#E8443A">05</span>Выделить GPU: минимум 1× A10 (24 GB) для STT-модели</div></div>
+  </div>
+</div><div class="stage-card" id="stage-1">
+  <div class="stage-header" onclick="toggle(1)">
+    <div class="stage-icon" style="background:#7C5CFC12">🧠</div>
+    <div class="stage-info">
+      <div class="stage-title-row">
+        <span class="stage-num" style="color:#7C5CFC">02</span>
+        <span class="stage-title">Понимание смысла</span>
+        <span class="stage-subtitle">NLU — Natural Language Understanding</span>
+      </div>
+      <p class="stage-desc">Извлечение из текста структурированных данных: намерение, объекты, атрибуты, связи. GigaChat Ultra (MIT, №1 MERA) или Qwen — оба варианта self-hosted.</p>
+    </div>
+    <div class="stage-chevron" id="chevron-1">▼</div>
+  </div>
+  <div class="stage-body" id="body-1" style="display:none">
+    <div class="section"><h4 class="section-title">Пайплайн этапа</h4><div class="pipeline"><span class="pill" style="background:#7C5CFC18;border-color:#7C5CFC40;color:#7C5CFC">Текст от STT</span><span class="arrow">→</span><span class="pill" style="background:#7C5CFC18;border-color:#7C5CFC40;color:#7C5CFC">LLM с промптом-схемой</span><span class="arrow">→</span><span class="pill" style="background:#7C5CFC18;border-color:#7C5CFC40;color:#7C5CFC">Структурированный JSON</span><span class="arrow">→</span><span class="pill" style="background:#7C5CFC18;border-color:#7C5CFC40;color:#7C5CFC">Валидация полей</span><span class="arrow">→</span><span class="pill" style="background:#7C5CFC18;border-color:#7C5CFC40;color:#7C5CFC">Готовая команда</span></div></div><div class="section"><h4 class="section-title">Инструменты</h4><div class="tools-grid"><div class="tool-card">
+  <div class="tool-header"><span class="tool-name">GigaChat Ultra Preview (Сбер)</span><span class="badge" style="background:#ECFDF5;color:#047857;border-color:#A7F3D0">Рекомендуем</span></div>
+  <p class="tool-desc">Самая мощная российская LLM. MIT-лицензия, open-source. №1 в бенчмарке MERA. Можно дообучить в закрытом контуре. LangChain-совместима.</p>
+</div><div class="tool-card">
+  <div class="tool-header"><span class="tool-name">GigaChat Lightning (Сбер)</span><span class="badge" style="background:#EFF6FF;color:#1D4ED8;border-color:#BFDBFE">Бюджетный</span></div>
+  <p class="tool-desc">Компактная MoE-модель, работает даже на ноутбуке. MIT-лицензия. Отличный вариант для MVP.</p>
+</div><div class="tool-card">
+  <div class="tool-header"><span class="tool-name">GigaChat 2 MAX (API)</span><span class="badge" style="background:#FFF7ED;color:#C2410C;border-color:#FED7AA">Облачный</span></div>
+  <p class="tool-desc">Облачный API Сбера. Проще внедрить, но данные уходят в облако Сбера — может не подойти для конкурентов.</p>
+</div><div class="tool-card">
+  <div class="tool-header"><span class="tool-name">Qwen2.5-72B</span><span class="badge" style="background:#FEF3C7;color:#92400E;border-color:#FDE68A">Альтернатива</span></div>
+  <p class="tool-desc">Alibaba, Apache 2.0. Отличный русский, хороший structured output. Деплой через vLLM.</p>
+</div><div class="tool-card">
+  <div class="tool-header"><span class="tool-name">Qwen2.5-7B</span><span class="badge" style="background:#EFF6FF;color:#1D4ED8;border-color:#BFDBFE">Бюджетный</span></div>
+  <p class="tool-desc">Удивительно хороша для своего размера. Хватит 1× A10. Достаточна для MVP.</p>
+</div></div></div><div class="section"><h4 class="section-title">Подводные камни</h4><div class="pitfalls-header"><div>Проблема</div><div>Пример</div><div>Решение</div></div><div class="pitfall-row">
+  <div><span class="warn">⚠</span> Несколько объектов в одной фразе</div>
+  <div class="example">««Добавь CRM и ERP в домен продаж»»</div>
+  <div class="solution">✓ Промпт должен явно описывать формат массива объектов</div>
+</div><div class="pitfall-row">
+  <div><span class="warn">⚠</span> Неявное намерение</div>
+  <div class="example">««А что там с кафкой?» — поиск? статус?»</div>
+  <div class="solution">✓ Поле ambiguous в JSON + механизм уточняющих вопросов</div>
+</div><div class="pitfall-row">
+  <div><span class="warn">⚠</span> LLM галлюцинирует поля</div>
+  <div class="example">«Придумывает владельца, которого не было»</div>
+  <div class="solution">✓ Низкая temperature (0.1) + инструкция: только упомянутое</div>
+</div><div class="pitfall-row">
+  <div><span class="warn">⚠</span> JSON приходит битый</div>
+  <div class="example">«LLM добавляет markdown-обёртки»</div>
+  <div class="solution">✓ Robust-парсинг: очистка + валидация через Pydantic</div>
+</div><div class="pitfall-row">
+  <div><span class="warn">⚠</span> Банк — конкурент Сбера</div>
+  <div class="example">«Руководство запрещает технологии Сбера»</div>
+  <div class="solution">✓ MIT-лицензия = нет зависимости. Альтернатива — Qwen (Apache 2.0)</div>
+</div></div><div class="section"><h4 class="section-title">Ключевые решения на этом этапе</h4><div class="decision-item"><span class="dec-num" style="color:#7C5CFC">01</span>Определить схему репозитория: типы объектов, атрибуты, типы связей</div><div class="decision-item"><span class="dec-num" style="color:#7C5CFC">02</span>Выбрать LLM: GigaChat Ultra (лучший русский, MIT) vs Qwen (проверенный structured output)</div><div class="decision-item"><span class="dec-num" style="color:#7C5CFC">03</span>Если банк — конкурент Сбера: open-source веса GigaChat (MIT, нет зависимости) или Qwen</div><div class="decision-item"><span class="dec-num" style="color:#7C5CFC">04</span>Написать и протестировать системный промпт с примерами (few-shot)</div><div class="decision-item"><span class="dec-num" style="color:#7C5CFC">05</span>Настроить валидацию JSON на выходе (Pydantic)</div></div>
+  </div>
+</div><div class="stage-card" id="stage-2">
+  <div class="stage-header" onclick="toggle(2)">
+    <div class="stage-icon" style="background:#0EA5E912">🔍</div>
+    <div class="stage-info">
+      <div class="stage-title-row">
+        <span class="stage-num" style="color:#0EA5E9">03</span>
+        <span class="stage-title">Поиск и сопоставление</span>
+        <span class="stage-subtitle">Fuzzy Matching — антидубль</span>
+      </div>
+      <p class="stage-desc">Определить, существует ли объект в репозитории, даже если пользователь назвал его неточно, на другом языке или жаргоном.</p>
+    </div>
+    <div class="stage-chevron" id="chevron-2">▼</div>
+  </div>
+  <div class="stage-body" id="body-2" style="display:none">
+    <div class="section"><h4 class="section-title">Пайплайн этапа</h4><div class="pipeline"><span class="pill" style="background:#0EA5E918;border-color:#0EA5E940;color:#0EA5E9">Название от NLU</span><span class="arrow">→</span><span class="pill" style="background:#0EA5E918;border-color:#0EA5E940;color:#0EA5E9">Точное совпадение</span><span class="arrow">→</span><span class="pill" style="background:#0EA5E918;border-color:#0EA5E940;color:#0EA5E9">Нечёткий текст</span><span class="arrow">→</span><span class="pill" style="background:#0EA5E918;border-color:#0EA5E940;color:#0EA5E9">Семантический поиск</span><span class="arrow">→</span><span class="pill" style="background:#0EA5E918;border-color:#0EA5E940;color:#0EA5E9">Алиасы</span><span class="arrow">→</span><span class="pill" style="background:#0EA5E918;border-color:#0EA5E940;color:#0EA5E9">Ранжирование</span></div></div><div class="section"><h4 class="section-title">Инструменты</h4><div class="tools-grid"><div class="tool-card">
+  <div class="tool-header"><span class="tool-name">rapidfuzz</span><span class="badge" style="background:#F0F9FF;color:#0369A1;border-color:#BAE6FD">Текстовый</span></div>
+  <p class="tool-desc">Быстрое нечёткое сравнение строк. Token sort ratio устойчив к перестановке слов.</p>
+</div><div class="tool-card">
+  <div class="tool-header"><span class="tool-name">bge-m3 (BAAI)</span><span class="badge" style="background:#FAF5FF;color:#7C3AED;border-color:#DDD6FE">Семантический</span></div>
+  <p class="tool-desc">Мультиязычные эмбеддинги. MIT. Ловит «платёжка» → «Payment System».</p>
+</div><div class="tool-card">
+  <div class="tool-header"><span class="tool-name">pgvector</span><span class="badge" style="background:#FFF7ED;color:#C2410C;border-color:#FED7AA">Хранение</span></div>
+  <p class="tool-desc">Расширение PostgreSQL для векторного поиска. Postgres уже есть в банке — минимум согласований.</p>
+</div><div class="tool-card">
+  <div class="tool-header"><span class="tool-name">Таблица алиасов</span><span class="badge" style="background:#FEF2F2;color:#B91C1C;border-color:#FECACA">Маппинг</span></div>
+  <p class="tool-desc">«1С» → «Бухгалтерская система», «кафка» → «Apache Kafka». Пополняется автоматически.</p>
+</div></div></div><div class="section"><h4 class="section-title">Уровни матчинга</h4><div class="match-levels"><div class="match-row" style="background:#FAFAFA"><span class="ml-level" style="color:#0EA5E9">L1</span><span class="ml-name">Точное</span><span class="ml-desc">Нормализация (lowercase, убрать пробелы/дефисы) → прямое сравнение</span><span class="ml-speed">мгновенно</span></div><div class="match-row" style="background:#fff"><span class="ml-level" style="color:#0EA5E9">L2</span><span class="ml-name">Нечёткое</span><span class="ml-desc">rapidfuzz token_sort_ratio — устойчив к перестановке слов</span><span class="ml-speed">&lt; 1 мс</span></div><div class="match-row" style="background:#FAFAFA"><span class="ml-level" style="color:#0EA5E9">L3</span><span class="ml-name">Семантическое</span><span class="ml-desc">bge-m3 эмбеддинги → cosine similarity через pgvector</span><span class="ml-speed">&lt; 50 мс</span></div><div class="match-row" style="background:#fff"><span class="ml-level" style="color:#0EA5E9">L4</span><span class="ml-name">Алиасы</span><span class="ml-desc">Жёсткая таблица маппингов: жаргон → официальное название</span><span class="ml-speed">мгновенно</span></div></div></div><div class="section"><h4 class="section-title">Подводные камни</h4><div class="pitfalls-header"><div>Проблема</div><div>Пример</div><div>Решение</div></div><div class="pitfall-row">
+  <div><span class="warn">⚠</span> «Платёжка» vs «Payment Gateway»</div>
+  <div class="example">«Текстовое сходство = 0%, но один объект»</div>
+  <div class="solution">✓ Семантические эмбеддинги ловят смысловую близость</div>
+</div><div class="pitfall-row">
+  <div><span class="warn">⚠</span> «CRM» vs «Система управления клиентами»</div>
+  <div class="example">«Аббревиатура — нулевое сходство»</div>
+  <div class="solution">✓ Таблица алиасов — единственный надёжный способ</div>
+</div><div class="pitfall-row">
+  <div><span class="warn">⚠</span> Несколько кандидатов с близким score</div>
+  <div class="example">««Сервис авторизации» vs «аутентификации» — 87% и 84%»</div>
+  <div class="solution">✓ Никогда не выбирать автоматически — показать оба</div>
+</div><div class="pitfall-row">
+  <div><span class="warn">⚠</span> Ложная автопривязка</div>
+  <div class="example">««Сервис платежей» → «Сервис возвратов платежей»»</div>
+  <div class="solution">✓ Высокий порог (&gt;92%) + подтверждение пользователем</div>
+</div></div><div class="section"><h4 class="section-title">Ключевые решения на этом этапе</h4><div class="decision-item"><span class="dec-num" style="color:#0EA5E9">01</span>Калибровать пороги: &gt;92% автопривязка, 70–92% предложить, &lt;70% не найден</div><div class="decision-item"><span class="dec-num" style="color:#0EA5E9">02</span>Первичное заполнение таблицы алиасов (вручную, с архитекторами)</div><div class="decision-item"><span class="dec-num" style="color:#0EA5E9">03</span>Выбрать: pgvector (уже есть Postgres) или Qdrant (быстрее, но новый компонент)</div><div class="decision-item"><span class="dec-num" style="color:#0EA5E9">04</span>Определить стратегию автопополнения алиасов из подтверждений пользователей</div></div>
+  </div>
+</div><div class="stage-card" id="stage-3">
+  <div class="stage-header" onclick="toggle(3)">
+    <div class="stage-icon" style="background:#F59E0B12">⚖️</div>
+    <div class="stage-info">
+      <div class="stage-title-row">
+        <span class="stage-num" style="color:#F59E0B">04</span>
+        <span class="stage-title">Принятие решений</span>
+        <span class="stage-subtitle">Логика агента</span>
+      </div>
+      <p class="stage-desc">На основе NLU и матчинга решить: привязать, предложить кандидатов, создать новый или запросить уточнение.</p>
+    </div>
+    <div class="stage-chevron" id="chevron-3">▼</div>
+  </div>
+  <div class="stage-body" id="body-3" style="display:none">
+    <div class="section"><h4 class="section-title">Пайплайн этапа</h4><div class="pipeline"><span class="pill" style="background:#F59E0B18;border-color:#F59E0B40;color:#F59E0B">Результат NLU</span><span class="arrow">→</span><span class="pill" style="background:#F59E0B18;border-color:#F59E0B40;color:#F59E0B">Результат матчинга</span><span class="arrow">→</span><span class="pill" style="background:#F59E0B18;border-color:#F59E0B40;color:#F59E0B">Дерево решений</span><span class="arrow">→</span><span class="pill" style="background:#F59E0B18;border-color:#F59E0B40;color:#F59E0B">Формирование ответа</span><span class="arrow">→</span><span class="pill" style="background:#F59E0B18;border-color:#F59E0B40;color:#F59E0B">Запрос подтверждения</span></div></div><div class="section"><h4 class="section-title">Инструменты</h4><div class="tools-grid"><div class="tool-card">
+  <div class="tool-header"><span class="tool-name">Rule-based логика</span><span class="badge" style="background:#ECFDF5;color:#047857;border-color:#A7F3D0">Рекомендуем</span></div>
+  <p class="tool-desc">Простое дерево решений на основе порогов. Предсказуемо, легко отлаживать.</p>
+</div><div class="tool-card">
+  <div class="tool-header"><span class="tool-name">LLM-арбитр</span><span class="badge" style="background:#FAF5FF;color:#7C3AED;border-color:#DDD6FE">Сложные случаи</span></div>
+  <p class="tool-desc">Тот же Qwen/GigaChat решает неоднозначные ситуации с несколькими кандидатами.</p>
+</div></div></div><div class="section"><h4 class="section-title">Дерево решений</h4><div class="decision-tree"><div class="dt-row" style="background:#FAFAFA"><span class="dt-cond">Уверенность &gt; 92%</span><span class="dt-action" style="color:#F59E0B">→ Автопривязка</span><span class="dt-detail">Сообщить пользователю, какой объект привязан</span></div><div class="dt-row" style="background:#fff"><span class="dt-cond">Уверенность 70–92%</span><span class="dt-action" style="color:#F59E0B">→ Предложить кандидатов</span><span class="dt-detail">Показать 2–3 варианта с кнопками выбора</span></div><div class="dt-row" style="background:#FAFAFA"><span class="dt-cond">Уверенность &lt; 70%</span><span class="dt-action" style="color:#F59E0B">→ Предложить создать</span><span class="dt-detail">«Объект не найден. Создать новый?»</span></div><div class="dt-row" style="background:#fff"><span class="dt-cond">Неоднозначность</span><span class="dt-action" style="color:#F59E0B">→ Уточняющий вопрос</span><span class="dt-detail">«Уточните: платёжная система или сервис платежей?»</span></div></div></div><div class="section"><h4 class="section-title">Подводные камни</h4><div class="pitfalls-header"><div>Проблема</div><div>Пример</div><div>Решение</div></div><div class="pitfall-row">
+  <div><span class="warn">⚠</span> Агент создал объект молча</div>
+  <div class="example">«Создал без подтверждения»</div>
+  <div class="solution">✓ Золотое правило: НИКОГДА не создавать без подтверждения</div>
+</div><div class="pitfall-row">
+  <div><span class="warn">⚠</span> Дубль из-за race condition</div>
+  <div class="example">«Два юзера одновременно создают один объект»</div>
+  <div class="solution">✓ UNIQUE constraint + финальная проверка перед записью</div>
+</div><div class="pitfall-row">
+  <div><span class="warn">⚠</span> Пользователь всегда жмёт «Создать»</div>
+  <div class="example">«Лень разбираться в кандидатах»</div>
+  <div class="solution">✓ Предупреждение + статистика дублей для администратора</div>
+</div></div><div class="section"><h4 class="section-title">Ключевые решения на этом этапе</h4><div class="decision-item"><span class="dec-num" style="color:#F59E0B">01</span>Определить пороги уверенности для каждого действия</div><div class="decision-item"><span class="dec-num" style="color:#F59E0B">02</span>Решить: нужен ли approval workflow (одобрение старшим архитектором)?</div><div class="decision-item"><span class="dec-num" style="color:#F59E0B">03</span>Что делать при intent=delete? Рекомендуем: двойное подтверждение</div><div class="decision-item"><span class="dec-num" style="color:#F59E0B">04</span>Автоматически сохранять алиасы при подтверждении привязки</div></div>
+  </div>
+</div><div class="stage-card" id="stage-4">
+  <div class="stage-header" onclick="toggle(4)">
+    <div class="stage-icon" style="background:#10B98112">💬</div>
+    <div class="stage-info">
+      <div class="stage-title-row">
+        <span class="stage-num" style="color:#10B981">05</span>
+        <span class="stage-title">Диалоговый интерфейс</span>
+        <span class="stage-subtitle">Взаимодействие с пользователем</span>
+      </div>
+      <p class="stage-desc">Удобный UI для голосового ввода, подтверждений, выбора кандидатов и просмотра результатов.</p>
+    </div>
+    <div class="stage-chevron" id="chevron-4">▼</div>
+  </div>
+  <div class="stage-body" id="body-4" style="display:none">
+    <div class="section"><h4 class="section-title">Пайплайн этапа</h4><div class="pipeline"><span class="pill" style="background:#10B98118;border-color:#10B98140;color:#10B981">Кнопка записи</span><span class="arrow">→</span><span class="pill" style="background:#10B98118;border-color:#10B98140;color:#10B981">Индикатор обработки</span><span class="arrow">→</span><span class="pill" style="background:#10B98118;border-color:#10B98140;color:#10B981">Карточка результата</span><span class="arrow">→</span><span class="pill" style="background:#10B98118;border-color:#10B98140;color:#10B981">Кнопки действий</span><span class="arrow">→</span><span class="pill" style="background:#10B98118;border-color:#10B98140;color:#10B981">Подтверждение</span></div></div><div class="section"><h4 class="section-title">Инструменты</h4><div class="tools-grid"><div class="tool-card">
+  <div class="tool-header"><span class="tool-name">Веб-приложение</span><span class="badge" style="background:#ECFDF5;color:#047857;border-color:#A7F3D0">Рекомендуем</span></div>
+  <p class="tool-desc">Полный контроль над UI. Встроить в портал банка. React/Vue + WebSocket.</p>
+</div><div class="tool-card">
+  <div class="tool-header"><span class="tool-name">MS Teams бот</span><span class="badge" style="background:#FEF3C7;color:#92400E;border-color:#FDE68A">Альтернатива</span></div>
+  <p class="tool-desc">Уже в корпоративной среде, голосовые сообщения, кнопки.</p>
+</div><div class="tool-card">
+  <div class="tool-header"><span class="tool-name">Telegram-бот</span><span class="badge" style="background:#FEF3C7;color:#92400E;border-color:#FDE68A">Для MVP</span></div>
+  <p class="tool-desc">Быстро сделать, но может не пройти ИБ банка.</p>
+</div></div></div><div class="section"><h4 class="section-title">Пример диалога</h4><div class="dialog-box"><div class="dialog-msg"><div class="msg-icon" style="background:#3B82F6">👤</div><div class="msg-body"><div class="msg-user">Добавь новый сервис нотификаций в домен коммуникаций, он зависит от кафки</div></div></div><div class="dialog-msg"><div class="msg-icon" style="background:#10B981">🤖</div><div class="msg-body"><div class="msg-agent">Распознано: создать сервис «нотификации» в домене «коммуникации»<br><br>⚠️ Найден похожий объект: «Сервис уведомлений» (совпадение 84%)<br><br>Что сделать?</div><div class="dialog-buttons"><span class="dialog-btn" style="background:#10B981;color:#fff">Это тот же — привязать</span><span class="dialog-btn" style="background:#F3F4F6;color:#374151">Создать новый</span><span class="dialog-btn" style="background:#F3F4F6;color:#374151">Отмена</span></div></div></div><div class="dialog-msg"><div class="msg-icon" style="background:#3B82F6">👤</div><div class="msg-body"><div class="msg-user">Это тот же — привязать</div></div></div><div class="dialog-msg"><div class="msg-icon" style="background:#10B981">🤖</div><div class="msg-body"><div class="msg-agent">✅ Привязан к: «Сервис уведомлений»<br>✅ Связь: → depends_on → Apache Kafka<br>✅ Алиас сохранён: «сервис нотификаций»</div></div></div></div></div><div class="section"><h4 class="section-title">Подводные камни</h4><div class="pitfalls-header"><div>Проблема</div><div>Пример</div><div>Решение</div></div><div class="pitfall-row">
+  <div><span class="warn">⚠</span> Пользователи не хотят говорить</div>
+  <div class="example">«В опенспейсе неудобно диктовать»</div>
+  <div class="solution">✓ Дублировать голос текстовым вводом — всегда</div>
+</div><div class="pitfall-row">
+  <div><span class="warn">⚠</span> Долгая обработка</div>
+  <div class="example">«5+ секунд на весь пайплайн»</div>
+  <div class="solution">✓ Стриминг ответа + индикаторы прогресса</div>
+</div><div class="pitfall-row">
+  <div><span class="warn">⚠</span> Потеря контекста</div>
+  <div class="example">««Добавь ему связь с CRM» — кому?»</div>
+  <div class="solution">✓ Хранить состояние диалога: текущий объект, домен</div>
+</div></div><div class="section"><h4 class="section-title">Ключевые решения на этом этапе</h4><div class="decision-item"><span class="dec-num" style="color:#10B981">01</span>Выбрать платформу UI: веб / Teams / Telegram</div><div class="decision-item"><span class="dec-num" style="color:#10B981">02</span>Определить: нужен ли текстовый ввод параллельно с голосом?</div><div class="decision-item"><span class="dec-num" style="color:#10B981">03</span>Продумать UX для мобильных устройств (архитекторы на встречах)</div><div class="decision-item"><span class="dec-num" style="color:#10B981">04</span>Интеграция с SSO банка для авторизации</div></div>
+  </div>
+</div><div class="stage-card" id="stage-5">
+  <div class="stage-header" onclick="toggle(5)">
+    <div class="stage-icon" style="background:#8B5CF612">📦</div>
+    <div class="stage-info">
+      <div class="stage-title-row">
+        <span class="stage-num" style="color:#8B5CF6">06</span>
+        <span class="stage-title">Запись и аудит</span>
+        <span class="stage-subtitle">Работа с репозиторием</span>
+      </div>
+      <p class="stage-desc">Безопасная запись в репозиторий с защитой от дублей, полным аудит-логом и интеграцией с существующими инструментами.</p>
+    </div>
+    <div class="stage-chevron" id="chevron-5">▼</div>
+  </div>
+  <div class="stage-body" id="body-5" style="display:none">
+    <div class="section"><h4 class="section-title">Пайплайн этапа</h4><div class="pipeline"><span class="pill" style="background:#8B5CF618;border-color:#8B5CF640;color:#8B5CF6">Подтверждение</span><span class="arrow">→</span><span class="pill" style="background:#8B5CF618;border-color:#8B5CF640;color:#8B5CF6">Проверка дублей</span><span class="arrow">→</span><span class="pill" style="background:#8B5CF618;border-color:#8B5CF640;color:#8B5CF6">Запись объекта</span><span class="arrow">→</span><span class="pill" style="background:#8B5CF618;border-color:#8B5CF640;color:#8B5CF6">Создание связей</span><span class="arrow">→</span><span class="pill" style="background:#8B5CF618;border-color:#8B5CF640;color:#8B5CF6">Аудит-лог</span><span class="arrow">→</span><span class="pill" style="background:#8B5CF618;border-color:#8B5CF640;color:#8B5CF6">Обновление индексов</span></div></div><div class="section"><h4 class="section-title">Инструменты</h4><div class="tools-grid"><div class="tool-card">
+  <div class="tool-header"><span class="tool-name">PostgreSQL + pgvector</span><span class="badge" style="background:#ECFDF5;color:#047857;border-color:#A7F3D0">Рекомендуем</span></div>
+  <p class="tool-desc">Прямая запись. Самый простой и контролируемый вариант.</p>
+</div><div class="tool-card">
+  <div class="tool-header"><span class="tool-name">API архитектурного инструмента</span><span class="badge" style="background:#FEF3C7;color:#92400E;border-color:#FDE68A">Альтернатива</span></div>
+  <p class="tool-desc">REST API для CRUD операций (Archi, LeanIX). Изучить ограничения.</p>
+</div><div class="tool-card">
+  <div class="tool-header"><span class="tool-name">Confluence API</span><span class="badge" style="background:#FEF3C7;color:#92400E;border-color:#FDE68A">Для Wiki</span></div>
+  <p class="tool-desc">Создание/обновление страниц через REST. Ограниченная структурированность.</p>
+</div></div></div><div class="section"><h4 class="section-title">Подводные камни</h4><div class="pitfalls-header"><div>Проблема</div><div>Пример</div><div>Решение</div></div><div class="pitfall-row">
+  <div><span class="warn">⚠</span> Race condition при создании</div>
+  <div class="example">«Два человека одновременно создают объект»</div>
+  <div class="solution">✓ UNIQUE constraint на (normalized_name, type)</div>
+</div><div class="pitfall-row">
+  <div><span class="warn">⚠</span> Нет аудит-лога</div>
+  <div class="example">«Непонятно, кто что создал/изменил»</div>
+  <div class="solution">✓ timestamp, user_id, action, raw_transcript, nlu_result</div>
+</div><div class="pitfall-row">
+  <div><span class="warn">⚠</span> Репозиторий без API</div>
+  <div class="example">«Данные в Excel/SharePoint»</div>
+  <div class="solution">✓ Промежуточная БД → скрипт синхронизации</div>
+</div></div><div class="section"><h4 class="section-title">Ключевые решения на этом этапе</h4><div class="decision-item"><span class="dec-num" style="color:#8B5CF6">01</span>Куда пишем? Своя БД / существующий инструмент / оба?</div><div class="decision-item"><span class="dec-num" style="color:#8B5CF6">02</span>Нужен ли approval workflow перед записью?</div><div class="decision-item"><span class="dec-num" style="color:#8B5CF6">03</span>Формат аудит-лога (транскрипт? NLU-результат? оба?)</div><div class="decision-item"><span class="dec-num" style="color:#8B5CF6">04</span>Политика удаления: soft delete (deprecated) или hard delete?</div></div>
+  </div>
+</div><div class="stage-card" id="stage-6">
+  <div class="stage-header" onclick="toggle(6)">
+    <div class="stage-icon" style="background:#EC489912">🏗️</div>
+    <div class="stage-info">
+      <div class="stage-title-row">
+        <span class="stage-num" style="color:#EC4899">07</span>
+        <span class="stage-title">Инфраструктура</span>
+        <span class="stage-subtitle">Деплой в контуре банка</span>
+      </div>
+      <p class="stage-desc">Развёртывание всех компонентов в закрытом контуре банка с учётом требований ИБ.</p>
+    </div>
+    <div class="stage-chevron" id="chevron-6">▼</div>
+  </div>
+  <div class="stage-body" id="body-6" style="display:none">
+    <div class="section"><h4 class="section-title">Пайплайн этапа</h4><div class="pipeline"><span class="pill" style="background:#EC489918;border-color:#EC489940;color:#EC4899">Загрузка моделей</span><span class="arrow">→</span><span class="pill" style="background:#EC489918;border-color:#EC489940;color:#EC4899">Docker/OpenShift</span><span class="arrow">→</span><span class="pill" style="background:#EC489918;border-color:#EC489940;color:#EC4899">TLS между компонентами</span><span class="arrow">→</span><span class="pill" style="background:#EC489918;border-color:#EC489940;color:#EC4899">SSO интеграция</span><span class="arrow">→</span><span class="pill" style="background:#EC489918;border-color:#EC489940;color:#EC4899">Мониторинг</span></div></div><div class="section"><h4 class="section-title">Инструменты</h4><div class="tools-grid"><div class="tool-card">
+  <div class="tool-header"><span class="tool-name">GigaChat + GigaAM (Сбер)</span><span class="badge" style="background:#ECFDF5;color:#047857;border-color:#A7F3D0">Полный стек</span></div>
+  <p class="tool-desc">LLM + STT от одного вендора. MIT, open-source. LangChain-совместимость через GigaChain.</p>
+</div><div class="tool-card">
+  <div class="tool-header"><span class="tool-name">vLLM</span><span class="badge" style="background:#FAF5FF;color:#7C3AED;border-color:#DDD6FE">Инференс LLM</span></div>
+  <p class="tool-desc">Самый быстрый open-source сервер для LLM. OpenAI-совместимый API.</p>
+</div><div class="tool-card">
+  <div class="tool-header"><span class="tool-name">faster-whisper</span><span class="badge" style="background:#F0F9FF;color:#0369A1;border-color:#BAE6FD">Инференс STT</span></div>
+  <p class="tool-desc">Обёртка Whisper на CTranslate2. 4× быстрее оригинала.</p>
+</div><div class="tool-card">
+  <div class="tool-header"><span class="tool-name">Docker / OpenShift</span><span class="badge" style="background:#FFF7ED;color:#C2410C;border-color:#FED7AA">Оркестрация</span></div>
+  <p class="tool-desc">Контейнеризация всех компонентов. OpenShift часто уже есть в банках.</p>
+</div><div class="tool-card">
+  <div class="tool-header"><span class="tool-name">Prometheus + Grafana</span><span class="badge" style="background:#ECFDF5;color:#047857;border-color:#A7F3D0">Мониторинг</span></div>
+  <p class="tool-desc">Метрики: латентность, ошибки, GPU, очередь запросов.</p>
+</div></div></div><div class="section"><h4 class="section-title">Аппаратные требования</h4><div class="hw-table"><div class="hw-header"><div>Компонент</div><div>GPU</div><div>RAM</div><div>CPU</div></div><div class="hw-row"><div>STT: GigaAM-v3</div><div>1× A10 (24 GB)</div><div>8 GB</div><div>4 cores</div></div><div class="hw-row"><div>LLM: GigaChat Ultra</div><div>2–4× A100 80 GB</div><div>128 GB</div><div>16 cores</div></div><div class="hw-row"><div>Эмбеддинги (bge-m3)</div><div>— (CPU ok)</div><div>8 GB</div><div>4 cores</div></div><div class="hw-row"><div>PostgreSQL + pgvector</div><div>—</div><div>16 GB</div><div>4 cores</div></div><div class="hw-row"><div>Приложение</div><div>—</div><div>8 GB</div><div>4 cores</div></div></div></div><div class="section"><h4 class="section-title">Чеклист для ИБ банка</h4><div class="checklist"><div class="check-item"><span class="checkbox">✓</span>Реестр open-source компонентов с лицензиями</div><div class="check-item"><span class="checkbox">✓</span>SBOM для каждого Docker-образа</div><div class="check-item"><span class="checkbox">✓</span>Сканирование образов на уязвимости (Trivy/Grype)</div><div class="check-item"><span class="checkbox">✓</span>Описание потоков данных (Data Flow Diagram)</div><div class="check-item"><span class="checkbox">✓</span>Подтверждение: данные не уходят за периметр</div><div class="check-item"><span class="checkbox">✓</span>План резервного копирования БД</div><div class="check-item"><span class="checkbox">✓</span>Политика логирования и хранения логов</div><div class="check-item"><span class="checkbox">✓</span>Проверка на соответствие 152-ФЗ (если есть ПД)</div></div></div><div class="section"><h4 class="section-title">Подводные камни</h4><div class="pitfalls-header"><div>Проблема</div><div>Пример</div><div>Решение</div></div><div class="pitfall-row">
+  <div><span class="warn">⚠</span> Согласование GPU-серверов</div>
+  <div class="example">«Закупка — от 2 до 6 месяцев»</div>
+  <div class="solution">✓ Начать параллельно с PoC на тестовых GPU</div>
+</div><div class="pitfall-row">
+  <div><span class="warn">⚠</span> Air-gapped контур</div>
+  <div class="example">«Нет интернета, модели не скачать»</div>
+  <div class="solution">✓ Загрузка через одобренный канал. Заранее скачать все веса</div>
+</div><div class="pitfall-row">
+  <div><span class="warn">⚠</span> Docker запрещён</div>
+  <div class="example">«ИБ не одобряет Docker daemon»</div>
+  <div class="solution">✓ Podman (rootless) или OpenShift</div>
+</div><div class="pitfall-row">
+  <div><span class="warn">⚠</span> Согласование с ИБ</div>
+  <div class="example">«3–6 месяцев на аудит open-source»</div>
+  <div class="solution">✓ Подготовить SBOM, Trivy, Data Flow Diagram заранее</div>
+</div></div><div class="section"><h4 class="section-title">Ключевые решения на этом этапе</h4><div class="decision-item"><span class="dec-num" style="color:#EC4899">01</span>Стек Сбера (GigaChat + GigaAM, MIT) или Qwen + Whisper? Зависит от политики банка</div><div class="decision-item"><span class="dec-num" style="color:#EC4899">02</span>Полный вариант (2–4× A100 + A10) или бюджетный MVP (GigaChat Lightning, 1–2× A10)?</div><div class="decision-item"><span class="dec-num" style="color:#EC4899">03</span>Есть ли OpenShift/Kubernetes в банке?</div><div class="decision-item"><span class="dec-num" style="color:#EC4899">04</span>TLS: self-signed или корпоративный CA?</div><div class="decision-item"><span class="dec-num" style="color:#EC4899">05</span>Хранение моделей: NFS, S3-совместимое хранилище, локальный диск?</div></div>
+  </div>
+</div><div class="stage-card" id="stage-7">
+  <div class="stage-header" onclick="toggle(7)">
+    <div class="stage-icon" style="background:#06B6D412">📈</div>
+    <div class="stage-info">
+      <div class="stage-title-row">
+        <span class="stage-num" style="color:#06B6D4">08</span>
+        <span class="stage-title">Мониторинг и развитие</span>
+        <span class="stage-subtitle">Метрики, улучшение, roadmap</span>
+      </div>
+      <p class="stage-desc">Отслеживание качества, цикл улучшения и план развития от PoC до продакшн.</p>
+    </div>
+    <div class="stage-chevron" id="chevron-7">▼</div>
+  </div>
+  <div class="stage-body" id="body-7" style="display:none">
+    <div class="section"><h4 class="section-title">Пайплайн этапа</h4><div class="pipeline"><span class="pill" style="background:#06B6D418;border-color:#06B6D440;color:#06B6D4">Сбор метрик</span><span class="arrow">→</span><span class="pill" style="background:#06B6D418;border-color:#06B6D440;color:#06B6D4">Анализ ошибок</span><span class="arrow">→</span><span class="pill" style="background:#06B6D418;border-color:#06B6D440;color:#06B6D4">Обновление словарей</span><span class="arrow">→</span><span class="pill" style="background:#06B6D418;border-color:#06B6D440;color:#06B6D4">Корректировка порогов</span><span class="arrow">→</span><span class="pill" style="background:#06B6D418;border-color:#06B6D440;color:#06B6D4">Расширение</span></div></div><div class="section"><h4 class="section-title">Инструменты</h4><div class="tools-grid"><div class="tool-card">
+  <div class="tool-header"><span class="tool-name">Аудит-лог + дашборд</span><span class="badge" style="background:#ECFDF5;color:#047857;border-color:#A7F3D0">Мониторинг</span></div>
+  <p class="tool-desc">Grafana-дашборд с ключевыми метриками качества агента.</p>
+</div><div class="tool-card">
+  <div class="tool-header"><span class="tool-name">Еженедельный review</span><span class="badge" style="background:#FEF3C7;color:#92400E;border-color:#FDE68A">Процесс</span></div>
+  <p class="tool-desc">Ручной разбор ошибок: отклонённые привязки, созданные дубли.</p>
+</div></div></div><div class="section"><h4 class="section-title">Ключевые метрики</h4><div class="metrics-grid"><div class="metric-card"><div class="metric-name">STT WER</div><div class="metric-desc">Ошибки распознавания</div><div class="metric-target" style="color:#06B6D4">&lt; 15% общие, &lt; 25% термины</div></div><div class="metric-card"><div class="metric-name">NLU accuracy</div><div class="metric-desc">Правильность intent + entities</div><div class="metric-target" style="color:#06B6D4">&gt; 90%</div></div><div class="metric-card"><div class="metric-name">Match precision</div><div class="metric-desc">Доля правильных привязок</div><div class="metric-target" style="color:#06B6D4">&gt; 95%</div></div><div class="metric-card"><div class="metric-name">Duplicate rate</div><div class="metric-desc">Дубли за неделю</div><div class="metric-target" style="color:#06B6D4">&lt; 2%</div></div><div class="metric-card"><div class="metric-name">User satisfaction</div><div class="metric-desc">Согласие с 1-м предложением</div><div class="metric-target" style="color:#06B6D4">&gt; 70%</div></div><div class="metric-card"><div class="metric-name">Interaction time</div><div class="metric-desc">Время на операцию</div><div class="metric-target" style="color:#06B6D4">&lt; 30 сек</div></div></div></div><div class="section"><h4 class="section-title">Roadmap внедрения</h4><div class="roadmap"><div class="rm-line" style="background:#06B6D430"></div><div class="rm-item"><div class="rm-dot" style="background:#06B6D4;border-color:#06B6D4"></div><div class="rm-content"><div class="rm-header"><span class="rm-phase">PoC</span><span class="rm-duration" style="background:#06B6D415;color:#06B6D4">2–3 недели</span></div><div class="rm-what">GigaAM-v3 + GigaChat Lightning + rapidfuzz. Тест на 50–100 объектах</div><div class="rm-result">→ Демонстрация концепции</div></div></div><div class="rm-item"><div class="rm-dot" style="background:#fff;border-color:#06B6D4"></div><div class="rm-content"><div class="rm-header"><span class="rm-phase">MVP</span><span class="rm-duration" style="background:#06B6D415;color:#06B6D4">1–2 месяца</span></div><div class="rm-what">pgvector, эмбеддинги, простой UI. Копия репозитория</div><div class="rm-result">→ Пилот на 5–10 человек</div></div></div><div class="rm-item"><div class="rm-dot" style="background:#fff;border-color:#06B6D4"></div><div class="rm-content"><div class="rm-header"><span class="rm-phase">Интеграция</span><span class="rm-duration" style="background:#06B6D415;color:#06B6D4">1–2 месяца</span></div><div class="rm-what">API реального репозитория. ИБ. SSO. Аудит</div><div class="rm-result">→ Продакшн для архитекторов</div></div></div><div class="rm-item"><div class="rm-dot" style="background:#fff;border-color:#06B6D4"></div><div class="rm-content"><div class="rm-header"><span class="rm-phase">Масштаб</span><span class="rm-duration" style="background:#06B6D415;color:#06B6D4">1 месяц</span></div><div class="rm-what">GigaChat Ultra / Qwen-72B, тонкая настройка</div><div class="rm-result">→ Полноценный инструмент</div></div></div><div class="rm-item"><div class="rm-dot" style="background:#fff;border-color:#06B6D4"></div><div class="rm-content"><div class="rm-header"><span class="rm-phase">Развитие</span><span class="rm-duration" style="background:#06B6D415;color:#06B6D4">Постоянно</span></div><div class="rm-what">Обработка совещаний, Confluence, авто-обновление</div><div class="rm-result">→ Экосистема</div></div></div></div></div><div class="section"><h4 class="section-title">Подводные камни</h4><div class="pitfalls-header"><div>Проблема</div><div>Пример</div><div>Решение</div></div><div class="pitfall-row">
+  <div><span class="warn">⚠</span> Словарь устаревает</div>
+  <div class="example">«Через полгода новые системы, новый жаргон»</div>
+  <div class="solution">✓ Владелец словаря + автопополнение из алиасов</div>
+</div><div class="pitfall-row">
+  <div><span class="warn">⚠</span> Нет обратной связи</div>
+  <div class="example">«Непонятно, довольны ли люди»</div>
+  <div class="solution">✓ Кнопки 👍👎 после действия → метрика satisfaction</div>
+</div><div class="pitfall-row">
+  <div><span class="warn">⚠</span> Дрейф порогов</div>
+  <div class="example">«При 5000 объектов — много ложных совпадений»</div>
+  <div class="solution">✓ Периодическая рекалибровка на реальных данных</div>
+</div></div>
+  </div>
+</div>
+</div>
+
+<script>
+function toggle(i){
+  var body=document.getElementById('body-'+i);
+  var chevron=document.getElementById('chevron-'+i);
+  var card=document.getElementById('stage-'+i);
+  if(body.style.display==='none'){
+    body.style.display='block';
+    chevron.classList.add('rotated');
+    card.classList.add('open');
+  }else{
+    body.style.display='none';
+    chevron.classList.remove('rotated');
+    card.classList.remove('open');
+  }
+}
+function expandAll(){for(var i=0;i<8;i++){var b=document.getElementById('body-'+i);b.style.display='block';document.getElementById('chevron-'+i).classList.add('rotated');document.getElementById('stage-'+i).classList.add('open');}}
+function collapseAll(){for(var i=0;i<8;i++){var b=document.getElementById('body-'+i);b.style.display='none';document.getElementById('chevron-'+i).classList.remove('rotated');document.getElementById('stage-'+i).classList.remove('open');}}
+</script>
+</body>
+</html>
