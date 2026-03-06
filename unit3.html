@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Китайские слова — прописи и анимация черт</title>
+  <script src="https://cdn.jsdelivr.net/npm/hanzi-writer@3.5/dist/hanzi-writer.min.js"></script>
+  <style>
+    :root {
+      --bg: #f7f4ef;
+      --card: rgba(255,255,255,0.9);
+      --text: #1f2937;
+      --muted: #6b7280;
+      --accent: #b45309;
+      --accent-soft: #f59e0b;
+      --line: #ead9d0;
+      --line-strong: #d8b7a8;
+      --shadow: 0 18px 45px rgba(76, 29, 7, 0.08);
+      --radius: 22px;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(245, 158, 11, 0.10), transparent 32%),
+        radial-gradient(circle at top right, rgba(180, 83, 9, 0.08), transparent 25%),
+        var(--bg);
+    }
+    .page {
+      max-width: 1500px;
+      margin: 0 auto;
+      padding: 28px 18px 48px;
+    }
+    .hero {
+      background: linear-gradient(135deg, rgba(255,255,255,0.92), rgba(255,248,240,0.92));
+      border: 1px solid rgba(216, 183, 168, 0.55);
+      border-radius: 28px;
+      padding: 24px;
+      box-shadow: var(--shadow);
+      margin-bottom: 22px;
+    }
+    .hero h1 {
+      margin: 0 0 8px;
+      font-size: clamp(1.7rem, 2vw + 1rem, 2.8rem);
+      line-height: 1.08;
+    }
+    .hero p {
+      margin: 8px 0;
+      color: var(--muted);
+      font-size: 1rem;
+      line-height: 1.55;
+      max-width: 980px;
+    }
+    .topbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+      margin-top: 14px;
+    }
+    .pill {
+      background: rgba(180, 83, 9, 0.08);
+      color: var(--accent);
+      border: 1px solid rgba(180, 83, 9, 0.15);
+      padding: 10px 14px;
+      border-radius: 999px;
+      font-size: 0.95rem;
+    }
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 16px;
+    }
+    button {
+      border: none;
+      border-radius: 999px;
+      padding: 10px 16px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;
+    }
+    button:hover { transform: translateY(-1px); }
+    button:active { transform: translateY(0); }
+    .btn-primary {
+      background: linear-gradient(135deg, #c2410c, #ea580c);
+      color: white;
+      box-shadow: 0 10px 22px rgba(194, 65, 12, 0.22);
+    }
+    .btn-secondary {
+      background: white;
+      color: var(--text);
+      border: 1px solid rgba(216, 183, 168, 0.8);
+    }
+    .legend {
+      display: grid;
+      gap: 10px;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      margin: 20px 0 24px;
+    }
+    .legend-item {
+      padding: 14px 16px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.75);
+      border: 1px solid rgba(216, 183, 168, 0.48);
+      color: var(--muted);
+      box-shadow: 0 8px 20px rgba(76, 29, 7, 0.05);
+    }
+    .words-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 18px;
+    }
+    .word-card {
+      background: var(--card);
+      border: 1px solid rgba(216, 183, 168, 0.55);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      backdrop-filter: blur(4px);
+    }
+    .word-header {
+      padding: 18px 18px 12px;
+      border-bottom: 1px solid rgba(216, 183, 168, 0.32);
+      background: linear-gradient(180deg, rgba(255, 247, 237, 0.75), rgba(255,255,255,0));
+    }
+    .word-main {
+      display: flex;
+      gap: 10px;
+      align-items: baseline;
+      flex-wrap: wrap;
+      margin-bottom: 8px;
+    }
+    .word-cn {
+      font-size: 1.9rem;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+    }
+    .word-pinyin {
+      font-size: 1rem;
+      color: var(--accent);
+      font-weight: 700;
+    }
+    .word-translation {
+      display: grid;
+      gap: 4px;
+      line-height: 1.45;
+      min-height: 3.7em;
+    }
+    .word-translation-en {
+      color: var(--muted);
+    }
+    .word-translation-ru {
+      color: #7c2d12;
+      font-weight: 600;
+    }
+    .word-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      padding: 0 18px 16px;
+    }
+    .char-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      padding: 0 18px 18px;
+    }
+    .char-tile {
+      width: min(100%, 170px);
+      flex: 1 1 150px;
+      min-width: 140px;
+      background: rgba(255, 251, 247, 0.92);
+      border: 1px solid rgba(216, 183, 168, 0.5);
+      border-radius: 20px;
+      padding: 12px;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.6);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .practice-wrap {
+      border-radius: 18px;
+      overflow: hidden;
+      background: #fffdfb;
+      border: 1px solid rgba(216, 183, 168, 0.55);
+      cursor: pointer;
+      position: relative;
+    }
+    .practice-wrap:hover {
+      box-shadow: 0 10px 22px rgba(194, 65, 12, 0.09);
+    }
+    .practice-svg {
+      width: 100%;
+      height: auto;
+      display: block;
+      aspect-ratio: 1 / 1;
+    }
+    .char-meta {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+    }
+    .char-label {
+      font-size: 1.1rem;
+      font-weight: 700;
+    }
+    .char-hint {
+      font-size: 0.85rem;
+      color: var(--muted);
+      line-height: 1.35;
+    }
+    .char-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .small-btn {
+      padding: 8px 11px;
+      font-size: 0.82rem;
+      border-radius: 999px;
+      background: white;
+      color: var(--text);
+      border: 1px solid rgba(216, 183, 168, 0.75);
+      box-shadow: 0 4px 10px rgba(76,29,7,0.05);
+    }
+    .status {
+      margin-top: 22px;
+      padding: 16px 18px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.78);
+      border: 1px solid rgba(216, 183, 168, 0.48);
+      color: var(--muted);
+      line-height: 1.5;
+    }
+    .loading-dot {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      margin-right: 8px;
+      border-radius: 50%;
+      background: var(--accent-soft);
+      vertical-align: middle;
+      box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.35);
+      animation: pulse 1.4s infinite;
+    }
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.35); }
+      70% { box-shadow: 0 0 0 12px rgba(245, 158, 11, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0); }
+    }
+    .footer-note {
+      margin-top: 18px;
+      color: var(--muted);
+      font-size: 0.94rem;
+      line-height: 1.55;
+    }
+    @media (max-width: 700px) {
+      .page { padding: 16px 12px 28px; }
+      .hero { padding: 18px; }
+      .word-header { padding: 16px 16px 12px; }
+      .word-actions, .char-list { padding-left: 16px; padding-right: 16px; }
+      .char-tile { min-width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <section class="hero">
+      <h1>Китайские слова: прописи по иероглифам</h1>
+      <p>На каждой карточке слово разбито на отдельные иероглифы. Нажми на квадрат с иероглифом — увидишь анимацию порядка черт. Когда анимация закончится, можно сразу писать мышью, стилусом или пальцем поверх клетки.</p>
+      <p>Карточки сгруппированы по словам со скриншота. Для каждого слова можно отдельно запустить анимацию всех его иероглифов по очереди.</p>
+      <div class="topbar">
+        <div class="pill">клик по клетке → анимация</div>
+        <div class="pill">после анимации → сразу тренировка</div>
+        <div class="pill">кнопка «Сбросить» очищает текущую пропись</div>
+      </div>
+      <div class="controls">
+        <button class="btn-primary" id="animate-all">Анимировать все слова</button>
+        <button class="btn-secondary" id="reset-all">Сбросить все прописи</button>
+      </div>
+    </section>
+
+    <section class="legend">
+      <div class="legend-item">Светлый иероглиф внутри клетки служит опорой для обводки.</div>
+      <div class="legend-item">Если ошибаться при написании, подсказка по чертам покажется автоматически.</div>
+      <div class="legend-item">Можно использовать как словарные карточки: сначала нажимай, потом перерисовывай.</div>
+    </section>
+
+    <main class="words-grid" id="words-grid"></main>
+
+    <div class="status" id="status-box">
+      <span class="loading-dot"></span>
+      Загружаю данные для анимации черт… Если что-то не появилось, проверь подключение к интернету и открой файл заново.
+    </div>
+
+    <div class="footer-note">
+      Совет: сначала смотри анимацию целого слова, потом по одному иероглифу переписывай его в клетках ниже столько раз, сколько нужно.
+    </div>
+  </div>
+
+  <script>
+    const WORDS = [
+      { word: '春节', pinyin: 'chūnjié', translation: 'Spring Festival, Chinese New Year', translationRu: 'Праздник весны, китайский Новый год' },
+      { word: '团圆', pinyin: 'tuányuán', translation: 'get together', translationRu: 'собираться вместе, воссоединяться' },
+      { word: '节日', pinyin: 'jiérì', translation: 'festival', translationRu: 'праздник' },
+      { word: '贴', pinyin: 'tiē', translation: 'paste, put up', translationRu: 'клеить, наклеивать, вывешивать' },
+      { word: '春联', pinyin: 'chūnlián', translation: 'spring couplets', translationRu: 'новогодние парные надписи' },
+      { word: '挂', pinyin: 'guà', translation: 'hang up', translationRu: 'вешать, развешивать' },
+      { word: '灯笼', pinyin: 'dēnglong', translation: 'lantern', translationRu: 'фонарь' },
+      { word: '庆祝', pinyin: 'qìngzhù', translation: 'celebrate', translationRu: 'праздновать, отмечать' },
+      { word: '除夕', pinyin: 'chúxī', translation: 'New Year’s Eve', translationRu: 'канун Нового года' },
+      { word: '参加', pinyin: 'cānjiā', translation: 'take part in, participate', translationRu: 'участвовать, принимать участие' },
+      { word: '又', pinyin: 'yòu', translation: 'again; also', translationRu: 'снова; также' },
+      { word: '玩', pinyin: 'wán', translation: 'play', translationRu: 'играть, развлекаться' },
+      { word: '游戏', pinyin: 'yóuxì', translation: 'game', translationRu: 'игра' },
+      { word: '大年初一', pinyin: 'dànián chūyī', translation: 'first day of lunar New Year', translationRu: 'первый день лунного Нового года' },
+      { word: '拜年', pinyin: 'bàinián', translation: 'pay a New Year visit', translationRu: 'поздравлять с Новым годом, наносить новогодний визит' },
+      { word: '先', pinyin: 'xiān', translation: 'first', translationRu: 'сначала, первым' },
+      { word: '包', pinyin: 'bāo', translation: 'wrap, make', translationRu: 'заворачивать, лепить' },
+      { word: '饺子', pinyin: 'jiǎozi', translation: 'dumplings', translationRu: 'пельмени цзяоцзы' },
+      { word: '热闹', pinyin: 'rènao', translation: 'bustling and exciting', translationRu: 'оживлённый, шумный' }
+    ];
+
+    const writerStates = new Map();
+    const wordToTileIds = new Map();
+    let readyCount = 0;
+    let totalTiles = 0;
+    let isAnimatingAll = false;
+
+    function createTianzige(svg, size) {
+      const ns = 'http://www.w3.org/2000/svg';
+      const makeLine = (x1, y1, x2, y2, dash = '') => {
+        const line = document.createElementNS(ns, 'line');
+        line.setAttribute('x1', x1);
+        line.setAttribute('y1', y1);
+        line.setAttribute('x2', x2);
+        line.setAttribute('y2', y2);
+        line.setAttribute('stroke', dash ? 'rgba(216, 183, 168, 0.95)' : 'rgba(216, 183, 168, 0.75)');
+        line.setAttribute('stroke-width', dash ? '1.5' : '1.8');
+        if (dash) line.setAttribute('stroke-dasharray', dash);
+        return line;
+      };
+      const border = document.createElementNS(ns, 'rect');
+      border.setAttribute('x', 1);
+      border.setAttribute('y', 1);
+      border.setAttribute('width', size - 2);
+      border.setAttribute('height', size - 2);
+      border.setAttribute('rx', 16);
+      border.setAttribute('fill', '#fffdfb');
+      border.setAttribute('stroke', 'rgba(216, 183, 168, 0.8)');
+      border.setAttribute('stroke-width', '2');
+      svg.appendChild(border);
+      svg.appendChild(makeLine(0, size / 2, size, size / 2));
+      svg.appendChild(makeLine(size / 2, 0, size / 2, size));
+      svg.appendChild(makeLine(0, 0, size, size, '7 6'));
+      svg.appendChild(makeLine(size, 0, 0, size, '7 6'));
+    }
+
+    function setStatus(text, done = false) {
+      const status = document.getElementById('status-box');
+      status.innerHTML = `${done ? '' : '<span class="loading-dot"></span>'}${text}`;
+    }
+
+    function createWordCard(item, wordIndex) {
+      const card = document.createElement('section');
+      card.className = 'word-card';
+
+      const header = document.createElement('div');
+      header.className = 'word-header';
+      header.innerHTML = `
+        <div class="word-main">
+          <div class="word-cn">${item.word}</div>
+          <div class="word-pinyin">${item.pinyin}</div>
+        </div>
+        <div class="word-translation">
+          <div class="word-translation-en">${item.translation}</div>
+          <div class="word-translation-ru">${item.translationRu}</div>
+        </div>
+      `;
+      card.appendChild(header);
+
+      const actions = document.createElement('div');
+      actions.className = 'word-actions';
+      const animateWordBtn = document.createElement('button');
+      animateWordBtn.className = 'btn-secondary';
+      animateWordBtn.textContent = 'Анимировать слово';
+      animateWordBtn.addEventListener('click', () => animateWord(wordIndex));
+      const resetWordBtn = document.createElement('button');
+      resetWordBtn.className = 'btn-secondary';
+      resetWordBtn.textContent = 'Сбросить слово';
+      resetWordBtn.addEventListener('click', () => resetWord(wordIndex));
+      actions.append(animateWordBtn, resetWordBtn);
+      card.appendChild(actions);
+
+      const charList = document.createElement('div');
+      charList.className = 'char-list';
+      const tileIds = [];
+
+      [...item.word].forEach((char, charIndex) => {
+        const tileId = `w${wordIndex}-c${charIndex}`;
+        tileIds.push(tileId);
+        totalTiles += 1;
+
+        const tile = document.createElement('article');
+        tile.className = 'char-tile';
+
+        const practiceWrap = document.createElement('div');
+        practiceWrap.className = 'practice-wrap';
+        practiceWrap.title = `Нажми, чтобы посмотреть анимацию написания ${char}`;
+
+        const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+        svg.setAttribute('viewBox', '0 0 160 160');
+        svg.setAttribute('width', '160');
+        svg.setAttribute('height', '160');
+        svg.classList.add('practice-svg');
+        svg.id = `svg-${tileId}`;
+        createTianzige(svg, 160);
+        practiceWrap.appendChild(svg);
+
+        const meta = document.createElement('div');
+        meta.className = 'char-meta';
+        meta.innerHTML = `
+          <div class="char-label">${char}</div>
+          <div class="char-hint">клик → анимация<br>потом пиши поверх</div>
+        `;
+
+        const actions = document.createElement('div');
+        actions.className = 'char-actions';
+
+        const resetBtn = document.createElement('button');
+        resetBtn.className = 'small-btn';
+        resetBtn.textContent = 'Сбросить';
+        resetBtn.addEventListener('click', (event) => {
+          event.stopPropagation();
+          resetTile(tileId);
+        });
+
+        const hintBtn = document.createElement('button');
+        hintBtn.className = 'small-btn';
+        hintBtn.textContent = 'Подсказка';
+        hintBtn.addEventListener('click', (event) => {
+          event.stopPropagation();
+          animateTile(tileId);
+        });
+
+        actions.append(resetBtn, hintBtn);
+        tile.append(practiceWrap, meta, actions);
+        charList.appendChild(tile);
+
+        practiceWrap.addEventListener('click', () => animateTile(tileId));
+
+        writerStates.set(tileId, {
+          id: tileId,
+          char,
+          svgId: svg.id,
+          writer: null,
+          ready: false,
+          busy: false
+        });
+      });
+
+      wordToTileIds.set(wordIndex, tileIds);
+      card.appendChild(charList);
+      return card;
+    }
+
+    function startQuiz(state) {
+      if (!state || !state.writer || !state.ready) return;
+      try {
+        state.writer.cancelQuiz();
+      } catch (_) {}
+      try {
+        state.writer.showCharacter();
+        state.writer.showOutline();
+        state.writer.quiz({
+          showHintAfterMisses: 2,
+          highlightOnComplete: true
+        });
+      } catch (_) {}
+    }
+
+    function resetTile(tileId) {
+      const state = writerStates.get(tileId);
+      if (!state || !state.ready) return;
+      try {
+        state.writer.cancelQuiz();
+      } catch (_) {}
+      try {
+        state.writer.hideCharacter();
+        state.writer.showOutline();
+        state.writer.showCharacter();
+        state.writer.quiz({
+          showHintAfterMisses: 2,
+          highlightOnComplete: true
+        });
+      } catch (_) {}
+    }
+
+    function animateTile(tileId) {
+      const state = writerStates.get(tileId);
+      if (!state || !state.ready || state.busy) return Promise.resolve();
+      state.busy = true;
+      return new Promise((resolve) => {
+        try { state.writer.cancelQuiz(); } catch (_) {}
+        try {
+          state.writer.hideCharacter();
+          state.writer.showOutline();
+          state.writer.animateCharacter({
+            onComplete: () => {
+              state.busy = false;
+              startQuiz(state);
+              resolve();
+            }
+          });
+        } catch (_) {
+          state.busy = false;
+          startQuiz(state);
+          resolve();
+        }
+      });
+    }
+
+    async function animateWord(wordIndex) {
+      const ids = wordToTileIds.get(wordIndex) || [];
+      for (const tileId of ids) {
+        await animateTile(tileId);
+        await new Promise((r) => setTimeout(r, 160));
+      }
+    }
+
+    function resetWord(wordIndex) {
+      const ids = wordToTileIds.get(wordIndex) || [];
+      ids.forEach((tileId) => resetTile(tileId));
+    }
+
+    async function animateAll() {
+      if (isAnimatingAll) return;
+      isAnimatingAll = true;
+      setStatus('Идёт последовательная анимация всех слов. После каждого показа можно сразу тренироваться.', false);
+      for (let i = 0; i < WORDS.length; i += 1) {
+        await animateWord(i);
+        await new Promise((r) => setTimeout(r, 260));
+      }
+      isAnimatingAll = false;
+      setStatus('Все клетки готовы. Нажимай на нужный иероглиф и тренируй написание.', true);
+    }
+
+    function resetAll() {
+      writerStates.forEach((_, tileId) => resetTile(tileId));
+      setStatus('Все клетки очищены и снова готовы для тренировки.', true);
+    }
+
+    function initWriters() {
+      writerStates.forEach((state) => {
+        state.writer = HanziWriter.create(state.svgId, state.char, {
+          width: 160,
+          height: 160,
+          padding: 12,
+          showCharacter: true,
+          showOutline: true,
+          strokeColor: 'rgba(194, 65, 12, 0.22)',
+          outlineColor: 'rgba(194, 65, 12, 0.14)',
+          drawingColor: '#0f172a',
+          radicalColor: '#c2410c',
+          highlightColor: '#dc2626',
+          delayBetweenStrokes: 170,
+          strokeAnimationSpeed: 1.15,
+          onLoadCharDataSuccess: () => {
+            state.ready = true;
+            readyCount += 1;
+            startQuiz(state);
+            if (readyCount === totalTiles) {
+              setStatus('Все иероглифы загружены. Можно нажимать на клетки и писать поверх.', true);
+            } else {
+              setStatus(`Загружено ${readyCount} из ${totalTiles} клеток для прописи…`, false);
+            }
+          },
+          onLoadCharDataError: () => {
+            const el = document.getElementById(state.svgId);
+            if (el) {
+              const ns = 'http://www.w3.org/2000/svg';
+              const txt = document.createElementNS(ns, 'text');
+              txt.setAttribute('x', '80');
+              txt.setAttribute('y', '86');
+              txt.setAttribute('text-anchor', 'middle');
+              txt.setAttribute('font-size', '18');
+              txt.setAttribute('fill', '#9ca3af');
+              txt.textContent = 'нет данных';
+              el.appendChild(txt);
+            }
+            setStatus('Часть данных не загрузилась. Обычно помогает повторно открыть файл при активном интернете.', false);
+          }
+        });
+      });
+    }
+
+    function renderPage() {
+      const root = document.getElementById('words-grid');
+      WORDS.forEach((item, index) => root.appendChild(createWordCard(item, index)));
+      document.getElementById('animate-all').addEventListener('click', animateAll);
+      document.getElementById('reset-all').addEventListener('click', resetAll);
+      initWriters();
+    }
+
+    if (window.HanziWriter) {
+      renderPage();
+    } else {
+      setStatus('Библиотека для анимации не загрузилась. Проверь интернет и открой файл ещё раз.', false);
+    }
+  </script>
+</body>
+</html>
